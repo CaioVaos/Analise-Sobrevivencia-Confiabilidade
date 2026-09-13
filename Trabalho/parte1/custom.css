@@ -1,0 +1,162 @@
+/* ===== Base ===== */
+.reveal {
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+  font-size: 30px;
+  background: #0b1712;
+  color: #10241d !important;
+}
+.reveal .slides section,
+.reveal .slides section > * {
+  color: #10241d;
+}
+
+
+/* ===== Títulos ===== */
+.reveal h1 {
+  font-size: 2.4em;
+  font-weight: 800;
+  color: #b8862a;
+}
+.reveal h2 {
+  font-size: 1.7em;
+  font-weight: 700;
+  color: #b8862a;
+}
+.reveal h3 {
+  font-size: 1.3em;
+  font-weight: 600;
+  color: #b8862a;
+}
+
+/* ===== Slide de título ===== */
+.reveal .title-slide {
+  background: url("media/transicao.png");
+  background-size: cover;
+  background-position: center;
+  color: #ffffff;
+}
+.reveal .slides section.glass {
+  background: rgba(8, 18, 14, 0.28);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+.reveal .title-slide h1,
+.reveal .title-slide h2,
+.reveal .title-slide p {
+  color: #ffffff;
+}
+
+/* ===== Texto ===== */
+.reveal p,
+.reveal li {
+  line-height: 1.45;
+}
+
+/* ===== Listas ===== */
+.reveal ul li::marker {
+  color: #b8862a;
+}
+
+/* ===== Caixas coloridas (use para destacar Evento/Censura/Tempo) ===== */
+.box-blue {
+  border-left: 8px solid #3f6b52;
+  background: #e9f1ea;
+  padding: 0.7em;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(16, 36, 29, 0.10);
+}
+.box-yellow {
+  border-left: 8px solid #b8862a;
+  background: #faf1de;
+  padding: 0.7em;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(16, 36, 29, 0.08);
+}
+.box-gray {
+  border-left: 8px solid #6b7d73;
+  background: #eef1ee;
+  padding: 0.7em;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(16, 36, 29, 0.07);
+}
+.box-terracotta {
+  border-left: 8px solid #b8862a;
+  background: rgba(184, 134, 42, 0.08);
+  padding: 0.7em;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(16, 36, 29, 0.10);
+}
+
+/* ===== Destaques (use para p-valores, medianas, achados) ===== */
+.highlight-blue {
+  color: #3f6b52;
+  font-weight: 700;
+}
+.highlight-yellow {
+  color: #b8862a;
+  font-weight: 700;
+}
+.highlight-teal {
+  color: #2c5943;
+  font-weight: 700;
+}
+
+/* ===== Tabelas (gtsummary / pairwise_survdiff) ===== */
+.reveal table {
+  font-size: 0.7em;
+  border-collapse: collapse;
+}
+.reveal table th {
+  background: #2c5943;
+  color: #ffffff;
+  padding: 0.4em 0.6em;
+}
+.reveal table td {
+  padding: 0.35em 0.6em;
+  border-bottom: 1px solid rgba(16, 36, 29, 0.15);
+}
+.reveal table tr:nth-child(even) td {
+  background: rgba(233, 241, 234, 0.6);
+}
+
+/* ===== Gráficos (ggsurvplot) ===== */
+.reveal .cell-output-display img {
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(16, 36, 29, 0.15);
+}
+
+/* ===== Código ===== */
+.reveal pre code {
+  font-size: 0.78em;
+  background: #10241d;
+  color: #eaf3ec;
+  border-radius: 10px;
+  padding: 1em;
+}
+
+/* ===== Notas de rodapé / fragmentos de p-valor ===== */
+.reveal .footer {
+  font-size: 0.5em;
+  color: #5f7566;
+}
+.reveal .fragment {
+  color: #2c5943;
+  font-weight: 600;
+}
+
+/* ===== Slide Final ===== */
+.reveal .final-slide {
+  background: url("media/final.png");
+
+  background-size: cover;
+  background-repeat: no-repeat;
+
+  color: white;
+}
+.reveal section.title-slide.final-slide,
+.reveal section.title-slide.final-slide h1 {
+  background: none !important;
+  background-color: transparent !important;
+  font-size: 2.5em !important;
+  background-image: none !important;
+}

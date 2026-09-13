@@ -1,0 +1,184 @@
+[
+  {
+    "objectID": "index.html#sobre",
+    "href": "index.html#sobre",
+    "title": "Análise de Sobrevivência e Confiabilidade",
+    "section": "📚 Sobre",
+    "text": "📚 Sobre\nEste hub reúne os trabalhos da disciplina Prática Estatística II — Análise de Sobrevivência e Confiabilidade.\n\nInstituição: Universidade Federal Fluminense (UFF)\nAutores: Seu Nome & Dupla\nPeríodo: 2026.2"
+  },
+  {
+    "objectID": "index.html#trabalho",
+    "href": "index.html#trabalho",
+    "title": "Análise de Sobrevivência e Confiabilidade",
+    "section": "⏳ Trabalho",
+    "text": "⏳ Trabalho\n\n\n⏱️ Parte I\nEstimação Não Paramétrica e Modelos Paramétricos\nVisualizar\n\n\n📈 Parte II\nSeleção de Variáveis e Modelos de Regressão Paramétricos\nVisualizar\n\n\n⚕️ Parte III\nModelo de Cox\nVisualizar"
+  },
+  {
+    "objectID": "Trabalho/parte1/index.html",
+    "href": "Trabalho/parte1/index.html",
+    "title": "PRÁTICA ESTATÍSTICA II",
+    "section": "",
+    "text": "Introdução"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Análise de Sobrevivência e Confiabilidade",
+    "section": "",
+    "text": "Este hub reúne os trabalhos da disciplina Análise de Sobrevivência e Confiabilidade.\n\nInstituição: Universidade Federal Fluminense (UFF)\nAutor: Caio Salviano\nPeríodo: 2026.2\n\n\n\n\n⏱️ Parte I\nEstimação Não Paramétrica e Modelos Paramétricos\nVisualizar\n\n\n📈 Parte II\nSeleção de Variáveis e Modelos de Regressão Paramétricos\nVisualizar\n\n\n⚕️ Parte III\nModelo de Cox\nVisualizar"
+  },
+  {
+    "objectID": "Trabalho/parte1/index.html#contexto-do-estudo",
+    "href": "Trabalho/parte1/index.html#contexto-do-estudo",
+    "title": "ANÁLISE DE SOBREVIVÊNCIA E CONFIABILIDADE",
+    "section": "1.1 Contexto do Estudo",
+    "text": "1.1 Contexto do Estudo\n\n\n\n\n\n1.1.1 A Base de Dados\n\n FOSP · RHC \n\n\n\n🗂️\n\n\nFonte dos dados\n\n\nFundação Oncocentro de São Paulo (FOSP) — Registro Hospitalar de Câncer (RHC)\n\n\n\n\n\n🩺\n\n\nTipo de câncer\n\n\nFígado e vias biliares intra-hepáticas — CID-O C22\n\n\n\n\n\n👥\n\n\nPopulação\n\n\nAdultos (≥ 18 anos), sem tratamento oncológico prévio à admissão\n\n\n\n\n\n📅\n\n\nPeríodo\n\n\nDiagnósticos entre 2014 e 2019\n\n\n\n\n\n\n\n\n\n\n1.1.2 Por que Estudar?\n\n Relevância \n\n\n\n⚠️\n\n\nPrognóstico\n\n\nCâncer de fígado tem prognóstico reservado e alta letalidade\n\n\n\n\n\n💡\n\n\nAplicações do estudo\n\n\nPlanejamento assistencial  Priorização de cuidados  Identificação precoce de grupos de risco"
+  },
+  {
+    "objectID": "Trabalho/parte1/index.html#evento-tempo-e-censura",
+    "href": "Trabalho/parte1/index.html#evento-tempo-e-censura",
+    "title": "ANÁLISE DE SOBREVIVÊNCIA E CONFIABILIDADE",
+    "section": "1.2 Evento, Tempo e Censura",
+    "text": "1.2 Evento, Tempo e Censura\n\n\n\n\n\n1.2.1 Evento & Tempo\n\n\n\n💀\n\n\nEvento de interesse\n\n\nÓbito por câncer ULTINFO = 3\n\n\n\n\n⏱️\n\n\nTempo até o evento\n\n\nMeses entre DTDIAG e DTULTINFO\n\n\n\n\n\n\n\n\n\n\n1.2.2 Censura\n\n\n\n🚫\n\n\nPacientes ao final do estudo:\n\n\nVivos, com câncer Vivos, SOE Óbito por outra causa\n\n\n→ tempo real até o evento não observado (censura à direita)"
+  },
+  {
+    "objectID": "Trabalho/parte1/index.html#variáveis-do-estudo",
+    "href": "Trabalho/parte1/index.html#variáveis-do-estudo",
+    "title": "ANÁLISE DE SOBREVIVÊNCIA E CONFIABILIDADE",
+    "section": "1.3 Variáveis do Estudo",
+    "text": "1.3 Variáveis do Estudo\n\n\n\n⏱️ Tempotempo — meses entre diagnóstico e última informação\n\n\n💀 Evento/Censuracens — 1 = óbito por câncer · 0 = censura\n\n\n\n\n\n🏷️ Covariáveis Qualitativas\n\n\nSEXO ESCOLARI ECGRUP CATEATEND CIRURGIA RADIO QUIMIO\n\n\n\n\n🔢 Covariável Quantitativa\n\nIDADE — idade ao diagnóstico, em anos"
+  },
+  {
+    "objectID": "Trabalho/parte1/index.html#estimador-de-kaplan-meier",
+    "href": "Trabalho/parte1/index.html#estimador-de-kaplan-meier",
+    "title": "ANÁLISE DE SOBREVIVÊNCIA E CONFIABILIDADE",
+    "section": "2.1 Estimador de Kaplan-Meier",
+    "text": "2.1 Estimador de Kaplan-Meier\n\n\n\n2.1 Kaplan-Meier\n\n survfit() \n\n\n📈\n\nO quê: estimador não paramétrico de S(t), sem supor distribuição para os tempos de falha\n\n\n\n🔗\n\nComo: usa todos os pacientes, inclusive censurados, até deixarem de contribuir informação\n\n\n\n🎯\n\nPara quê: obter mediana de sobrevivência e IC 95% — mais robusta que a média sob censura\n\n\n\n✅\n\nPor que aqui: não conhecemos a priori a distribuição do tempo até o óbito por câncer de fígado"
+  },
+  {
+    "objectID": "Trabalho/parte1/index.html#testes-de-comparação-de-curvas",
+    "href": "Trabalho/parte1/index.html#testes-de-comparação-de-curvas",
+    "title": "ANÁLISE DE SOBREVIVÊNCIA E CONFIABILIDADE",
+    "section": "2.2 Testes de Comparação de Curvas",
+    "text": "2.2 Testes de Comparação de Curvas\n\n\n\n\n\nLog-Rank\n\nsurvdiff()\n\n\nPeso igual para todos os tempos de evento — padrão para diferenças ao longo de todo o seguimento\n\n\n\n\n\n\n\n\nPeto-Peto\n\nsurvdiff(rho=1)\n\n\nMaior peso aos eventos iniciais — complementa o log-rank quando curvas se cruzam\n\n\n\n\nH₀: as curvas de sobrevivência dos grupos comparados são iguais"
+  },
+  {
+    "objectID": "Trabalho/parte1/index.html#comparações-múltiplas",
+    "href": "Trabalho/parte1/index.html#comparações-múltiplas",
+    "title": "ANÁLISE DE SOBREVIVÊNCIA E CONFIABILIDADE",
+    "section": "2.3 Comparações Múltiplas",
+    "text": "2.3 Comparações Múltiplas\n\n\n\n2.3 Correção de Holm-Bonferroni\n\npairwise_survdiff()\n\n\n⚠️\n\nCovariáveis com mais de 2 grupos exigem comparação par a par → acumula erro tipo I\n\n\n\n🛡️\n\nHolm-Bonferroni controla o erro global sem ser tão conservadora quanto a Bonferroni tradicional\n\n\n\n\nAplicada a:\n\n\nECGRUP ESCOLARI CATEATEND"
+  },
+  {
+    "objectID": "Trabalho/parte1/index.html#medidas-resumo-das-covariáveis-quantitativas",
+    "href": "Trabalho/parte1/index.html#medidas-resumo-das-covariáveis-quantitativas",
+    "title": "ANÁLISE DE SOBREVIVÊNCIA E CONFIABILIDADE",
+    "section": "2.4 Medidas-Resumo das Covariáveis Quantitativas",
+    "text": "2.4 Medidas-Resumo das Covariáveis Quantitativas\n\nA única covariável quantitativa do estudo é a idade ao diagnóstico\nResumida por meio de média, desvio-padrão, mediana e amplitude interquartílica\nPara permitir o uso das ferramentas não paramétricas (KM e log-rank), a idade foi dicotomizada pela mediana em dois grupos de comparação"
+  },
+  {
+    "objectID": "Trabalho/parte1/index.html#medidas-resumo-covariável-quantitativa",
+    "href": "Trabalho/parte1/index.html#medidas-resumo-covariável-quantitativa",
+    "title": "ANÁLISE DE SOBREVIVÊNCIA E CONFIABILIDADE",
+    "section": "1.4 Medidas-Resumo — Covariável Quantitativa",
+    "text": "1.4 Medidas-Resumo — Covariável Quantitativa\n\n\n\n2.4 Idade ao Diagnóstico\n\n\n\nResumida por:\n\nMédia Desvio-padrão Mediana Amplitude interquartílica\n\n\n\n✂️\n\nDicotomizada pela mediana em 2 grupos, para uso com KM e log-rank"
+  },
+  {
+    "objectID": "Trabalho/parte1/index.html#amostra-final",
+    "href": "Trabalho/parte1/index.html#amostra-final",
+    "title": "ANÁLISE DE SOBREVIVÊNCIA E CONFIABILIDADE",
+    "section": "2.1 Amostra Final",
+    "text": "2.1 Amostra Final\n\nPacientes com câncer de fígado (C22) — FOSP, 2014–2019\n\n\n\n\n\nPacientes\n\n\nN\n\n\n\n\n\n\n\nEventos (óbito)\n\n\n%\n\n\n\n\n\n\n\nCensuras\n\n\n%"
+  },
+  {
+    "objectID": "Trabalho/parte1/index.html#evento-tempo-censura-e-variáveis",
+    "href": "Trabalho/parte1/index.html#evento-tempo-censura-e-variáveis",
+    "title": "ANÁLISE DE SOBREVIVÊNCIA E CONFIABILIDADE",
+    "section": "1.2 Evento, Tempo, Censura e Variáveis",
+    "text": "1.2 Evento, Tempo, Censura e Variáveis\n\n\n\n\n\n1.2.1 Evento & Tempo\n\n\n\n💀\n\n\nEvento de interesse\n\n\nÓbito por câncer ULTINFO = 3\n\n\n\n\n⏱️\n\n\nTempo até o evento\n\n\nMeses entre DTDIAG e DTULTINFO\n\n\n\n\n\n\n\n\n1.2.2 Censura\n\n\n\n🚫\n\n\nPacientes ao final do estudo:\n\n\nVivos, com câncer Vivos, SOE Óbito por outra causa\n\n\n→ tempo real até o evento não observado (censura à direita)\n\n\n\n\n\n\n\n\n\n\n1.2.3 Variáveis do Estudo\n\n\n\n\n⏱️ Tempotempo — meses entre diagnóstico e última informação\n\n\n\n\n💀 Evento/Censuracens — 1 = óbito por câncer · 0 = censura\n\n\n\n\n🏷️ Covariáveis Qualitativas\n\n\nSEXO ESCOLARI ECGRUP CATEATEND CIRURGIA RADIO QUIMIO\n\n\n\n\n🔢 Covariável Quantitativa\n\nIDADE — idade ao diagnóstico, em anos"
+  },
+  {
+    "objectID": "Trabalho/parte1/index.html#detalhamento",
+    "href": "Trabalho/parte1/index.html#detalhamento",
+    "title": "ANÁLISE DE SOBREVIVÊNCIA E CONFIABILIDADE",
+    "section": "1.2 Detalhamento",
+    "text": "1.2 Detalhamento\n\n\n\n\n\n1.2.1 Evento & Tempo\n\n\n\n💀\n\n\nEvento de interesse\n\n\nÓbito por câncer ULTINFO = 3\n\n\n\n\n\n⏱️\n\n\nTempo até o evento\n\n\nMeses entre DTDIAG e DTULTINFO\n\n\n\n\n\n\n\n\n\n\n1.2.2 Censura\n\n\n\n🚫\n\n\nPacientes ao final do estudo:\n\n\nVivos, com câncer  Vivos, SOE  Óbito por outra causa\n\n\n→ tempo real até o evento não observado (censura à direita)\n\n\n\n\n\n\n\n\n\n\n1.2.3 Variáveis do Estudo\n\n\n\n\n⏱️ Tempotempo — meses entre diagnóstico e última informação\n\n\n\n\n\n💀 Evento/Censuracens — 1 = óbito por câncer · 0 = censura\n\n\n\n\n\n🏷️ Covariáveis Qualitativas\n\n\nSEXO ESCOLARI ECGRUP CATEATEND\nCIRURGIA RADIO QUIMIO\n\n\n\n\n\n🔢 Covariável Quantitativa\n\nIDADE — idade ao diagnóstico, em anos"
+  },
+  {
+    "objectID": "Trabalho/parte1/index.html#metodologia",
+    "href": "Trabalho/parte1/index.html#metodologia",
+    "title": "ANÁLISE DE SOBREVIVÊNCIA E CONFIABILIDADE",
+    "section": "1.3 Metodologia",
+    "text": "1.3 Metodologia\n\n\n\n\n\n🏷️ Covariáveis Qualitativas\n\n\n\n\nsurvfit() Kaplan-Meier\n\n\nsurvdiff() Log-Rank\n\n\nsurvdiff(rho=1) Peto-Peto\n\n\npairwise_survdiff() Holm-Bonferroni\n\n\nAplicada a:\n\nSEXO ESCOLARI ECGRUP CATEATEND CIRURGIA RADIO QUIMIO\n\n\n\n\n\n\n\n\n\n\n🔢 Covariável Quantitativa\n\n\n\n\nMedidas-resumo:\n\nMédia Desvio-padrão Mediana Amplitude interquartílica\n\n\n\nmedian() Dicotomização pela mediana\n\n\nAplicada a:\n\nIDADE\n\n\n\nApós dicotomização:\n\nsurvfit() survdiff()"
+  },
+  {
+    "objectID": "Trabalho/parte1/index.html#descritivo",
+    "href": "Trabalho/parte1/index.html#descritivo",
+    "title": "ANÁLISE DE SOBREVIVÊNCIA E CONFIABILIDADE",
+    "section": "2.1 Descritivo",
+    "text": "2.1 Descritivo"
+  },
+  {
+    "objectID": "Trabalho/parte1/index.html#sem-estratos",
+    "href": "Trabalho/parte1/index.html#sem-estratos",
+    "title": "ANÁLISE DE SOBREVIVÊNCIA E CONFIABILIDADE",
+    "section": "2.2 Sem Estratos",
+    "text": "2.2 Sem Estratos"
+  },
+  {
+    "objectID": "Trabalho/parte1/index.html#qualitativa---sexo",
+    "href": "Trabalho/parte1/index.html#qualitativa---sexo",
+    "title": "ANÁLISE DE SOBREVIVÊNCIA E CONFIABILIDADE",
+    "section": "2.3 Qualitativa - Sexo",
+    "text": "2.3 Qualitativa - Sexo"
+  },
+  {
+    "objectID": "Trabalho/parte1/index.html#qualitativa---escolaridade",
+    "href": "Trabalho/parte1/index.html#qualitativa---escolaridade",
+    "title": "ANÁLISE DE SOBREVIVÊNCIA E CONFIABILIDADE",
+    "section": "2.4 Qualitativa - Escolaridade",
+    "text": "2.4 Qualitativa - Escolaridade"
+  },
+  {
+    "objectID": "Trabalho/parte1/index.html#qualitativa---estadiamento",
+    "href": "Trabalho/parte1/index.html#qualitativa---estadiamento",
+    "title": "ANÁLISE DE SOBREVIVÊNCIA E CONFIABILIDADE",
+    "section": "2.5 Qualitativa - Estadiamento",
+    "text": "2.5 Qualitativa - Estadiamento"
+  },
+  {
+    "objectID": "Trabalho/parte1/index.html#qualitativa---categoria-de-atendimento",
+    "href": "Trabalho/parte1/index.html#qualitativa---categoria-de-atendimento",
+    "title": "ANÁLISE DE SOBREVIVÊNCIA E CONFIABILIDADE",
+    "section": "2.6 Qualitativa - Categoria de Atendimento",
+    "text": "2.6 Qualitativa - Categoria de Atendimento"
+  },
+  {
+    "objectID": "Trabalho/parte1/index.html#qualitativa---cirurgia",
+    "href": "Trabalho/parte1/index.html#qualitativa---cirurgia",
+    "title": "ANÁLISE DE SOBREVIVÊNCIA E CONFIABILIDADE",
+    "section": "2.7 Qualitativa - Cirurgia",
+    "text": "2.7 Qualitativa - Cirurgia"
+  },
+  {
+    "objectID": "Trabalho/parte1/index.html#qualitativa---radioterapia",
+    "href": "Trabalho/parte1/index.html#qualitativa---radioterapia",
+    "title": "ANÁLISE DE SOBREVIVÊNCIA E CONFIABILIDADE",
+    "section": "2.8 Qualitativa - Radioterapia",
+    "text": "2.8 Qualitativa - Radioterapia"
+  },
+  {
+    "objectID": "Trabalho/parte1/index.html#qualitativa---quimioterapia",
+    "href": "Trabalho/parte1/index.html#qualitativa---quimioterapia",
+    "title": "ANÁLISE DE SOBREVIVÊNCIA E CONFIABILIDADE",
+    "section": "2.9 Qualitativa - Quimioterapia",
+    "text": "2.9 Qualitativa - Quimioterapia"
+  },
+  {
+    "objectID": "Trabalho/parte1/index.html#quantitativa---idade",
+    "href": "Trabalho/parte1/index.html#quantitativa---idade",
+    "title": "ANÁLISE DE SOBREVIVÊNCIA E CONFIABILIDADE",
+    "section": "2.10 Quantitativa - Idade",
+    "text": "2.10 Quantitativa - Idade"
+  }
+]

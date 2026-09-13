@@ -1,0 +1,440 @@
+---
+title: "<span style='color: #d9b054;'>ANÁLISE DE SOBREVIVÊNCIA E CONFIABILIDADE</span>"
+subtitle: "<span style='font-size: 26px; color: #cfe0d5;'>**Parte I: Análise Não Paramétrica**</span>"
+author: "<span style='color: #ffffff;'>Caio Salviano (<caiosalviano@id.uff.br>)</span>"
+date: 2026-09-28
+date-format: "DD/MM/YYYY"
+institute: "<span style='color: #ffffff;'>Universidade Federal Fluminense</span>"
+format:
+  revealjs:
+    css: custom.css
+    slide-number: true
+    incremental: false
+    transition: slide
+    background-transition: fade
+    width: 1280
+    height: 720
+    margin: 0.07
+    auto-stretch: false
+    number-sections: true
+    title-slide-attributes:
+      data-background-image: "media/capa.png"
+      data-background-size: cover
+      style: "transform: translateY(-15px);"
+---
+
+# Introdução
+
+## Contexto do Estudo
+
+:::: {.columns}
+
+::: {.column width="49%"}
+<div style="background:#e3efe6; border:1.5px solid #3f6b52; border-radius:12px; padding:1.25rem 1.1rem; display:flex; flex-direction:column; gap:0; font-size:0.7em;">
+
+<div style="display:flex; align-items:center; justify-content:left; gap:10px;">
+<h3 style="font-size:1.3em; font-weight:700; color:#10241d; margin:0;">
+1.1.1 A Base de Dados
+</h3>
+<span style="font-family:'Courier New',monospace; font-size:0.85em; font-weight:700; padding:3px 8px; border-radius:5px; background:#dcead9; color:#3f6b52; white-space:nowrap;">
+FOSP · RHC
+</span>
+</div>
+
+---
+
+<div style="display:flex; gap:8px; align-items:flex-start; padding:3px 0;">
+<span style="background:#dcead9; border-radius:6px; padding:2px 5px; margin-top:2px;">🗂️</span>
+<div>
+<div style="font-size:0.85em; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:#6b7d73; margin-bottom:2px;">Fonte dos dados</div>
+<div>Fundação Oncocentro de São Paulo (FOSP) — Registro Hospitalar de Câncer (RHC)</div>
+</div>
+</div>
+
+---
+
+<div style="display:flex; gap:8px; align-items:flex-start; padding:3px 0;">
+<span style="background:#dcead9; border-radius:6px; padding:2px 5px; margin-top:2px;">🩺</span>
+<div>
+<div style="font-size:0.85em; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:#6b7d73; margin-bottom:2px;">Tipo de câncer</div>
+<div>Fígado e vias biliares intra-hepáticas — CID-O <strong style="color:#3f6b52;">C22</strong></div>
+</div>
+</div>
+
+---
+
+<div style="display:flex; gap:8px; align-items:flex-start; padding:3px 0;">
+<span style="background:#dcead9; border-radius:6px; padding:2px 5px; margin-top:2px;">👥</span>
+<div>
+<div style="font-size:0.85em; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:#6b7d73; margin-bottom:2px;">População</div>
+<div>Adultos (≥ 18 anos), sem tratamento oncológico prévio à admissão</div>
+</div>
+</div>
+
+---
+
+<div style="display:flex; gap:8px; align-items:flex-start; padding:3px 0;">
+<span style="background:#dcead9; border-radius:6px; padding:2px 5px; margin-top:2px;">📅</span>
+<div>
+<div style="font-size:0.85em; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:#6b7d73; margin-bottom:2px;">Período</div>
+<div>Diagnósticos entre <strong style="color:#3f6b52;">2014</strong> e <strong style="color:#3f6b52;">2019</strong></div>
+</div>
+</div>
+
+</div>
+:::
+
+::: {.column width="2%"}
+:::
+
+::: {.column width="49%"}
+<div style="background:#faf1de; border:1.5px solid #b8862a; border-radius:12px; padding:1.25rem 1.1rem; display:flex; flex-direction:column; gap:0; font-size:0.7em; height:100%;">
+
+<div style="display:flex; align-items:center; justify-content:left; gap:10px;">
+<h3 style="font-size:1.3em; font-weight:700; color:#10241d; margin:0;">
+1.1.2 Por que Estudar?
+</h3>
+<span style="font-family:'Courier New',monospace; font-size:0.85em; font-weight:700; padding:3px 8px; border-radius:5px; background:#b8862a; color:#fff; white-space:nowrap;">
+Relevância
+</span>
+</div>
+
+---
+
+<div style="display:flex; gap:8px; align-items:flex-start; padding:5px 0;">
+<span style="background:#f5e6c8; border-radius:6px; padding:2px 5px; margin-top:2px;">⚠️</span>
+<div>
+<div style="font-size:0.85em; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:#6b7d73; margin-bottom:2px;">Prognóstico</div>
+<div>Câncer de fígado tem prognóstico reservado e alta letalidade</div>
+</div>
+</div>
+
+---
+
+<div style="display:flex; gap:8px; align-items:flex-start; padding:5px 0;">
+<span style="background:#f5e6c8; border-radius:6px; padding:2px 5px; margin-top:2px;">💡</span>
+<div style="width:100%;">
+<div style="font-size:0.85em; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:#6b7d73; margin-bottom:4px;">Aplicações do estudo</div>
+<div style="display:flex; flex-wrap:wrap; gap:3px; margin-top:2px;">
+<span style="flex:0 0 calc(50% - 3px); font-size:0.85em; padding:1px 7px; border-radius:99px; font-weight:500; background:rgba(184,134,42,0.1); color:#7a5a12; border:0.5px solid rgba(184,134,42,0.3);">Planejamento assistencial</span>
+<br>
+<span style="flex:0 0 calc(50% - 3px); font-size:0.85em; padding:1px 7px; border-radius:99px; font-weight:500; background:rgba(184,134,42,0.1); color:#7a5a12; border:0.5px solid rgba(184,134,42,0.3);">Priorização de cuidados</span>
+<br>
+<span style="flex:0 0 100%; font-size:0.85em; padding:1px 7px; border-radius:99px; font-weight:500; background:rgba(184,134,42,0.1); color:#7a5a12; border:0.5px solid rgba(184,134,42,0.3);">Identificação precoce de grupos de risco</span>
+</div>
+</div>
+</div>
+
+</div>
+:::
+
+::::
+
+## Detalhamento
+
+:::: {.columns}
+
+::: {.column width="49%"}
+<div style="background:#e3efe6; border:1.5px solid #3f6b52; border-radius:12px; padding:1rem 0.9rem; display:flex; flex-direction:column; gap:10px; font-size:0.72em; height:100%;">
+
+<div style="display:flex; align-items:center; justify-content:left; gap:10px;">
+<h3 style="font-size:1.2em; font-weight:700; color:#10241d; margin:0;">1.2.1 Evento &amp; Tempo</h3>
+</div>
+
+<div style="display:flex; gap:8px; align-items:flex-start;">
+<span style="background:#dcead9; border-radius:6px; padding:2px 5px; margin-top:2px;">💀</span>
+<div>
+<div style="font-size:0.85em; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:#6b7d73; margin-bottom:2px;">Evento de interesse</div>
+<div>Óbito por câncer <span style="font-family:'Courier New',monospace; background:#dcead9; color:#3f6b52; padding:1px 6px; border-radius:5px;">ULTINFO = 3</span></div>
+</div>
+</div>
+<br>
+<div style="display:flex; gap:8px; align-items:flex-start;">
+<span style="background:#dcead9; border-radius:6px; padding:2px 5px; margin-top:2px;">⏱️</span>
+<div>
+<div style="font-size:0.85em; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:#6b7d73; margin-bottom:2px;">Tempo até o evento</div>
+<div>Meses entre <span style="font-family:'Courier New',monospace; background:#dcead9; color:#3f6b52; padding:1px 6px; border-radius:5px;">DTDIAG</span> e <span style="font-family:'Courier New',monospace; background:#dcead9; color:#3f6b52; padding:1px 6px; border-radius:5px;">DTULTINFO</span></div>
+</div>
+</div>
+<br>
+<div style="border-top:1px solid rgba(63,107,82,0.25); margin:2px 0;"></div>
+<br>
+<div style="display:flex; align-items:center; justify-content:left; gap:10px;">
+<h3 style="font-size:1.2em; font-weight:700; color:#10241d; margin:0;">1.2.2 Censura</h3>
+</div>
+
+<div style="display:flex; gap:8px; align-items:flex-start;">
+<span style="background:#dcead9; border-radius:6px; padding:2px 5px; margin-top:2px;">🚫</span>
+<div style="width:100%;">
+<div style="font-size:0.85em; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:#6b7d73; margin-bottom:4px;">Pacientes ao final do estudo:</div>
+<div style="display:flex; flex-wrap:wrap; gap:3px; margin-top:2px;">
+<span style="font-size:0.85em; padding:1px 7px; border-radius:99px; font-weight:500; background:rgba(63,107,82,0.12); color:#2c5943; border:0.5px solid rgba(63,107,82,0.3);">Vivos, com câncer</span>
+<br>
+<span style="font-size:0.85em; padding:1px 7px; border-radius:99px; font-weight:500; background:rgba(63,107,82,0.12); color:#2c5943; border:0.5px solid rgba(63,107,82,0.3);">Vivos, SOE</span>
+<br>
+<span style="font-size:0.85em; padding:1px 7px; border-radius:99px; font-weight:500; background:rgba(63,107,82,0.12); color:#2c5943; border:0.5px solid rgba(63,107,82,0.3);">Óbito por outra causa</span>
+</div>
+<div style="margin-top:8px; font-style:italic; color:#6b7d73;">→ tempo real até o evento não observado (censura à direita)</div>
+</div>
+</div>
+
+</div>
+:::
+
+::: {.column width="2%"}
+:::
+
+::: {.column width="49%"}
+<div style="background:#faf1de; border:1.5px solid #b8862a; border-radius:12px; padding:1rem 0.9rem; display:flex; flex-direction:column; gap:10px; font-size:0.72em; height:100%;">
+
+<div style="display:flex; align-items:center; justify-content:left; gap:10px;">
+<h3 style="font-size:1.2em; font-weight:700; color:#10241d; margin:0;">1.2.3 Variáveis do Estudo</h3>
+</div>
+
+<div style="display:flex; gap:16px;">
+<div style="flex:1;"><span style="font-size:0.85em; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:#6b7d73;">⏱️ Tempo</span><br><span style="font-family:'Courier New',monospace; background:#f5e6c8; color:#7a5a12; padding:1px 6px; border-radius:5px;">tempo</span> — meses entre diagnóstico e última informação</div>
+</div>
+<br>
+<div style="display:flex; gap:16px;">
+<div style="flex:1;"><span style="font-size:0.85em; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:#6b7d73;">💀 Evento/Censura</span><br><span style="font-family:'Courier New',monospace; background:#f5e6c8; color:#7a5a12; padding:1px 6px; border-radius:5px;">cens</span> — 1 = óbito por câncer · 0 = censura</div>
+</div>
+<br>
+<div>
+<div style="font-size:0.85em; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:#6b7d73; margin-bottom:6px;">🏷️ Covariáveis Qualitativas</div>
+<div style="display:flex; flex-wrap:wrap; gap:5px;">
+<span style="padding:2px 9px; border-radius:99px; font-weight:500; background:rgba(184,134,42,0.1); color:#7a5a12; border:0.5px solid rgba(184,134,42,0.3);">SEXO</span>
+<span style="padding:2px 9px; border-radius:99px; font-weight:500; background:rgba(184,134,42,0.1); color:#7a5a12; border:0.5px solid rgba(184,134,42,0.3);">ESCOLARI</span>
+<span style="padding:2px 9px; border-radius:99px; font-weight:500; background:rgba(184,134,42,0.1); color:#7a5a12; border:0.5px solid rgba(184,134,42,0.3);">ECGRUP</span>
+<span style="padding:2px 9px; border-radius:99px; font-weight:500; background:rgba(184,134,42,0.1); color:#7a5a12; border:0.5px solid rgba(184,134,42,0.3);">CATEATEND</span>
+
+
+<span style="padding:2px 9px; border-radius:99px; font-weight:500; background:rgba(184,134,42,0.1); color:#7a5a12; border:0.5px solid rgba(184,134,42,0.3);">CIRURGIA</span>
+<span style="padding:2px 9px; border-radius:99px; font-weight:500; background:rgba(184,134,42,0.1); color:#7a5a12; border:0.5px solid rgba(184,134,42,0.3);">RADIO</span>
+<span style="padding:2px 9px; border-radius:99px; font-weight:500; background:rgba(184,134,42,0.1); color:#7a5a12; border:0.5px solid rgba(184,134,42,0.3);">QUIMIO</span>
+</div>
+</div>
+<br>
+<div>
+<div style="font-size:0.85em; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:#6b7d73; margin-bottom:6px;">🔢 Covariável Quantitativa</div>
+<span style="padding:2px 9px; border-radius:99px; font-weight:500; background:rgba(184,134,42,0.1); color:#7a5a12; border:0.5px solid rgba(184,134,42,0.3);">IDADE</span>
+<span style="margin-left:6px; color:#7a5a12;">— idade ao diagnóstico, em anos</span>
+</div>
+
+</div>
+:::
+
+::::
+
+## Metodologia
+
+:::: {.columns}
+
+::: {.column width="49%"}
+<div style="background:#e3efe6; border:1.5px solid #3f6b52; border-radius:12px; padding:1.1rem 1rem; font-size:0.62em; height:100%;">
+
+<div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+<h3 style="font-size:1.25em; font-weight:700; color:#10241d; margin:0;">🏷️ Covariáveis Qualitativas</h3>
+</div>
+
+<div style="display:flex; flex-direction:column; gap:10px;">
+
+<div style="display:flex; gap:8px; align-items:center;">
+<span style="font-family:'Courier New',monospace; font-size:0.9em; font-weight:700; padding:2px 8px; border-radius:5px; background:#dcead9; color:#3f6b52; white-space:nowrap;">survfit()</span>
+<span>Kaplan-Meier</span>
+</div>
+
+<div style="display:flex; gap:8px; align-items:center;">
+<span style="font-family:'Courier New',monospace; font-size:0.9em; font-weight:700; padding:2px 8px; border-radius:5px; background:#dcead9; color:#3f6b52; white-space:nowrap;">survdiff()</span>
+<span>Log-Rank</span>
+</div>
+
+<div style="display:flex; gap:8px; align-items:center;">
+<span style="font-family:'Courier New',monospace; font-size:0.9em; font-weight:700; padding:2px 8px; border-radius:5px; background:#dcead9; color:#3f6b52; white-space:nowrap;">survdiff(rho=1)</span>
+<span>Peto-Peto</span>
+</div>
+
+<div style="display:flex; gap:8px; align-items:center;">
+<span style="font-family:'Courier New',monospace; font-size:0.9em; font-weight:700; padding:2px 8px; border-radius:5px; background:#dcead9; color:#3f6b52; white-space:nowrap;">pairwise_survdiff()</span>
+<span>Holm-Bonferroni</span>
+</div>
+
+<div style="margin-top:4px;">
+<strong>Aplicada a:</strong>
+<div style="display:flex; flex-wrap:wrap; gap:4px; margin-top:4px;">
+<span style="padding:1px 8px; border-radius:99px; font-weight:500; background:rgba(63,107,82,0.12); color:#2c5943; border:0.5px solid rgba(63,107,82,0.3);">SEXO</span>
+<span style="padding:1px 8px; border-radius:99px; font-weight:500; background:rgba(63,107,82,0.12); color:#2c5943; border:0.5px solid rgba(63,107,82,0.3);">ESCOLARI</span>
+<span style="padding:1px 8px; border-radius:99px; font-weight:500; background:rgba(63,107,82,0.12); color:#2c5943; border:0.5px solid rgba(63,107,82,0.3);">ECGRUP</span>
+<span style="padding:1px 8px; border-radius:99px; font-weight:500; background:rgba(63,107,82,0.12); color:#2c5943; border:0.5px solid rgba(63,107,82,0.3);">CATEATEND</span>
+<span style="padding:1px 8px; border-radius:99px; font-weight:500; background:rgba(63,107,82,0.12); color:#2c5943; border:0.5px solid rgba(63,107,82,0.3);">CIRURGIA</span>
+<span style="padding:1px 8px; border-radius:99px; font-weight:500; background:rgba(63,107,82,0.12); color:#2c5943; border:0.5px solid rgba(63,107,82,0.3);">RADIO</span>
+<span style="padding:1px 8px; border-radius:99px; font-weight:500; background:rgba(63,107,82,0.12); color:#2c5943; border:0.5px solid rgba(63,107,82,0.3);">QUIMIO</span>
+</div>
+</div>
+
+</div>
+</div>
+:::
+
+::: {.column width="2%"}
+:::
+
+::: {.column width="49%"}
+<div style="background:#faf1de; border:1.5px solid #b8862a; border-radius:12px; padding:1.1rem 1rem; font-size:0.62em; height:100%;">
+
+<div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+<h3 style="font-size:1.25em; font-weight:700; color:#10241d; margin:0;">🔢 Covariável Quantitativa</h3>
+</div>
+
+<div style="display:flex; flex-direction:column; gap:10px;">
+
+<div>
+<strong>Medidas-resumo:</strong>
+<div style="display:flex; flex-wrap:wrap; gap:4px; margin-top:4px;">
+<span style="padding:1px 8px; border-radius:99px; font-weight:500; background:rgba(184,134,42,0.1); color:#7a5a12; border:0.5px solid rgba(184,134,42,0.3);">Média</span>
+<span style="padding:1px 8px; border-radius:99px; font-weight:500; background:rgba(184,134,42,0.1); color:#7a5a12; border:0.5px solid rgba(184,134,42,0.3);">Desvio-padrão</span>
+<span style="padding:1px 8px; border-radius:99px; font-weight:500; background:rgba(184,134,42,0.1); color:#7a5a12; border:0.5px solid rgba(184,134,42,0.3);">Mediana</span>
+<span style="padding:1px 8px; border-radius:99px; font-weight:500; background:rgba(184,134,42,0.1); color:#7a5a12; border:0.5px solid rgba(184,134,42,0.3);">Amplitude interquartílica</span>
+</div>
+</div>
+
+<div style="display:flex; gap:8px; align-items:center;">
+<span style="font-family:'Courier New',monospace; font-size:0.9em; font-weight:700; padding:2px 8px; border-radius:5px; background:#b8862a; color:#fff; white-space:nowrap;">median()</span>
+<span>Dicotomização pela mediana</span>
+</div>
+
+<div style="margin-top:4px;">
+<strong>Aplicada a:</strong>
+<div style="display:flex; flex-wrap:wrap; gap:4px; margin-top:4px;">
+<span style="padding:1px 8px; border-radius:99px; font-weight:500; background:rgba(184,134,42,0.1); color:#7a5a12; border:0.5px solid rgba(184,134,42,0.3);">IDADE</span>
+</div>
+</div>
+
+<div style="margin-top:4px; padding-top:8px; border-top:1px solid rgba(184,134,42,0.25);">
+<strong>Após dicotomização:</strong>
+<div style="display:flex; flex-wrap:wrap; gap:4px; margin-top:4px;">
+<span style="font-family:'Courier New',monospace; font-size:0.9em; font-weight:700; padding:2px 8px; border-radius:5px; background:#b8862a; color:#fff;">survfit()</span>
+<span style="font-family:'Courier New',monospace; font-size:0.9em; font-weight:700; padding:2px 8px; border-radius:5px; background:#b8862a; color:#fff;">survdiff()</span>
+</div>
+</div>
+
+</div>
+</div>
+:::
+
+::::
+
+# Resultados
+
+## Descritivo
+
+## Sem Estratos
+
+```{r}
+#| eval: true
+#| fig-align: center
+#| out-width: "100%"
+#| out-height: "80%"
+
+curva_sem_covariavel <- readRDS("plots/curva_sem_covariavel.RDS")
+curva_sem_covariavel
+```
+
+## Qualitativa - Sexo
+
+```{r}
+#| eval: true
+#| fig-align: center
+#| out-width: "100%"
+#| out-height: "80%"
+
+curva_sexo <- readRDS("plots/curva_sexo.RDS")
+curva_sexo
+```
+
+## Qualitativa - Escolaridade
+
+```{r}
+#| eval: true
+#| fig-align: center
+#| out-width: "100%"
+#| out-height: "80%"
+
+curva_escolari <- readRDS("plots/curva_escolari.RDS")
+curva_escolari
+```
+
+## Qualitativa - Estadiamento
+
+```{r}
+#| eval: true
+#| fig-align: center
+#| out-width: "100%"
+#| out-height: "80%"
+
+curva_ecgrup <- readRDS("plots/curva_ecgrup.RDS")
+curva_ecgrup
+```
+
+## Qualitativa - Categoria de Atendimento
+
+```{r}
+#| eval: true
+#| fig-align: center
+#| out-width: "100%"
+#| out-height: "80%"
+
+curva_cateatend <- readRDS("plots/curva_cateatend.RDS")
+curva_cateatend
+```
+
+## Qualitativa - Cirurgia
+
+```{r}
+#| eval: true
+#| fig-align: center
+#| out-width: "100%"
+#| out-height: "80%"
+
+curva_cirurgia <- readRDS("plots/curva_cirurgia.RDS")
+curva_cirurgia
+```
+
+## Qualitativa - Radioterapia
+
+```{r}
+#| eval: true
+#| fig-align: center
+#| out-width: "100%"
+#| out-height: "80%"
+
+curva_radio <- readRDS("plots/curva_radio.RDS")
+curva_radio
+```
+
+## Qualitativa - Quimioterapia
+
+```{r}
+#| eval: true
+#| fig-align: center
+#| out-width: "100%"
+#| out-height: "80%"
+
+curva_quimio <- readRDS("plots/curva_quimio.RDS")
+curva_quimio
+```
+
+## Quantitativa - Idade
+
+```{r}
+#| eval: true
+#| fig-align: center
+#| out-width: "100%"
+#| out-height: "80%"
+
+curva_idade_boxplot <- readRDS("plots/curva_idade_boxplot.RDS")
+curva_idade_boxplot
+```
+
+# Conclusão
+
+# Fim. {.unnumbered .final-slide}
