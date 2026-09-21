@@ -32,7 +32,7 @@
     "href": "Trabalho/parte1/index.html#contexto-do-estudo",
     "title": "ANÁLISE DE SOBREVIVÊNCIA E CONFIABILIDADE",
     "section": "1.1 Contexto do Estudo",
-    "text": "1.1 Contexto do Estudo\n\n\n\n\n\n1.1.1 A Base de Dados\n\n FOSP · RHC \n\n\n\n🗂️\n\n\nFonte dos dados\n\n\nFundação Oncocentro de São Paulo (FOSP) — Registro Hospitalar de Câncer (RHC)\n\n\n\n\n\n🩺\n\n\nTipo de câncer\n\n\nFígado e vias biliares intra-hepáticas — CID-O C22\n\n\n\n\n\n👥\n\n\nPopulação\n\n\nAdultos (≥ 18 anos), sem tratamento oncológico prévio à admissão\n\n\n\n\n\n📅\n\n\nPeríodo\n\n\nDiagnósticos entre 2014 e 2019\n\n\n\n\n\n\n\n\n\n\n1.1.2 Por que Estudar?\n\n Relevância \n\n\n\n⚠️\n\n\nPrognóstico\n\n\nCâncer de fígado tem prognóstico reservado e alta letalidade\n\n\n\n\n\n💡\n\n\nAplicações do estudo\n\n\nPlanejamento assistencial  Priorização de cuidados  Identificação precoce de grupos de risco"
+    "text": "1.1 Contexto do Estudo\n\n\n\n\n\n1.1.1 A Base de Dados\n\n\nFOSP · RHC\n\n\n\n\n\n🗂️ Fonte dos dados\n\n\nFOSP\n\n\nFundação Oncocentro de São Paulo · Registro Hospitalar de Câncer (RHC)\n\n\n\n\n🩺 Tipo de câncer\n\n\nC22\n\n\nFígado e vias biliares intra-hepáticas · CID-O\n\n\n\n\n👥 População\n\n\n≥ 18 anos\n\n\nAdultos, sem tratamento oncológico prévio à admissão\n\n\n\n\n📅 Período\n\n\n2014–2019\n\n\nAno do diagnóstico\n\n\n\n\n\n\n\n\n\n\n1.1.2 Por que Estudar?\n\n\nRelevância\n\n\n\n\n\n65,6%\n\n\nóbito por câncer\n\n\n\n\n⚠️ Prognóstico\n\n\nCâncer de fígado tem prognóstico reservado e alta letalidade\n\n\n2.774 dos 4.231 pacientes desta base evoluíram a óbito por câncer\n\n\n\n\n💡 Aplicações do estudo\n\n\n\n\n1\n\n\nPlanejamento assistencial\n\n\n\n\n2\n\n\nPriorização de cuidados\n\n\n\n\n3\n\n\nIdentificação precoce de grupos de risco"
   },
   {
     "objectID": "Trabalho/parte1/index.html#evento-tempo-e-censura",
@@ -102,7 +102,7 @@
     "href": "Trabalho/parte1/index.html#detalhamento",
     "title": "ANÁLISE DE SOBREVIVÊNCIA E CONFIABILIDADE",
     "section": "1.2 Detalhamento",
-    "text": "1.2 Detalhamento\n\n\n\n\n\n1.2.1 Evento & Tempo\n\n\n\n💀\n\n\nEvento de interesse\n\n\nÓbito por câncer ULTINFO = 3\n\n\n\n\n\n⏱️\n\n\nTempo até o evento\n\n\nMeses entre DTDIAG e DTULTINFO\n\n\n\n\n\n\n\n\n\n\n1.2.2 Censura\n\n\n\n🚫\n\n\nPacientes ao final do estudo:\n\n\nVivos, com câncer  Vivos, SOE  Óbito por outra causa\n\n\n→ tempo real até o evento não observado (censura à direita)\n\n\n\n\n\n\n\n\n\n\n1.2.3 Variáveis do Estudo\n\n\n\n\n⏱️ Tempotempo — meses entre diagnóstico e última informação\n\n\n\n\n\n💀 Evento/Censuracens — 1 = óbito por câncer · 0 = censura\n\n\n\n\n\n🏷️ Covariáveis Qualitativas\n\n\nSEXO ESCOLARI ECGRUP CATEATEND\nCIRURGIA RADIO QUIMIO\n\n\n\n\n\n🔢 Covariável Quantitativa\n\nIDADE — idade ao diagnóstico, em anos"
+    "text": "1.2 Detalhamento\n\n\n\n\n1.2.1 Evento & Tempo\n\n\n\n\n📅 Diagnóstico\n\n\nDTDIAG\n\n\n\n\n⏱️ tempo (meses)\n\n\n\n\n\n\n▶\n\n\n\n\n\n📅 Última informação\n\n\nDTULTINFO\n\n\n\n\n\n💀\n\n\n\nEvento de interesse\n\n\nÓbito por câncer\n\n\n\nULTINFO = 3\n\n\ncens = 1\n\n\n\n\n\n\n1.2.2 Censura\n\n\n🚫 Pacientes ao final do estudo\n\n\n\nULTINFO = 1\n\n\nVivos, com câncer\n\n\n\n\nULTINFO = 2\n\n\nVivos, SOE\n\n\n\n\nULTINFO = 4\n\n\nÓbito por outra causa\n\n\n\n→ tempo real até o evento não observado (censura à direita) · cens = 0\n\n\n\n\n\n\n\n1.2.3 Variáveis do Estudo\n\n\n\n\n⏱️ Tempo\n\n\ntempo\n\n\nmeses entre diagnóstico e última informação\n\n\n\n\n💀 Evento / Censura\n\n\ncens\n\n\n1 = óbito por câncer · 0 = censura\n\n\n\n\n\n\n🏷️ Covariáveis Qualitativas\n\n\n7\n\n\n\n\nSEXO\n\n\nESCOLARI\n\n\nECGRUP\n\n\nCATEATEND\n\n\nCIRURGIA\n\n\nRADIO\n\n\nQUIMIO\n\n\n\n\n\n\n🔢 Covariável Quantitativa\n\n\n1\n\n\n\n\nIDADE\n\n\n— idade ao diagnóstico, em anos"
   },
   {
     "objectID": "Trabalho/parte1/index.html#metodologia",
@@ -115,71 +115,71 @@
     "objectID": "Trabalho/parte1/index.html#descritivo",
     "href": "Trabalho/parte1/index.html#descritivo",
     "title": "ANÁLISE DE SOBREVIVÊNCIA E CONFIABILIDADE",
-    "section": "2.1 Descritivo",
-    "text": "2.1 Descritivo\n\n\n\n\n👥 Observações\n\n\n4.231\n\n\npacientes com câncer de fígado (C22)\n\n\n\n\n\n\n\n💀 Ocorrências do evento\n\n\n2.774\n\n\n65,6% · óbito por câncer\n\n\n\n\n\n\n\n🚫 Censuras\n\n\n1.457\n\n\n34,4% · sem óbito por câncer\n\n\n\n\n\nEvento · 65,6%\n\n\nCensura · 34,4%\n\n\n\n\n\n\nEstadiamentoECGRUP\n\n\nIn situ00,0%\n\n\nEstágio I62114,7%\n\n\nEstágio II82519,5%\n\n\nEstágio III67716,0%\n\n\nEstágio IV98423,3%\n\n\nSem informação66815,8%\n\n\nNão se aplica45610,8%\n\n\n\n\n\n\n\nEscolaridadeESCOLARI\n\n\nAnalfabeto1543,6%\n\n\nFund. incompleto1.20128,4%\n\n\nFund. completo79018,7%\n\n\nEnsino médio70316,6%\n\n\nEnsino superior3909,2%\n\n\nSem informação99323,5%\n\n\n\n\n\n\n\nSexoSEXO\n\n\nMasculino2.88668,2%\n\n\nFeminino1.34531,8%\n\n\n\n\nAtendimentoCATEATEND\n\n\nSUS43810,4%\n\n\nConvênio3.71887,9%\n\n\nParticular751,8%\n\n\n\n\n\n\n\nTratamentos\n\n\nCirurgia\n\n\nSim1.05524,9%\n\n\nNão3.17675,1%\n\n\nRadioterapia\n\n\nSim1884,4%\n\n\nNão4.04395,6%\n\n\nQuimioterapia\n\n\nSim1.57737,3%\n\n\nNão2.65462,7%\n\n\n\n\nPercentuais calculados sobre o total de 4.231 pacientes. “In situ” não possui casos em C22."
+    "section": "3.1 Descritivo",
+    "text": "3.1 Descritivo\n\n\n\n\n👥 Observações\n\n\n4.231\n\n\npacientes com câncer de fígado (C22)\n\n\n\n\n\n\n\n💀 Ocorrências do evento\n\n\n2.774\n\n\n65,6% · óbito por câncer\n\n\n\n\n\n\n\n🚫 Censuras\n\n\n1.457\n\n\n34,4% · sem óbito por câncer\n\n\n\n\n\nEvento · 65,6%\n\n\nCensura · 34,4%\n\n\n\n\n\n\nEstadiamentoECGRUP\n\n\nIn situ00,0%\n\n\nEstágio I62114,7%\n\n\nEstágio II82519,5%\n\n\nEstágio III67716,0%\n\n\nEstágio IV98423,3%\n\n\nSem informação66815,8%\n\n\nNão se aplica45610,8%\n\n\n\n\n\n\n\nEscolaridadeESCOLARI\n\n\nAnalfabeto1543,6%\n\n\nFund. incompleto1.20128,4%\n\n\nFund. completo79018,7%\n\n\nEnsino médio70316,6%\n\n\nEnsino superior3909,2%\n\n\nSem informação99323,5%\n\n\n\n\n\n\n\nSexoSEXO\n\n\nMasculino2.88668,2%\n\n\nFeminino1.34531,8%\n\n\n\n\nAtendimentoCATEATEND\n\n\nSUS43810,4%\n\n\nConvênio3.71887,9%\n\n\nParticular751,8%\n\n\n\n\n\n\n\nTratamentos\n\n\nCirurgia\n\n\nSim1.05524,9%\n\n\nNão3.17675,1%\n\n\nRadioterapia\n\n\nSim1884,4%\n\n\nNão4.04395,6%\n\n\nQuimioterapia\n\n\nSim1.57737,3%\n\n\nNão2.65462,7%\n\n\n\n\nPercentuais calculados sobre o total de 4.231 pacientes. “In situ” não possui casos em C22."
   },
   {
     "objectID": "Trabalho/parte1/index.html#sem-estratos",
     "href": "Trabalho/parte1/index.html#sem-estratos",
     "title": "ANÁLISE DE SOBREVIVÊNCIA E CONFIABILIDADE",
-    "section": "2.2 Sem Estratos",
-    "text": "2.2 Sem Estratos"
+    "section": "3.2 Sem Estratos",
+    "text": "3.2 Sem Estratos"
   },
   {
     "objectID": "Trabalho/parte1/index.html#qualitativa---sexo",
     "href": "Trabalho/parte1/index.html#qualitativa---sexo",
     "title": "ANÁLISE DE SOBREVIVÊNCIA E CONFIABILIDADE",
-    "section": "2.3 Qualitativa - Sexo",
-    "text": "2.3 Qualitativa - Sexo"
+    "section": "3.3 Qualitativa - Sexo",
+    "text": "3.3 Qualitativa - Sexo"
   },
   {
     "objectID": "Trabalho/parte1/index.html#qualitativa---escolaridade",
     "href": "Trabalho/parte1/index.html#qualitativa---escolaridade",
     "title": "ANÁLISE DE SOBREVIVÊNCIA E CONFIABILIDADE",
-    "section": "2.4 Qualitativa - Escolaridade",
-    "text": "2.4 Qualitativa - Escolaridade"
+    "section": "3.4 Qualitativa - Escolaridade",
+    "text": "3.4 Qualitativa - Escolaridade"
   },
   {
     "objectID": "Trabalho/parte1/index.html#qualitativa---estadiamento",
     "href": "Trabalho/parte1/index.html#qualitativa---estadiamento",
     "title": "ANÁLISE DE SOBREVIVÊNCIA E CONFIABILIDADE",
-    "section": "2.5 Qualitativa - Estadiamento",
-    "text": "2.5 Qualitativa - Estadiamento"
+    "section": "3.5 Qualitativa - Estadiamento",
+    "text": "3.5 Qualitativa - Estadiamento"
   },
   {
     "objectID": "Trabalho/parte1/index.html#qualitativa---categoria-de-atendimento",
     "href": "Trabalho/parte1/index.html#qualitativa---categoria-de-atendimento",
     "title": "ANÁLISE DE SOBREVIVÊNCIA E CONFIABILIDADE",
-    "section": "2.6 Qualitativa - Categoria de Atendimento",
-    "text": "2.6 Qualitativa - Categoria de Atendimento"
+    "section": "3.6 Qualitativa - Categoria de Atendimento",
+    "text": "3.6 Qualitativa - Categoria de Atendimento"
   },
   {
     "objectID": "Trabalho/parte1/index.html#qualitativa---cirurgia",
     "href": "Trabalho/parte1/index.html#qualitativa---cirurgia",
     "title": "ANÁLISE DE SOBREVIVÊNCIA E CONFIABILIDADE",
-    "section": "2.7 Qualitativa - Cirurgia",
-    "text": "2.7 Qualitativa - Cirurgia"
+    "section": "3.7 Qualitativa - Cirurgia",
+    "text": "3.7 Qualitativa - Cirurgia"
   },
   {
     "objectID": "Trabalho/parte1/index.html#qualitativa---radioterapia",
     "href": "Trabalho/parte1/index.html#qualitativa---radioterapia",
     "title": "ANÁLISE DE SOBREVIVÊNCIA E CONFIABILIDADE",
-    "section": "2.8 Qualitativa - Radioterapia",
-    "text": "2.8 Qualitativa - Radioterapia"
+    "section": "3.8 Qualitativa - Radioterapia",
+    "text": "3.8 Qualitativa - Radioterapia"
   },
   {
     "objectID": "Trabalho/parte1/index.html#qualitativa---quimioterapia",
     "href": "Trabalho/parte1/index.html#qualitativa---quimioterapia",
     "title": "ANÁLISE DE SOBREVIVÊNCIA E CONFIABILIDADE",
-    "section": "2.9 Qualitativa - Quimioterapia",
-    "text": "2.9 Qualitativa - Quimioterapia"
+    "section": "3.9 Qualitativa - Quimioterapia",
+    "text": "3.9 Qualitativa - Quimioterapia"
   },
   {
     "objectID": "Trabalho/parte1/index.html#quantitativa---idade",
     "href": "Trabalho/parte1/index.html#quantitativa---idade",
     "title": "ANÁLISE DE SOBREVIVÊNCIA E CONFIABILIDADE",
-    "section": "2.10 Quantitativa - Idade",
-    "text": "2.10 Quantitativa - Idade"
+    "section": "3.10 Quantitativa - Idade",
+    "text": "3.10 Quantitativa - Idade"
   },
   {
     "objectID": "Trabalho/parte1/index.html#descritivo-1",
@@ -192,7 +192,14 @@
     "objectID": "Trabalho/parte1/index.html#conclusão-1",
     "href": "Trabalho/parte1/index.html#conclusão-1",
     "title": "ANÁLISE DE SOBREVIVÊNCIA E CONFIABILIDADE",
-    "section": "3.1 Conclusão",
-    "text": "3.1 Conclusão\n\n\n🎯 Mensagem principal\n\n\nA sobrevida mediana global é de 13,9 meses, com gradientes marcantes por estadiamento, escolaridade e cirurgia; a diferença por sexo é modesta.\n\n\n\n\n\n\n3.1.1 Principais Achados\n\n\nGERALMediana global de 13,9 meses (IC 95%: 12,8–15,0) · 2.774 óbitos em 4.231\n\n\nSEXOMasculino 14,9 vs feminino 12,2 meses · log-rank p = 0,044, diferença limítrofe\n\n\nESCOLARIMediana cresce com a escolaridade: 6,5 (analfabeto) → 28,5 meses (superior)\n\n\nECGRUPEstágio IV 5,3 meses vs estágio II 48,3; estágio I sem mediana atingida\n\n\nCATEATENDSUS 31,4 · Particular 24,6 · Convênio 12,5 meses; SUS acima do Convênio, a investigar\n\n\nCIRURGIASem cirurgia 8,8 meses; com cirurgia, mediana não atingida (35,8% de óbitos vs 75,4%)\n\n\nRADIOCom radioterapia 25,5 vs 13,5 meses sem (n = 188 tratados)\n\n\nQUIMIOCom quimioterapia 18,6 vs 9,5 meses sem\n\n\nIDADEMediana de 63 anos (Q1–Q3: 56–70) · média de 62,2\n\n\n\n\n\n\n\n3.1.2 Limitações\n\n\n▪34,4% de censuras (1.457 de 4.231)\n\n\n▪“Sem informação” em 23,5% de ESCOLARI e 15,8% de ECGRUP\n\n\n▪Categorias pequenas: Particular (n = 75) e Radioterapia (n = 188)\n\n\n▪Análise univariada, sem ajuste por outras covariáveis\n\n\n▪Maior sobrevida com tratamentos pode refletir seleção de pacientes (associação, não causa)\n\n\n▪Óbito por outra causa tratado como censura\n\n\n\n\n3.1.3 Próximos Passos\n\n\n▪Parte II: modelagem paramétrica das curvas de sobrevida\n\n\n▪Ajuste multivariado por estadiamento, escolaridade e tratamentos"
+    "section": "4.1 Conclusão",
+    "text": "4.1 Conclusão\n\n\n🎯 Mensagem principal\n\n\nA sobrevida mediana global é de 13,9 meses, com gradientes marcantes por estadiamento, escolaridade e cirurgia; a diferença por sexo é modesta.\n\n\n\n\n\n\n3.1.1 Principais Achados\n\n\nGERALMediana global de 13,9 meses (IC 95%: 12,8–15,0) · 2.774 óbitos em 4.231\n\n\nSEXOMasculino 14,9 vs feminino 12,2 meses · log-rank p = 0,044, diferença limítrofe\n\n\nESCOLARIMediana cresce com a escolaridade: 6,5 (analfabeto) → 28,5 meses (superior)\n\n\nECGRUPEstágio IV 5,3 meses vs estágio II 48,3; estágio I sem mediana atingida\n\n\nCATEATENDSUS 31,4 · Particular 24,6 · Convênio 12,5 meses; SUS acima do Convênio, a investigar\n\n\nCIRURGIASem cirurgia 8,8 meses; com cirurgia, mediana não atingida (35,8% de óbitos vs 75,4%)\n\n\nRADIOCom radioterapia 25,5 vs 13,5 meses sem (n = 188 tratados)\n\n\nQUIMIOCom quimioterapia 18,6 vs 9,5 meses sem\n\n\nIDADEMediana de 63 anos (Q1–Q3: 56–70) · média de 62,2\n\n\n\n\n\n\n\n3.1.2 Limitações\n\n\n▪34,4% de censuras (1.457 de 4.231)\n\n\n▪“Sem informação” em 23,5% de ESCOLARI e 15,8% de ECGRUP\n\n\n▪Categorias pequenas: Particular (n = 75) e Radioterapia (n = 188)\n\n\n▪Análise univariada, sem ajuste por outras covariáveis\n\n\n▪Maior sobrevida com tratamentos pode refletir seleção de pacientes (associação, não causa)\n\n\n▪Óbito por outra causa tratado como censura\n\n\n\n\n3.1.3 Próximos Passos\n\n\n▪Parte II: modelagem paramétrica das curvas de sobrevida\n\n\n▪Ajuste multivariado por estadiamento, escolaridade e tratamentos"
+  },
+  {
+    "objectID": "Trabalho/parte1/index.html#metodologia-1",
+    "href": "Trabalho/parte1/index.html#metodologia-1",
+    "title": "ANÁLISE DE SOBREVIVÊNCIA E CONFIABILIDADE",
+    "section": "2.1 Metodologia",
+    "text": "2.1 Metodologia\n\n\n\n\n🏷️ Covariáveis Qualitativas\n\n\n\n1\n\n\n\n\nsurvfit()\n\n\nKaplan-Meier\n\n\n\nEstimação das curvas de sobrevida\n\n\n\n\n\n2\n\n\n\n\nsurvdiff()\n\n\nLog-Rank\n\n\n\nTeste de igualdade das curvas de sobrevida\n\n\n\n\n\n3\n\n\n\n\nsurvdiff(rho=1)\n\n\nPeto-Peto\n\n\n\nTeste com maior peso às diferenças no início do seguimento\n\n\n\n\n\n4\n\n\n\n\npairwise_survdiff()\n\n\nHolm-Bonferroni\n\n\n\nComparações par a par com correção para múltiplos testes\n\n\n\n\nAplicada a\n\n\n\nSEXO\n\n\nESCOLARI\n\n\nECGRUP\n\n\nCATEATEND\n\n\nCIRURGIA\n\n\nRADIO\n\n\nQUIMIO\n\n\n\n\n\n\n\n\n🔢 Covariável Quantitativa\n\n\nMedidas-resumo\n\n\n\nMédia\n\n\nDesvio-padrão\n\n\nMediana\n\n\nAmplitude interquartílica\n\n\n\n\n\n\nDicotomização pela mediana\n\n\n\nIDADE\n\n\n➜\n\n\nmedian()\n\n\n➜\n\n\n\nAbaixo da mediana\n\n\nAcima da mediana\n\n\n\n\nMediana observada da idade: 63 anos\n\n\n\n\n\nApós dicotomização\n\n\n\nsurvfit()\n\n\nsurvdiff()"
   }
 ]
