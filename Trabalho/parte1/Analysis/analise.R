@@ -4,11 +4,9 @@ library(arrow)
 library(dplyr)
 library(survival)
 library(survminer)
+library(ggsurvfit)
 library(ggplot2)
 library(gtsummary)
-library(cowplot)
-library(grid)
-
 
 # 2. Leitura e Filtros ---------------------------------------------------------
 
@@ -37,9 +35,8 @@ df <- read_parquet("Trabalho/parte1/data/FOSP.parquet") %>%
   ) %>%
   mutate(
     tempo = as.numeric(DTULTINFO - DTDIAG) / 30.44,
-    cens = ifelse(ULTINFO == 3, 1, 0)
+    cens  = ifelse(ULTINFO == 3, 1, 0)
   )
-
 
 # 3. Recodificação das Variáveis ----------------------------------------------
 
@@ -78,83 +75,123 @@ df <- df %>%
                     labels = c("Não", "Sim"))
   )
 
+saveRDS(df, "Trabalho/parte1/data/df_final.RDS")
 
 # 4. Análise Descritiva --------------------------------------------------------
 
 nrow(df)
 sum(df$cens == 1)
 sum(df$cens == 0)
-mean(df$cens) * 100
 
-summary(df$tempo)
+summary(df)
 
+# 5. Análise Sem Covariáveis ---------------------------------------------------
 
-# 5. Paleta, Tema e Borda dos Gráficos ----------------------------------------
+df <- readRDS("Trabalho/parte1/data/df_final.RDS")
 
+# Paleta
 cor_navy    <- "#10241d"
 cor_verde   <- "#3f6b52"
 cor_dourado <- "#b8862a"
 cor_cinza   <- "#6b7d73"
 cor_media   <- "#c0392b"
 
-
+# Tema
 tema_km <- theme_minimal(base_size = 13) +
   theme(
-    plot.title       = element_text(color = cor_navy, face = "bold", size = 15),
-    axis.title       = element_text(color = cor_navy),
-    axis.text        = element_text(color = cor_cinza),
-    legend.title     = element_text(color = cor_navy, face = "bold"),
-    legend.text      = element_text(color = cor_cinza),
-    panel.grid.minor = element_blank(),
-    panel.grid.major = element_line(color = "grey90"),
-    plot.background  = element_rect(fill = "white", color = NA)
+    plot.title.position = "plot",
+    plot.title         = element_text(color = cor_navy, face = "bold",
+                                      size = 17, margin = margin(b = 4)),
+    plot.subtitle      = element_text(color = cor_cinza, size = 10.5,
+                                      margin = margin(b = 10)),
+    axis.title         = element_text(color = cor_navy, size = 11),
+    axis.title.x       = element_text(margin = margin(t = 8)),
+    axis.title.y       = element_text(margin = margin(r = 8)),
+    axis.text          = element_text(color = cor_cinza, size = 10),
+    axis.line.x        = element_line(color = cor_cinza, linewidth = 0.4),
+    axis.ticks.x       = element_line(color = cor_cinza, linewidth = 0.4),
+    legend.position    = "top",
+    legend.justification = "left",
+    legend.title       = element_text(color = cor_navy, face = "bold", size = 10.5),
+    legend.text        = element_text(color = cor_navy, size = 10),
+    legend.key.width   = unit(1.3, "cm"),
+    panel.grid.minor   = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.major.y = element_line(color = "grey92", linewidth = 0.5),
+    plot.background    = element_rect(fill = "white", color = NA),
+    plot.margin        = margin(14, 18, 10, 14)
   )
 
+# Textos de apoio
+n_total  <- format(nrow(df), big.mark = ".", decimal.mark = ",")
+n_obitos <- format(sum(df$cens == 1), big.mark = ".", decimal.mark = ",")
 
-paleta_2 <- c(cor_verde, cor_dourado)
-
-paleta_n <- function(n) {
-  colorRampPalette(c(cor_verde, cor_navy, cor_dourado))(n)
-}
-
-
-# 6. Análise Sem Covariáveis ---------------------------------------------------
-
-surv_obj <- Surv(
-  time = df$tempo,
-  event = df$cens
+subtitulo <- paste0(
+  "FOSP, diagnósticos de 2014 a 2019  ·  n = ", n_total,
+  " pacientes  ·  ", n_obitos, " óbitos por câncer"
 )
 
-km_geral <- survfit(
-  surv_obj ~ 1,
-  data = df
+# Ajuste (IC log-log de 95%)
+km_geral <- survfit2(
+  Surv(tempo, cens) ~ 1,
+  data      = df,
+  conf.type = "log-log",
+  conf.int  = 0.95
 )
 
-km_geral
+mediana <- summary(km_geral)$table["median"]
+sobrev  <- summary(km_geral, times = c(12, 60))$surv
 
-summary(
+texto_resumo <- paste0(
+  "Mediana: ", format(round(mediana, 1), decimal.mark = ","), " meses\n",
+  "Sobrevida em 12 meses: ", round(100 * sobrev[1]), "%\n",
+  "Sobrevida em 60 meses: ", round(100 * sobrev[2]), "%"
+)
+
+# Gráfico
+curva_sem_covariavel <- ggsurvfit(
   km_geral,
-  times = c(6, 12, 24, 36, 60)
-)
-
-
-curva_sem_covariavel <- ggsurvplot(
-  km_geral,
-  data              = df,
-  conf.int          = TRUE,
-  conf.int.fill     = cor_verde,
-  risk.table        = TRUE,
-  surv.median.line  = "hv",
-  palette           = cor_verde,
-  xlab              = "Tempo (meses)",
-  ylab              = "S(t)",
-  title             = "Kaplan-Meier — Câncer de Fígado (C22)",
-  ggtheme           = tema_km,
-  risk.table.col    = "black",
-  font.title        = c(15, "bold", cor_navy),
-  font.x            = c(13, "plain", cor_navy),
-  font.y            = c(13, "plain", cor_navy)
-)
+  linewidth = 1.3,
+  color     = cor_verde
+) +
+  add_confidence_interval(fill = cor_verde, alpha = 0.18) +
+  add_quantile(
+    y_value   = 0.5,
+    color     = cor_media,
+    linetype  = "dashed",
+    linewidth = 0.7
+  ) +
+  annotate(
+    "label",
+    x          = 60,
+    y          = 0.80,
+    label      = texto_resumo,
+    hjust      = 0,
+    vjust      = 1,
+    fill       = "#f7f4ea",
+    color      = cor_navy,
+    size       = 3.8,
+    lineheight = 1.25
+  ) +
+  add_risktable(
+    risktable_stats = "n.risk",
+    stats_label     = list(n.risk = "Em risco"),
+    size            = 3.6,
+    theme           = list(
+      theme_risktable_default(),
+      theme(plot.title = element_text(face = "bold", color = cor_navy))
+    )
+  ) +
+  scale_ggsurvfit(
+    x_scales = list(breaks = seq(0, 144, 24))
+  ) +
+  labs(
+    title    = "Sobrevida global — Câncer de Fígado (C22)",
+    subtitle = subtitulo,
+    x        = "Tempo desde o diagnóstico (meses)",
+    y        = "Probabilidade de sobrevida, S(t)"
+  ) +
+  tema_km
 
 curva_sem_covariavel
 
@@ -163,232 +200,475 @@ saveRDS(
   "Trabalho/parte1/plots/curva_sem_covariavel.RDS"
 )
 
+# 6. Análise por Covariáveis Qualitativas --------------------------------------
 
-# 7. Análise por Covariáveis Qualitativas --------------------------------------
+df <- readRDS("Trabalho/parte1/data/df_final.RDS")
+
+# Paleta
+cor_navy    <- "#10241d"
+cor_verde   <- "#3f6b52"
+cor_dourado <- "#b8862a"
+cor_cinza   <- "#6b7d73"
+cor_media   <- "#c0392b"
+
+paleta_2 <- c(cor_verde, cor_dourado)
+
+# Tema
+tema_km <- theme_minimal(base_size = 13) +
+  theme(
+    plot.title.position = "plot",
+    plot.title         = element_text(color = cor_navy, face = "bold",
+                                      size = 17, margin = margin(b = 4)),
+    plot.subtitle      = element_text(color = cor_cinza, size = 10.5,
+                                      margin = margin(b = 10)),
+    axis.title         = element_text(color = cor_navy, size = 11),
+    axis.title.x       = element_text(margin = margin(t = 8)),
+    axis.title.y       = element_text(margin = margin(r = 8)),
+    axis.text          = element_text(color = cor_cinza, size = 10),
+    axis.line.x        = element_line(color = cor_cinza, linewidth = 0.4),
+    axis.ticks.x       = element_line(color = cor_cinza, linewidth = 0.4),
+    legend.position    = "top",
+    legend.justification = "left",
+    legend.title       = element_text(color = cor_navy, face = "bold", size = 10.5),
+    legend.text        = element_text(color = cor_navy, size = 10),
+    legend.key.width   = unit(1.3, "cm"),
+    panel.grid.minor   = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.major.y = element_line(color = "grey92", linewidth = 0.5),
+    plot.background    = element_rect(fill = "white", color = NA),
+    plot.margin        = margin(14, 18, 10, 14)
+  )
+
+# Textos de apoio
+n_total  <- format(nrow(df), big.mark = ".", decimal.mark = ",")
+n_obitos <- format(sum(df$cens == 1), big.mark = ".", decimal.mark = ",")
+
+subtitulo <- paste0(
+  "Câncer de fígado (C22)  ·  FOSP 2014–2019  ·  n = ", n_total,
+  "  ·  ", n_obitos, " óbitos"
+)
+
 
 ## SEXO ----
 
-curva_sexo <- ggsurvplot(
-  survfit(surv_obj ~ SEXO, data = df),
-  data         = df,
-  conf.int     = FALSE,
-  pval         = TRUE,
-  pval.coord   = c(1, 0.1),
-  risk.table   = TRUE,
-  palette      = paleta_2,
-  xlab         = "Tempo (meses)",
-  ylab         = "S(t)",
-  title        = "Kaplan-Meier por Sexo",
-  legend.title = "Sexo",
-  legend.labs  = levels(df$SEXO),
-  ggtheme      = tema_km,
-  font.title   = c(15, "bold", cor_navy)
-)
+km_sexo <- survfit2(Surv(tempo, cens) ~ SEXO, data = df)
+
+curva_sexo <- ggsurvfit(km_sexo, linewidth = 1.2) +
+  add_confidence_interval(alpha = 0.12) +
+  add_quantile(
+    y_value   = 0.5,
+    color     = "grey55",
+    linetype  = "dashed",
+    linewidth = 0.4
+  ) +
+  add_risktable(
+    risktable_stats = "n.risk",
+    stats_label     = list(n.risk = "Em risco"),
+    size            = 3.6,
+    theme           = list(
+      theme_risktable_default(),
+      theme(plot.title = element_text(face = "bold", color = cor_navy))
+    )
+  ) +
+  add_risktable_strata_symbol(symbol = "\U25CF", size = 12) +
+  add_pvalue(
+    location = "annotation",
+    caption  = "{p.value}",
+    x        = 1,
+    y        = 0.1,
+    hjust    = 0,
+    size     = 4.2,
+    fontface = "bold",
+    color    = cor_navy
+  ) +
+  scale_ggsurvfit(x_scales = list(breaks = seq(0, 144, 24))) +
+  scale_color_manual(values = paleta_2) +
+  scale_fill_manual(values = paleta_2) +
+  guides(
+    color = guide_legend(override.aes = list(linewidth = 1.6)),
+    fill  = "none"
+  ) +
+  labs(
+    title    = "Sobrevida por Sexo",
+    subtitle = subtitulo,
+    x        = "Tempo desde o diagnóstico (meses)",
+    y        = "Probabilidade de sobrevida, S(t)",
+    color    = "Sexo"
+  ) +
+  tema_km
 
 curva_sexo
 
-saveRDS(
-  curva_sexo,
-  "Trabalho/parte1/plots/curva_sexo.RDS"
-)
+saveRDS(curva_sexo, "Trabalho/parte1/plots/curva_sexo.RDS")
 
 
 ## ESCOLARI ----
+# Escala ordinal (dourado -> verde -> navy); "Sem informação" em cinza.
 
-curva_escolari <- ggsurvplot(
-  survfit(surv_obj ~ ESCOLARI, data = df),
-  data         = df,
-  conf.int     = FALSE,
-  pval         = TRUE,
-  pval.coord   = c(1, 0.1),
-  risk.table   = TRUE,
-  palette      = paleta_n(nlevels(df$ESCOLARI)),
-  xlab         = "Tempo (meses)",
-  ylab         = "S(t)",
-  title        = "Kaplan-Meier por Escolaridade",
-  legend.title = "Escolaridade",
-  legend.labs  = levels(df$ESCOLARI),
-  ggtheme      = tema_km,
-  font.title   = c(15, "bold", cor_navy),
-  font.legend  = c(10)
-)
+km_escolari <- survfit2(Surv(tempo, cens) ~ ESCOLARI, data = df)
+
+curva_escolari <- ggsurvfit(km_escolari, linewidth = 1.2) +
+  add_risktable(
+    risktable_stats = "n.risk",
+    stats_label     = list(n.risk = "Em risco"),
+    size            = 3.4,
+    theme           = list(
+      theme_risktable_default(),
+      theme(plot.title = element_text(face = "bold", color = cor_navy))
+    )
+  ) +
+  add_risktable_strata_symbol(symbol = "\U25CF", size = 12) +
+  add_pvalue(
+    location = "annotation",
+    caption  = "{p.value}",
+    x        = 1,
+    y        = 0.1,
+    hjust    = 0,
+    size     = 4.2,
+    fontface = "bold",
+    color    = cor_navy
+  ) +
+  scale_ggsurvfit(x_scales = list(breaks = seq(0, 144, 24))) +
+  scale_color_manual(
+    values = c(
+      colorRampPalette(c("#d9b054", cor_verde, cor_navy))(5),
+      cor_cinza
+    )
+  ) +
+  guides(color = guide_legend(nrow = 2, byrow = TRUE,
+                              override.aes = list(linewidth = 1.6))) +
+  labs(
+    title    = "Sobrevida por Escolaridade",
+    subtitle = subtitulo,
+    x        = "Tempo desde o diagnóstico (meses)",
+    y        = "Probabilidade de sobrevida, S(t)",
+    color    = "Escolaridade"
+  ) +
+  tema_km
 
 curva_escolari
 
-saveRDS(
-  curva_escolari,
-  "Trabalho/parte1/plots/curva_escolari.RDS"
-)
-
+saveRDS(curva_escolari, "Trabalho/parte1/plots/curva_escolari.RDS")
 
 ## ECGRUP ----
+# Apenas estágios I a IV ("In situ" não tem observações em C22;
+# "Sem informação" e "Não se aplica" foram removidos do gráfico).
+# Estágios I a IV: verde -> dourado -> vermelho (gravidade crescente).
 
-curva_ecgrup <- ggsurvplot(
-  survfit(surv_obj ~ ECGRUP, data = df),
-  data         = df,
-  conf.int     = FALSE,
-  pval         = TRUE,
-  pval.coord   = c(1, 0.1),
-  risk.table   = TRUE,
-  palette      = paleta_n(nlevels(df$ECGRUP)),
-  xlab         = "Tempo (meses)",
-  ylab         = "S(t)",
-  title        = "Kaplan-Meier por Estadiamento",
-  legend.title = "Estadiamento",
-  legend.labs  = levels(df$ECGRUP),
-  ggtheme      = tema_km,
-  font.title   = c(15, "bold", cor_navy),
-  font.legend  = c(10)
+df_ecgrup <- df %>%
+  filter(ECGRUP %in% c("Estágio I", "Estágio II", "Estágio III", "Estágio IV")) %>%
+  mutate(ECGRUP = droplevels(ECGRUP))
+
+# Subtítulo com o n do subconjunto
+subtitulo_ecgrup <- paste0(
+  "Câncer de fígado (C22)  ·  FOSP 2014–2019  ·  n = ",
+  format(nrow(df_ecgrup), big.mark = ".", decimal.mark = ","),
+  "  ·  ",
+  format(sum(df_ecgrup$cens == 1), big.mark = ".", decimal.mark = ","),
+  " óbitos"
 )
+
+km_ecgrup <- survfit2(Surv(tempo, cens) ~ ECGRUP, data = df_ecgrup)
+
+curva_ecgrup <- ggsurvfit(km_ecgrup, linewidth = 1.2) +
+  add_risktable(
+    risktable_stats = "n.risk",
+    stats_label     = list(n.risk = "Em risco"),
+    size            = 3.4,
+    theme           = list(
+      theme_risktable_default(),
+      theme(plot.title = element_text(face = "bold", color = cor_navy))
+    )
+  ) +
+  add_risktable_strata_symbol(symbol = "\U25CF", size = 12) +
+  add_pvalue(
+    location = "annotation",
+    caption  = "{p.value}",
+    x        = 1,
+    y        = 0.1,
+    hjust    = 0,
+    size     = 4.2,
+    fontface = "bold",
+    color    = cor_navy
+  ) +
+  scale_ggsurvfit(x_scales = list(breaks = seq(0, 144, 24))) +
+  scale_color_manual(
+    values = colorRampPalette(c(cor_verde, cor_dourado, cor_media))(4)
+  ) +
+  guides(color = guide_legend(override.aes = list(linewidth = 1.6))) +
+  labs(
+    title    = "Sobrevida por Estadiamento",
+    subtitle = subtitulo_ecgrup,
+    x        = "Tempo desde o diagnóstico (meses)",
+    y        = "Probabilidade de sobrevida, S(t)",
+    color    = "Estadiamento"
+  ) +
+  tema_km
 
 curva_ecgrup
 
-saveRDS(
-  curva_ecgrup,
-  "Trabalho/parte1/plots/curva_ecgrup.RDS"
-)
-
+saveRDS(curva_ecgrup, "Trabalho/parte1/plots/curva_ecgrup.RDS")
 
 ## CATEATEND ----
 
-curva_cateatend <- ggsurvplot(
-  survfit(surv_obj ~ CATEATEND, data = df),
-  data         = df,
-  conf.int     = FALSE,
-  pval         = TRUE,
-  pval.coord   = c(1, 0.1),
-  risk.table   = TRUE,
-  palette      = paleta_n(nlevels(df$CATEATEND)),
-  xlab         = "Tempo (meses)",
-  ylab         = "S(t)",
-  title        = "Kaplan-Meier por Categoria de Atendimento",
-  legend.title = "Atendimento",
-  legend.labs  = levels(df$CATEATEND),
-  ggtheme      = tema_km,
-  font.title   = c(15, "bold", cor_navy)
-)
+km_cateatend <- survfit2(Surv(tempo, cens) ~ CATEATEND, data = df)
+
+curva_cateatend <- ggsurvfit(km_cateatend, linewidth = 1.2) +
+  add_quantile(
+    y_value   = 0.5,
+    color     = "grey55",
+    linetype  = "dashed",
+    linewidth = 0.4
+  ) +
+  add_risktable(
+    risktable_stats = "n.risk",
+    stats_label     = list(n.risk = "Em risco"),
+    size            = 3.6,
+    theme           = list(
+      theme_risktable_default(),
+      theme(plot.title = element_text(face = "bold", color = cor_navy))
+    )
+  ) +
+  add_risktable_strata_symbol(symbol = "\U25CF", size = 12) +
+  add_pvalue(
+    location = "annotation",
+    caption  = "{p.value}",
+    x        = 1,
+    y        = 0.1,
+    hjust    = 0,
+    size     = 4.2,
+    fontface = "bold",
+    color    = cor_navy
+  ) +
+  scale_ggsurvfit(x_scales = list(breaks = seq(0, 144, 24))) +
+  scale_color_manual(values = c(cor_verde, cor_dourado, cor_navy)) +
+  guides(color = guide_legend(override.aes = list(linewidth = 1.6))) +
+  labs(
+    title    = "Sobrevida por Categoria de Atendimento",
+    subtitle = subtitulo,
+    x        = "Tempo desde o diagnóstico (meses)",
+    y        = "Probabilidade de sobrevida, S(t)",
+    color    = "Atendimento"
+  ) +
+  tema_km
 
 curva_cateatend
 
-saveRDS(
-  curva_cateatend,
-  "Trabalho/parte1/plots/curva_cateatend.RDS"
-)
+saveRDS(curva_cateatend, "Trabalho/parte1/plots/curva_cateatend.RDS")
 
 
 ## CIRURGIA ----
 
-curva_cirurgia <- ggsurvplot(
-  survfit(surv_obj ~ CIRURGIA, data = df),
-  data         = df,
-  conf.int     = FALSE,
-  pval         = TRUE,
-  pval.coord   = c(1, 0.1),
-  risk.table   = TRUE,
-  palette      = paleta_2,
-  xlab         = "Tempo (meses)",
-  ylab         = "S(t)",
-  title        = "Kaplan-Meier por Cirurgia",
-  legend.title = "Cirurgia",
-  legend.labs  = levels(df$CIRURGIA),
-  ggtheme      = tema_km,
-  font.title   = c(15, "bold", cor_navy)
-)
+km_cirurgia <- survfit2(Surv(tempo, cens) ~ CIRURGIA, data = df)
+
+curva_cirurgia <- ggsurvfit(km_cirurgia, linewidth = 1.2) +
+  add_confidence_interval(alpha = 0.12) +
+  add_quantile(
+    y_value   = 0.5,
+    color     = "grey55",
+    linetype  = "dashed",
+    linewidth = 0.4
+  ) +
+  add_risktable(
+    risktable_stats = "n.risk",
+    stats_label     = list(n.risk = "Em risco"),
+    size            = 3.6,
+    theme           = list(
+      theme_risktable_default(),
+      theme(plot.title = element_text(face = "bold", color = cor_navy))
+    )
+  ) +
+  add_risktable_strata_symbol(symbol = "\U25CF", size = 12) +
+  add_pvalue(
+    location = "annotation",
+    caption  = "{p.value}",
+    x        = 1,
+    y        = 0.1,
+    hjust    = 0,
+    size     = 4.2,
+    fontface = "bold",
+    color    = cor_navy
+  ) +
+  scale_ggsurvfit(x_scales = list(breaks = seq(0, 144, 24))) +
+  scale_color_manual(values = paleta_2) +
+  scale_fill_manual(values = paleta_2) +
+  guides(
+    color = guide_legend(override.aes = list(linewidth = 1.6)),
+    fill  = "none"
+  ) +
+  labs(
+    title    = "Sobrevida por Cirurgia",
+    subtitle = subtitulo,
+    x        = "Tempo desde o diagnóstico (meses)",
+    y        = "Probabilidade de sobrevida, S(t)",
+    color    = "Cirurgia"
+  ) +
+  tema_km
 
 curva_cirurgia
 
-saveRDS(
-  curva_cirurgia,
-  "Trabalho/parte1/plots/curva_cirurgia.RDS"
-)
+saveRDS(curva_cirurgia, "Trabalho/parte1/plots/curva_cirurgia.RDS")
 
 
 ## RADIO ----
 
-curva_radio <- ggsurvplot(
-  survfit(surv_obj ~ RADIO, data = df),
-  data         = df,
-  conf.int     = FALSE,
-  pval         = TRUE,
-  pval.coord   = c(1, 0.1),
-  risk.table   = TRUE,
-  palette      = paleta_2,
-  xlab         = "Tempo (meses)",
-  ylab         = "S(t)",
-  title        = "Kaplan-Meier por Radioterapia",
-  legend.title = "Radioterapia",
-  legend.labs  = levels(df$RADIO),
-  ggtheme      = tema_km,
-  font.title   = c(15, "bold", cor_navy)
-)
+km_radio <- survfit2(Surv(tempo, cens) ~ RADIO, data = df)
+
+curva_radio <- ggsurvfit(km_radio, linewidth = 1.2) +
+  add_confidence_interval(alpha = 0.12) +
+  add_quantile(
+    y_value   = 0.5,
+    color     = "grey55",
+    linetype  = "dashed",
+    linewidth = 0.4
+  ) +
+  add_risktable(
+    risktable_stats = "n.risk",
+    stats_label     = list(n.risk = "Em risco"),
+    size            = 3.6,
+    theme           = list(
+      theme_risktable_default(),
+      theme(plot.title = element_text(face = "bold", color = cor_navy))
+    )
+  ) +
+  add_risktable_strata_symbol(symbol = "\U25CF", size = 12) +
+  add_pvalue(
+    location = "annotation",
+    caption  = "{p.value}",
+    x        = 1,
+    y        = 0.1,
+    hjust    = 0,
+    size     = 4.2,
+    fontface = "bold",
+    color    = cor_navy
+  ) +
+  scale_ggsurvfit(x_scales = list(breaks = seq(0, 144, 24))) +
+  scale_color_manual(values = paleta_2) +
+  scale_fill_manual(values = paleta_2) +
+  guides(
+    color = guide_legend(override.aes = list(linewidth = 1.6)),
+    fill  = "none"
+  ) +
+  labs(
+    title    = "Sobrevida por Radioterapia",
+    subtitle = subtitulo,
+    x        = "Tempo desde o diagnóstico (meses)",
+    y        = "Probabilidade de sobrevida, S(t)",
+    color    = "Radioterapia"
+  ) +
+  tema_km
 
 curva_radio
 
-saveRDS(
-  curva_radio,
-  "Trabalho/parte1/plots/curva_radio.RDS"
-)
+saveRDS(curva_radio, "Trabalho/parte1/plots/curva_radio.RDS")
 
 
 ## QUIMIO ----
 
-curva_quimio <- ggsurvplot(
-  survfit(surv_obj ~ QUIMIO, data = df),
-  data         = df,
-  conf.int     = FALSE,
-  pval         = TRUE,
-  pval.coord   = c(1, 0.1),
-  risk.table   = TRUE,
-  palette      = paleta_2,
-  xlab         = "Tempo (meses)",
-  ylab         = "S(t)",
-  title        = "Kaplan-Meier por Quimioterapia",
-  legend.title = "Quimioterapia",
-  legend.labs  = levels(df$QUIMIO),
-  ggtheme      = tema_km,
-  font.title   = c(15, "bold", cor_navy)
-)
+km_quimio <- survfit2(Surv(tempo, cens) ~ QUIMIO, data = df)
+
+curva_quimio <- ggsurvfit(km_quimio, linewidth = 1.2) +
+  add_confidence_interval(alpha = 0.12) +
+  add_quantile(
+    y_value   = 0.5,
+    color     = "grey55",
+    linetype  = "dashed",
+    linewidth = 0.4
+  ) +
+  add_risktable(
+    risktable_stats = "n.risk",
+    stats_label     = list(n.risk = "Em risco"),
+    size            = 3.6,
+    theme           = list(
+      theme_risktable_default(),
+      theme(plot.title = element_text(face = "bold", color = cor_navy))
+    )
+  ) +
+  add_risktable_strata_symbol(symbol = "\U25CF", size = 12) +
+  add_pvalue(
+    location = "annotation",
+    caption  = "{p.value}",
+    x        = 1,
+    y        = 0.1,
+    hjust    = 0,
+    size     = 4.2,
+    fontface = "bold",
+    color    = cor_navy
+  ) +
+  scale_ggsurvfit(x_scales = list(breaks = seq(0, 144, 24))) +
+  scale_color_manual(values = paleta_2) +
+  scale_fill_manual(values = paleta_2) +
+  guides(
+    color = guide_legend(override.aes = list(linewidth = 1.6)),
+    fill  = "none"
+  ) +
+  labs(
+    title    = "Sobrevida por Quimioterapia",
+    subtitle = subtitulo,
+    x        = "Tempo desde o diagnóstico (meses)",
+    y        = "Probabilidade de sobrevida, S(t)",
+    color    = "Quimioterapia"
+  ) +
+  tema_km
 
 curva_quimio
 
-saveRDS(
-  curva_quimio,
-  "Trabalho/parte1/plots/curva_quimio.RDS"
-)
+saveRDS(curva_quimio, "Trabalho/parte1/plots/curva_quimio.RDS")
 
 
-# 8. Análise por Covariáveis Quantitativas -------------------------------------
+# 7. Análise por Covariáveis Quantitativas -------------------------------------
+
+df <- readRDS("Trabalho/parte1/data/df_final.RDS")
+
+# Paleta
+cor_navy    <- "#10241d"
+cor_verde   <- "#3f6b52"
+cor_dourado <- "#b8862a"
+cor_cinza   <- "#6b7d73"
+cor_media   <- "#c0392b"
+
+# Tema
+tema_km <- theme_minimal(base_size = 13) +
+  theme(
+    plot.title.position = "plot",
+    plot.title         = element_text(color = cor_navy, face = "bold",
+                                      size = 17, margin = margin(b = 4)),
+    plot.subtitle      = element_text(color = cor_cinza, size = 10.5,
+                                      margin = margin(b = 10)),
+    axis.title         = element_text(color = cor_navy, size = 11),
+    axis.title.y       = element_text(margin = margin(r = 8)),
+    axis.text          = element_text(color = cor_cinza, size = 10),
+    axis.text.x        = element_text(color = cor_navy, size = 10.5, lineheight = 1.1),
+    panel.grid.minor   = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.major.y = element_line(color = "grey92", linewidth = 0.5),
+    plot.background    = element_rect(fill = "white", color = NA),
+    plot.margin        = margin(14, 18, 10, 14)
+  )
+
 
 ## IDADE ----
 
 df_idade_box <- bind_rows(
   df %>%
-    mutate(
-      grupo = ifelse(cens == 1, "Óbito por câncer", "Censura")
-    ) %>%
+    mutate(grupo = ifelse(cens == 1, "Óbito por câncer", "Censura")) %>%
     select(grupo, IDADE),
 
   df %>%
-    mutate(
-      grupo = "Total"
-    ) %>%
+    mutate(grupo = "Total") %>%
     select(grupo, IDADE)
 ) %>%
   mutate(
     grupo = factor(
       grupo,
-      levels = c(
-        "Óbito por câncer",
-        "Censura",
-        "Total"
-      )
+      levels = c("Óbito por câncer", "Censura", "Total")
     )
   )
-
 
 resumo_idade <- df_idade_box %>%
   group_by(grupo) %>%
   summarise(
+    n       = n(),
     media   = mean(IDADE, na.rm = TRUE),
     mediana = median(IDADE, na.rm = TRUE),
     q1      = quantile(IDADE, 0.25, na.rm = TRUE),
@@ -397,10 +677,22 @@ resumo_idade <- df_idade_box %>%
   ) %>%
   mutate(
     x_num = as.numeric(grupo),
-    x_min = x_num - 0.275,
-    x_max = x_num + 0.275
+    texto = paste0(
+      "Mediana: ", format(round(mediana, 1), decimal.mark = ","), "\n",
+      "Q1 – Q3: ", format(round(q1, 1), decimal.mark = ","), " – ",
+      format(round(q3, 1), decimal.mark = ","), "\n",
+      "Média: ", format(round(media, 1), decimal.mark = ",")
+    )
   )
 
+# Rótulos do eixo x com o n de cada grupo
+rotulos_x <- setNames(
+  paste0(
+    as.character(resumo_idade$grupo), "\n(n = ",
+    format(resumo_idade$n, big.mark = ".", decimal.mark = ","), ")"
+  ),
+  as.character(resumo_idade$grupo)
+)
 
 paleta_idade <- c(
   "Óbito por câncer" = cor_verde,
@@ -408,106 +700,56 @@ paleta_idade <- c(
   "Total"            = cor_navy
 )
 
-
 curva_idade_boxplot <- ggplot(
   df_idade_box,
   aes(x = grupo, y = IDADE, fill = grupo)
 ) +
-
+  geom_violin(
+    color = NA,
+    alpha = 0.28,
+    width = 0.95
+  ) +
   geom_boxplot(
     color         = cor_navy,
-    alpha         = 0.75,
-    width         = 0.55,
-    outlier.color = cor_cinza,
-    outlier.alpha = 0.6
+    alpha         = 0.85,
+    width         = 0.20,
+    linewidth     = 0.5,
+    outlier.shape = NA
   ) +
-
-  geom_segment(
+  geom_point(
     data = resumo_idade,
-    aes(
-      x = x_min,
-      xend = x_max,
-      y = media,
-      yend = media
-    ),
+    aes(x = grupo, y = media),
     inherit.aes = FALSE,
-    color = cor_media,
-    linetype = "dashed",
-    linewidth = 0.7
+    shape       = 23,
+    size        = 3.6,
+    stroke      = 1,
+    fill        = "white",
+    color       = cor_media
   ) +
-
   geom_text(
     data = resumo_idade,
-    aes(
-      x = grupo,
-      y = media,
-      label = paste0("Média: ", round(media, 1))
-    ),
+    aes(x = x_num + 0.30, y = mediana, label = texto),
     inherit.aes = FALSE,
-    vjust = -1.0,
-    size = 3.4,
-    color = cor_media,
-    fontface = "bold"
+    hjust       = 0,
+    size        = 3.3,
+    lineheight  = 1.15,
+    color       = cor_navy
   ) +
-
-  geom_text(
-    data = resumo_idade,
-    aes(
-      x = grupo,
-      y = mediana,
-      label = paste0("Q2: ", round(mediana, 1))
-    ),
-    inherit.aes = FALSE,
-    vjust = 1.9,
-    size = 3.2,
-    color = cor_navy
-  ) +
-
-  geom_text(
-    data = resumo_idade,
-    aes(
-      x = grupo,
-      y = q1,
-      label = paste0("Q1: ", round(q1, 1))
-    ),
-    inherit.aes = FALSE,
-    vjust = 1.6,
-    hjust = -0.35,
-    size = 2.9,
-    color = cor_cinza
-  ) +
-
-  geom_text(
-    data = resumo_idade,
-    aes(
-      x = grupo,
-      y = q3,
-      label = paste0("Q3: ", round(q3, 1))
-    ),
-    inherit.aes = FALSE,
-    vjust = -1.0,
-    hjust = -0.35,
-    size = 2.9,
-    color = cor_cinza
-  ) +
-
   scale_fill_manual(values = paleta_idade) +
-
-  labs(
-    title = "Distribuição da Idade ao Diagnóstico",
-    x     = NULL,
-    y     = "Idade (anos)"
+  scale_x_discrete(
+    labels = rotulos_x,
+    expand = expansion(add = c(0.6, 0.9))
   ) +
-
+  scale_y_continuous(breaks = seq(20, 100, 10)) +
+  labs(
+    title    = "Distribuição da Idade ao Diagnóstico",
+    subtitle = "Losango vermelho = média  ·  caixa = mediana e quartis  ·  formato = densidade",
+    x        = NULL,
+    y        = "Idade (anos)"
+  ) +
   tema_km +
-
-  theme(
-    legend.position = "none"
-  )
+  theme(legend.position = "none")
 
 curva_idade_boxplot
 
-saveRDS(
-  curva_idade_boxplot,
-  "Trabalho/parte1/plots/curva_idade_boxplot.RDS"
-)
+saveRDS(curva_idade_boxplot, "Trabalho/parte1/plots/curva_idade_boxplot.RDS")

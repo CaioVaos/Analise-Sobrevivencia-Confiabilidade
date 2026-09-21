@@ -2,13 +2,13 @@
 title: "Análise de Sobrevivência e Confiabilidade"
 format:
   html:
-    theme: solar
+    theme: darkly
     toc: false
     page-layout: full
 ---
 
 <style>
-/* título centralizado no topo */
+/* ===== Fontes e título ===== */
 #title-block-header,
 #title-block-header .quarto-title,
 #title-block-header .quarto-title-block {
@@ -17,78 +17,192 @@ format:
 #title-block-header .quarto-title-meta {
   display: none;
 }
+#title-block-header .quarto-title h1 {
+  font-family: "Georgia", "Times New Roman", serif;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #d9b054;
+  text-shadow: 0 0 18px rgba(217, 176, 84, 0.25);
+}
 
-/* fundo com curva de sobrevivência (Kaplan-Meier) discreta, tom sóbrio */
+/* ===== Fundo: verde-petróleo escuro com "veias" douradas sutis (tema fígado) ===== */
 body {
-  background-color: #002b36;
+  background-color: #0b1712;
   background-image:
-    linear-gradient(rgba(0, 43, 54, 0.94), rgba(0, 43, 54, 0.94)),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='400' viewBox='0 0 800 400'%3E%3Cpolyline points='0,40 120,40 120,90 260,90 260,130 260,160 400,160 400,200 400,230 540,230 540,270 680,270 680,310 800,310' fill='none' stroke='%23268bd2' stroke-width='2' stroke-opacity='0.18'/%3E%3Cpolyline points='0,60 90,60 90,120 230,120 230,175 370,175 370,215 370,250 520,250 520,290 660,290 660,330 800,330' fill='none' stroke='%23b58900' stroke-width='2' stroke-opacity='0.12'/%3E%3C/svg%3E");
-  background-repeat: no-repeat, no-repeat;
-  background-position: center top, center top;
-  background-size: cover, cover;
-  background-attachment: fixed, fixed;
+    radial-gradient(circle at 15% 10%, rgba(184,134,42,0.10) 0%, transparent 45%),
+    radial-gradient(circle at 90% 85%, rgba(63,107,82,0.18) 0%, transparent 55%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='500' viewBox='0 0 900 500'%3E%3Cpath d='M50 450 C150 380, 180 300, 160 220 C145 160, 190 120, 260 110 C330 100, 350 60, 330 20' stroke='%23b8862a' stroke-width='2' fill='none' stroke-opacity='0.14'/%3E%3Cpath d='M50 450 C120 420, 130 380, 110 340' stroke='%23b8862a' stroke-width='1.5' fill='none' stroke-opacity='0.10'/%3E%3Cpath d='M160 220 C200 210, 230 230, 250 260' stroke='%23b8862a' stroke-width='1.5' fill='none' stroke-opacity='0.10'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='400' viewBox='0 0 800 400'%3E%3Cpolyline points='800,40 680,40 680,90 540,90 540,130 540,160 400,160 400,200 400,230 260,230 260,270 120,270 120,310 0,310' fill='none' stroke='%233f6b52' stroke-width='2' stroke-opacity='0.18'/%3E%3C/svg%3E");
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+  background-position: left top, right bottom, left bottom, right top;
+  background-size: 700px, 700px, 500px, cover;
+  background-attachment: fixed, fixed, fixed, fixed;
 }
 
-.g-col-4 {
+/* ===== Bloco de metadados ===== */
+.meta-info {
   text-align: center;
+  color: #cfe0d5;
+  font-size: 0.95rem;
+  margin: 0.5rem 0 2.5rem 0;
+  letter-spacing: 0.02em;
 }
-.av-destaque {
+.meta-info strong {
+  color: #d9b054;
+}
+.meta-divider {
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #b8862a, transparent);
+  margin: 1.5rem auto;
+}
+
+/* ===== Timeline vertical, em vez do grid de cards ===== */
+.timeline {
+  max-width: 780px;
+  margin: 2rem auto 0 auto;
   position: relative;
-  border-radius: 8px;
-  background-color: #1a3a4a;
-  margin: 1.5rem 0;
+  padding-left: 2.2rem;
 }
-.av-destaque::before {
+.timeline::before {
+  content: "";
   position: absolute;
-  top: -1px;
-  right: 12px;
-  background: #b58900;
-  color: #fdf6e3;
-  font-size: 0.65rem;
-  font-weight: 600;
-  padding: 2px 10px;
-  border-radius: 0 0 6px 6px;
+  left: 34px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: linear-gradient(180deg, #3f6b52, #b8862a, #3f6b52);
+  opacity: 0.5;
+}
+
+.tl-item {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 1.4rem;
+  margin-bottom: 1.6rem;
+  padding: 1.1rem 1.3rem;
+  border-radius: 14px;
+  background: rgba(20, 38, 30, 0.55);
+  border: 1px solid rgba(184, 134, 42, 0.25);
+  backdrop-filter: blur(6px);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+.tl-item:hover {
+  transform: translateX(6px);
+  border-color: rgba(184, 134, 42, 0.6);
+}
+
+.tl-icon {
+  flex: 0 0 auto;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  background: radial-gradient(circle, #1c2b23 0%, #10241d 100%);
+  border: 2px solid #b8862a;
+  box-shadow: 0 0 12px rgba(184, 134, 42, 0.35);
   z-index: 1;
+}
+
+.tl-body {
+  flex: 1;
+}
+.tl-tag {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #10241d;
+  background: #b8862a;
+  padding: 2px 10px;
+  border-radius: 99px;
+  margin-bottom: 6px;
+}
+.tl-title {
+  color: #e8f0ea;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 0 2px 0;
+}
+.tl-desc {
+  color: #9fb3a7;
+  font-size: 0.9rem;
+  margin-bottom: 0.7rem;
+}
+.tl-body .btn {
+  background: transparent;
+  border: 1.5px solid #3f6b52;
+  color: #cfe0d5;
+  font-size: 0.82rem;
+  padding: 4px 14px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+.tl-body .btn:hover {
+  background: #3f6b52;
+  color: #ffffff;
+  border-color: #3f6b52;
+}
+
+/* Estado "em breve" */
+.tl-item.tl-pending {
+  opacity: 0.6;
+}
+.tl-item.tl-pending .tl-icon {
+  border-color: #6b7d73;
+  box-shadow: none;
+}
+.tl-item.tl-pending .tl-tag {
+  background: #6b7d73;
 }
 </style>
 
----
+::: {.meta-info}
+Fundação Oncocentro de São Paulo (FOSP) · Câncer de Fígado (C22)
 
-Este hub reúne os trabalhos da disciplina **Análise de Sobrevivência e Confiabilidade**.
-
-- **Instituição:** Universidade Federal Fluminense (UFF)
-
-- **Autor:** Caio Salviano
-
-- **Período:** 2026.2
-
----
-
-::: {.grid}
-
-::: {.g-col-4 .av-destaque .av-destaque-1}
-#### ⏱️ Parte I
-
-Estimação Não Paramétrica e Modelos Paramétricos
-
-[Visualizar](Trabalho/parte1/){.btn .btn-primary}
+::: {.meta-divider}
 :::
 
-::: {.g-col-4 .av-destaque .av-destaque-2}
-#### 📈 Parte II
-
-Seleção de Variáveis e Modelos de Regressão Paramétricos
-
-[Visualizar](Trabalho/parte2/){.btn .btn-primary}
+**Instituição:** Universidade Federal Fluminense (UFF) &nbsp;·&nbsp;
+**Autor:** Caio Salviano &nbsp;·&nbsp;
+**Período:** 2026.2
 :::
 
-::: {.g-col-4 .av-destaque .av-destaque-3}
-#### ⚕️ Parte III
+::: {.timeline}
 
-Modelo de Cox
+<div class="tl-item">
+<div class="tl-icon">📉</div>
+<div class="tl-body">
+<span class="tl-tag">Parte I</span>
+<div class="tl-title">Análise Não Paramétrica</div>
+<div class="tl-desc">Estimador de Kaplan-Meier, comparação de curvas e testes de log-rank</div>
+<a href="Trabalho/parte1/" class="btn">Visualizar →</a>
+</div>
+</div>
 
-[Visualizar](Trabalho/parte3/){.btn .btn-primary}
-:::
+<div class="tl-item tl-pending">
+<div class="tl-icon">🧬</div>
+<div class="tl-body">
+<span class="tl-tag">Parte II</span>
+<div class="tl-title">Modelos Paramétricos e Regressão</div>
+<div class="tl-desc">Em breve</div>
+<a href="Trabalho/parte2/" class="btn">Visualizar →</a>
+</div>
+</div>
+
+<div class="tl-item tl-pending">
+<div class="tl-icon">⏳</div>
+<div class="tl-body">
+<span class="tl-tag">Parte III</span>
+<div class="tl-title">Modelo de Cox</div>
+<div class="tl-desc">Em breve</div>
+<a href="Trabalho/parte3/" class="btn">Visualizar →</a>
+</div>
+</div>
 
 :::

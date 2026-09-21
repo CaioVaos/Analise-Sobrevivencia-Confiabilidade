@@ -6,7 +6,7 @@
   color: #10241d !important;
 }
 .reveal .slides section,
-.reveal .slides section > * {
+.reveal .slides section {
   color: #10241d;
 }
 
