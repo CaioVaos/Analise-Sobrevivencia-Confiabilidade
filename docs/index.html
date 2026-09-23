@@ -153,31 +153,35 @@ body {
   margin: 1.5rem auto;
 }
 
-/* ===== Timeline vertical, em vez do grid de cards ===== */
+/* ===== Timeline horizontal, ocupando a largura da página ===== */
 .timeline {
-  max-width: 780px;
-  margin: 2rem auto 0 auto;
+  width: 100%;
+  margin: 2rem 0 0 0;
   position: relative;
-  padding-left: 2.2rem;
+  padding: 2.6rem 2rem 0 2rem;
+  display: flex;
+  gap: 1.5rem;
 }
 .timeline::before {
   content: "";
   position: absolute;
-  left: 34px;
-  top: 8px;
-  bottom: 8px;
-  width: 2px;
-  background: linear-gradient(180deg, #3f6b52, #b8862a, #3f6b52);
+  left: calc(2rem + 26px);
+  right: calc(2rem + 26px);
+  top: 2.6rem;
+  height: 2px;
+  background: linear-gradient(90deg, #3f6b52, #b8862a, #3f6b52);
   opacity: 0.5;
 }
 
 .tl-item {
   position: relative;
+  flex: 1;
   display: flex;
-  align-items: flex-start;
-  gap: 1.4rem;
-  margin-bottom: 1.6rem;
-  padding: 1.1rem 1.3rem;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.9rem;
+  padding: 1.6rem 1.3rem 1.3rem 1.3rem;
   border-radius: 14px;
   background: rgba(20, 38, 30, 0.55);
   border: 1px solid rgba(184, 134, 42, 0.25);
@@ -185,7 +189,7 @@ body {
   transition: transform 0.2s ease, border-color 0.2s ease;
 }
 .tl-item:hover {
-  transform: translateX(6px);
+  transform: translateY(-6px);
   border-color: rgba(184, 134, 42, 0.6);
 }
 
@@ -206,6 +210,9 @@ body {
 
 .tl-body {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .tl-tag {
   display: inline-block;

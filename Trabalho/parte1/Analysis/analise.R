@@ -7,6 +7,45 @@ library(survminer)
 library(ggsurvfit)
 library(ggplot2)
 library(gtsummary)
+library(multcompView)
+
+Letrinhas <- function(p_mat, alpha = 0.05) {
+  p_mat <- as.matrix(p_mat)
+  mode(p_mat) <- "numeric"
+  rownames(p_mat) <- as.character(rownames(p_mat))
+  colnames(p_mat) <- as.character(colnames(p_mat))
+  grupos <- union(rownames(p_mat), colnames(p_mat))
+  mat_full <- matrix(NA,
+                     nrow = length(grupos),
+                     ncol = length(grupos),
+                     dimnames = list(grupos, grupos))
+  mat_full[rownames(p_mat), colnames(p_mat)] <- p_mat
+  for (i in seq_len(nrow(mat_full))) {
+    for (j in seq_len(ncol(mat_full))) {
+      if (is.na(mat_full[i, j]) && !is.na(mat_full[j, i])) {
+        mat_full[i, j] <- mat_full[j, i]
+      }
+    }
+  }
+  diag(mat_full) <- 1
+  rownames(mat_full) <- colnames(mat_full)
+  multcompView::multcompLetters(mat_full, threshold = alpha)$Letters
+}
+
+# Converte uma letra normal em negrito Unicode (𝐀, 𝐁, 𝐂, ...).
+# Não depende do pacote ggtext, então funciona com qualquer versão do ggplot2.
+letra_negrito <- function(letra) {
+  negrito <- c("𝐀","𝐁","𝐂","𝐃","𝐄","𝐅","𝐆","𝐇","𝐈","𝐉","𝐊","𝐋","𝐌",
+               "𝐍","𝐎","𝐏","𝐐","𝐑","𝐒","𝐓","𝐔","𝐕","𝐖","𝐗","𝐘","𝐙")
+  idx <- match(toupper(letra), LETTERS)
+  negrito[idx]
+}
+
+# Constrói os rótulos "Nível (LETRA)": nome do grupo em texto normal,
+# só a letra da comparação múltipla em negrito Unicode.
+rotulos_com_letras <- function(niveis, letras) {
+  paste0(niveis, " (", sapply(letras[niveis], letra_negrito), ")")
+}
 
 # 2. Leitura e Filtros ---------------------------------------------------------
 
@@ -189,7 +228,7 @@ curva_sem_covariavel <- ggsurvfit(
     title    = "Sobrevida global — Câncer de Fígado (C22)",
     subtitle = subtitulo,
     x        = "Tempo desde o diagnóstico (meses)",
-    y        = "Probabilidade de sobrevida, S(t)"
+    y        = "S(t)"
   ) +
   tema_km
 
@@ -253,6 +292,10 @@ subtitulo <- paste0(
 
 km_sexo <- survfit2(Surv(tempo, cens) ~ SEXO, data = df)
 
+res_sexo    <- pairwise_survdiff(Surv(tempo, cens) ~ SEXO, data = df,
+                                  p.adjust.method = "holm", rho = 0)
+letras_sexo <- Letrinhas(res_sexo$p.value)
+
 curva_sexo <- ggsurvfit(km_sexo, linewidth = 1.2) +
   add_confidence_interval(alpha = 0.12) +
   add_quantile(
@@ -282,7 +325,10 @@ curva_sexo <- ggsurvfit(km_sexo, linewidth = 1.2) +
     color    = cor_navy
   ) +
   scale_ggsurvfit(x_scales = list(breaks = seq(0, 144, 24))) +
-  scale_color_manual(values = paleta_2) +
+  scale_color_manual(
+    values = paleta_2,
+    labels = rotulos_com_letras(levels(df$SEXO), letras_sexo)
+  ) +
   scale_fill_manual(values = paleta_2) +
   guides(
     color = guide_legend(override.aes = list(linewidth = 1.6)),
@@ -292,7 +338,7 @@ curva_sexo <- ggsurvfit(km_sexo, linewidth = 1.2) +
     title    = "Sobrevida por Sexo",
     subtitle = subtitulo,
     x        = "Tempo desde o diagnóstico (meses)",
-    y        = "Probabilidade de sobrevida, S(t)",
+    y        = "S(t)",
     color    = "Sexo"
   ) +
   tema_km
@@ -303,9 +349,26 @@ saveRDS(curva_sexo, "Trabalho/parte1/plots/curva_sexo.RDS")
 
 
 ## ESCOLARI ----
-# Escala ordinal (dourado -> verde -> navy); "Sem informação" em cinza.
+# Escala ordinal (dourado -> verde -> navy). "Sem informação" removida do gráfico.
 
-km_escolari <- survfit2(Surv(tempo, cens) ~ ESCOLARI, data = df)
+df_escolari <- df %>%
+  filter(ESCOLARI != "Sem informação") %>%
+  mutate(ESCOLARI = droplevels(ESCOLARI))
+
+# Subtítulo com o n do subconjunto
+subtitulo_escolari <- paste0(
+  "Câncer de fígado (C22)  ·  FOSP 2014–2019  ·  n = ",
+  format(nrow(df_escolari), big.mark = ".", decimal.mark = ","),
+  "  ·  ",
+  format(sum(df_escolari$cens == 1), big.mark = ".", decimal.mark = ","),
+  " óbitos"
+)
+
+km_escolari <- survfit2(Surv(tempo, cens) ~ ESCOLARI, data = df_escolari)
+
+res_escolari    <- pairwise_survdiff(Surv(tempo, cens) ~ ESCOLARI, data = df_escolari,
+                                      p.adjust.method = "holm", rho = 0)
+letras_escolari <- Letrinhas(res_escolari$p.value)
 
 curva_escolari <- ggsurvfit(km_escolari, linewidth = 1.2) +
   add_risktable(
@@ -330,18 +393,16 @@ curva_escolari <- ggsurvfit(km_escolari, linewidth = 1.2) +
   ) +
   scale_ggsurvfit(x_scales = list(breaks = seq(0, 144, 24))) +
   scale_color_manual(
-    values = c(
-      colorRampPalette(c("#d9b054", cor_verde, cor_navy))(5),
-      cor_cinza
-    )
+    values = colorRampPalette(c("#d9b054", cor_verde, cor_navy))(5),
+    labels = rotulos_com_letras(levels(df_escolari$ESCOLARI), letras_escolari)
   ) +
   guides(color = guide_legend(nrow = 2, byrow = TRUE,
                               override.aes = list(linewidth = 1.6))) +
   labs(
     title    = "Sobrevida por Escolaridade",
-    subtitle = subtitulo,
+    subtitle = subtitulo_escolari,
     x        = "Tempo desde o diagnóstico (meses)",
-    y        = "Probabilidade de sobrevida, S(t)",
+    y        = "S(t)",
     color    = "Escolaridade"
   ) +
   tema_km
@@ -370,6 +431,10 @@ subtitulo_ecgrup <- paste0(
 
 km_ecgrup <- survfit2(Surv(tempo, cens) ~ ECGRUP, data = df_ecgrup)
 
+res_ecgrup    <- pairwise_survdiff(Surv(tempo, cens) ~ ECGRUP, data = df_ecgrup,
+                                    p.adjust.method = "holm", rho = 0)
+letras_ecgrup <- Letrinhas(res_ecgrup$p.value)
+
 curva_ecgrup <- ggsurvfit(km_ecgrup, linewidth = 1.2) +
   add_risktable(
     risktable_stats = "n.risk",
@@ -393,14 +458,15 @@ curva_ecgrup <- ggsurvfit(km_ecgrup, linewidth = 1.2) +
   ) +
   scale_ggsurvfit(x_scales = list(breaks = seq(0, 144, 24))) +
   scale_color_manual(
-    values = colorRampPalette(c(cor_verde, cor_dourado, cor_media))(4)
+    values = colorRampPalette(c(cor_verde, cor_dourado, cor_media))(4),
+    labels = rotulos_com_letras(levels(df_ecgrup$ECGRUP), letras_ecgrup)
   ) +
   guides(color = guide_legend(override.aes = list(linewidth = 1.6))) +
   labs(
     title    = "Sobrevida por Estadiamento",
     subtitle = subtitulo_ecgrup,
     x        = "Tempo desde o diagnóstico (meses)",
-    y        = "Probabilidade de sobrevida, S(t)",
+    y        = "S(t)",
     color    = "Estadiamento"
   ) +
   tema_km
@@ -412,6 +478,10 @@ saveRDS(curva_ecgrup, "Trabalho/parte1/plots/curva_ecgrup.RDS")
 ## CATEATEND ----
 
 km_cateatend <- survfit2(Surv(tempo, cens) ~ CATEATEND, data = df)
+
+res_cateatend    <- pairwise_survdiff(Surv(tempo, cens) ~ CATEATEND, data = df,
+                                       p.adjust.method = "holm", rho = 0)
+letras_cateatend <- Letrinhas(res_cateatend$p.value)
 
 curva_cateatend <- ggsurvfit(km_cateatend, linewidth = 1.2) +
   add_quantile(
@@ -441,13 +511,16 @@ curva_cateatend <- ggsurvfit(km_cateatend, linewidth = 1.2) +
     color    = cor_navy
   ) +
   scale_ggsurvfit(x_scales = list(breaks = seq(0, 144, 24))) +
-  scale_color_manual(values = c(cor_verde, cor_dourado, cor_navy)) +
+  scale_color_manual(
+    values = c(cor_verde, cor_dourado, cor_navy),
+    labels = rotulos_com_letras(levels(df$CATEATEND), letras_cateatend)
+  ) +
   guides(color = guide_legend(override.aes = list(linewidth = 1.6))) +
   labs(
     title    = "Sobrevida por Categoria de Atendimento",
     subtitle = subtitulo,
     x        = "Tempo desde o diagnóstico (meses)",
-    y        = "Probabilidade de sobrevida, S(t)",
+    y        = "S(t)",
     color    = "Atendimento"
   ) +
   tema_km
@@ -460,6 +533,10 @@ saveRDS(curva_cateatend, "Trabalho/parte1/plots/curva_cateatend.RDS")
 ## CIRURGIA ----
 
 km_cirurgia <- survfit2(Surv(tempo, cens) ~ CIRURGIA, data = df)
+
+res_cirurgia    <- pairwise_survdiff(Surv(tempo, cens) ~ CIRURGIA, data = df,
+                                      p.adjust.method = "holm", rho = 0)
+letras_cirurgia <- Letrinhas(res_cirurgia$p.value)
 
 curva_cirurgia <- ggsurvfit(km_cirurgia, linewidth = 1.2) +
   add_confidence_interval(alpha = 0.12) +
@@ -490,7 +567,10 @@ curva_cirurgia <- ggsurvfit(km_cirurgia, linewidth = 1.2) +
     color    = cor_navy
   ) +
   scale_ggsurvfit(x_scales = list(breaks = seq(0, 144, 24))) +
-  scale_color_manual(values = paleta_2) +
+  scale_color_manual(
+    values = paleta_2,
+    labels = rotulos_com_letras(levels(df$CIRURGIA), letras_cirurgia)
+  ) +
   scale_fill_manual(values = paleta_2) +
   guides(
     color = guide_legend(override.aes = list(linewidth = 1.6)),
@@ -500,7 +580,7 @@ curva_cirurgia <- ggsurvfit(km_cirurgia, linewidth = 1.2) +
     title    = "Sobrevida por Cirurgia",
     subtitle = subtitulo,
     x        = "Tempo desde o diagnóstico (meses)",
-    y        = "Probabilidade de sobrevida, S(t)",
+    y        = "S(t)",
     color    = "Cirurgia"
   ) +
   tema_km
@@ -513,6 +593,10 @@ saveRDS(curva_cirurgia, "Trabalho/parte1/plots/curva_cirurgia.RDS")
 ## RADIO ----
 
 km_radio <- survfit2(Surv(tempo, cens) ~ RADIO, data = df)
+
+res_radio    <- pairwise_survdiff(Surv(tempo, cens) ~ RADIO, data = df,
+                                   p.adjust.method = "holm", rho = 0)
+letras_radio <- Letrinhas(res_radio$p.value)
 
 curva_radio <- ggsurvfit(km_radio, linewidth = 1.2) +
   add_confidence_interval(alpha = 0.12) +
@@ -543,7 +627,10 @@ curva_radio <- ggsurvfit(km_radio, linewidth = 1.2) +
     color    = cor_navy
   ) +
   scale_ggsurvfit(x_scales = list(breaks = seq(0, 144, 24))) +
-  scale_color_manual(values = paleta_2) +
+  scale_color_manual(
+    values = paleta_2,
+    labels = rotulos_com_letras(levels(df$RADIO), letras_radio)
+  ) +
   scale_fill_manual(values = paleta_2) +
   guides(
     color = guide_legend(override.aes = list(linewidth = 1.6)),
@@ -553,7 +640,7 @@ curva_radio <- ggsurvfit(km_radio, linewidth = 1.2) +
     title    = "Sobrevida por Radioterapia",
     subtitle = subtitulo,
     x        = "Tempo desde o diagnóstico (meses)",
-    y        = "Probabilidade de sobrevida, S(t)",
+    y        = "S(t)",
     color    = "Radioterapia"
   ) +
   tema_km
@@ -566,6 +653,10 @@ saveRDS(curva_radio, "Trabalho/parte1/plots/curva_radio.RDS")
 ## QUIMIO ----
 
 km_quimio <- survfit2(Surv(tempo, cens) ~ QUIMIO, data = df)
+
+res_quimio    <- pairwise_survdiff(Surv(tempo, cens) ~ QUIMIO, data = df,
+                                    p.adjust.method = "holm", rho = 0)
+letras_quimio <- Letrinhas(res_quimio$p.value)
 
 curva_quimio <- ggsurvfit(km_quimio, linewidth = 1.2) +
   add_confidence_interval(alpha = 0.12) +
@@ -596,7 +687,10 @@ curva_quimio <- ggsurvfit(km_quimio, linewidth = 1.2) +
     color    = cor_navy
   ) +
   scale_ggsurvfit(x_scales = list(breaks = seq(0, 144, 24))) +
-  scale_color_manual(values = paleta_2) +
+  scale_color_manual(
+    values = paleta_2,
+    labels = rotulos_com_letras(levels(df$QUIMIO), letras_quimio)
+  ) +
   scale_fill_manual(values = paleta_2) +
   guides(
     color = guide_legend(override.aes = list(linewidth = 1.6)),
@@ -606,7 +700,7 @@ curva_quimio <- ggsurvfit(km_quimio, linewidth = 1.2) +
     title    = "Sobrevida por Quimioterapia",
     subtitle = subtitulo,
     x        = "Tempo desde o diagnóstico (meses)",
-    y        = "Probabilidade de sobrevida, S(t)",
+    y        = "S(t)",
     color    = "Quimioterapia"
   ) +
   tema_km
@@ -627,7 +721,9 @@ cor_dourado <- "#b8862a"
 cor_cinza   <- "#6b7d73"
 cor_media   <- "#c0392b"
 
-# Tema
+paleta_2 <- c(cor_verde, cor_dourado)
+
+# Tema (para o boxplot, sem legenda)
 tema_km <- theme_minimal(base_size = 13) +
   theme(
     plot.title.position = "plot",

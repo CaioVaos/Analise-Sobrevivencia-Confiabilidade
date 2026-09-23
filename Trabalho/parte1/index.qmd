@@ -32,7 +32,7 @@ format:
 ::: {.column width="49%"}
 <div style="background:#e3efe6; border:1.5px solid #3f6b52; border-radius:14px; padding:1rem 1.1rem; display:flex; flex-direction:column; gap:12px; height:100%; text-align:left;">
 <div style="display:flex; align-items:center; gap:12px;">
-<h3 style="font-size:0.95em; font-weight:700; color:#10241d; margin:0;">1.1.1 A Base de Dados</h3>
+<h3 style="font-size:0.95em; font-weight:700; color:#10241d; margin:0;">A Base de Dados</h3>
 <div style="font-family:'Courier New',monospace; font-size:0.55em; font-weight:700; padding:3px 10px; border-radius:6px; background:#3f6b52; color:#ffffff; white-space:nowrap;">FOSP · RHC</div>
 </div>
 <div style="flex:1; display:grid; grid-template-columns:1fr 1fr; grid-auto-rows:1fr; gap:12px;">
@@ -66,7 +66,7 @@ format:
 ::: {.column width="49%"}
 <div style="background:#faf1de; border:1.5px solid #b8862a; border-radius:14px; padding:1rem 1.1rem; display:flex; flex-direction:column; gap:12px; height:100%; text-align:left;">
 <div style="display:flex; align-items:center; gap:12px;">
-<h3 style="font-size:0.95em; font-weight:700; color:#10241d; margin:0;">1.1.2 Por que Estudar?</h3>
+<h3 style="font-size:0.95em; font-weight:700; color:#10241d; margin:0;">Por que Estudar?</h3>
 <div style="font-family:'Courier New',monospace; font-size:0.55em; font-weight:700; padding:3px 10px; border-radius:6px; background:#b8862a; color:#ffffff; white-space:nowrap;">Relevância</div>
 </div>
 <div style="background:#ffffff; border:1px solid rgba(184,134,42,0.45); border-radius:12px; padding:14px 16px; display:flex; gap:16px; align-items:center;">
@@ -106,7 +106,7 @@ format:
 
 ::: {.column width="49%"}
 <div style="background:#e3efe6; border:1.5px solid #3f6b52; border-radius:14px; padding:1rem 1.1rem; display:flex; flex-direction:column; gap:12px; height:100%; text-align:left;">
-<h3 style="font-size:0.95em; font-weight:700; color:#10241d; margin:0;">1.2.1 Evento &amp; Tempo</h3>
+<h3 style="font-size:0.95em; font-weight:700; color:#10241d; margin:0;">Evento &amp; Tempo</h3>
 <div style="display:flex; align-items:center; gap:10px;">
 <div style="flex:0 0 auto; background:#ffffff; border:1.5px solid #3f6b52; border-radius:10px; padding:8px 12px; text-align:center;">
 <div style="font-size:0.42em; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#6b7d73;">📅 Diagnóstico</div>
@@ -134,7 +134,7 @@ format:
 <div style="font-family:'Courier New',monospace; font-size:0.55em; font-weight:700; padding:2px 8px; border-radius:5px; background:#d9b054; color:#10241d;">cens = 1</div>
 </div>
 <div style="border-top:1px solid rgba(63,107,82,0.3);"></div>
-<h3 style="font-size:0.95em; font-weight:700; color:#10241d; margin:0;">1.2.2 Censura</h3>
+<h3 style="font-size:0.95em; font-weight:700; color:#10241d; margin:0;">Censura</h3>
 <div style="font-size:0.5em; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#6b7d73;">🚫 Pacientes ao final do estudo</div>
 <div style="display:flex; align-items:center; gap:12px; background:#ffffff; border:1px solid rgba(63,107,82,0.3); border-radius:10px; padding:5px 12px;">
 <div style="flex:0 0 7.5em; font-family:'Courier New',monospace; font-size:0.5em; font-weight:700; color:#3f6b52;">ULTINFO = 1</div>
@@ -157,7 +157,7 @@ format:
 
 ::: {.column width="49%"}
 <div style="background:#faf1de; border:1.5px solid #b8862a; border-radius:14px; padding:1rem 1.1rem; display:flex; flex-direction:column; gap:12px; height:100%; text-align:left;">
-<h3 style="font-size:0.95em; font-weight:700; color:#10241d; margin:0;">1.2.3 Variáveis do Estudo</h3>
+<h3 style="font-size:0.95em; font-weight:700; color:#10241d; margin:0;">Variáveis do Estudo</h3>
 <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
 <div style="background:#ffffff; border:1px solid rgba(184,134,42,0.4); border-left:5px solid #b8862a; border-radius:10px; padding:8px 12px;">
 <div style="font-size:0.45em; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#6b7d73;">⏱️ Tempo</div>
@@ -511,46 +511,93 @@ curva_idade_boxplot
 
 ## Conclusão
 
-<div style="background:#10241d; border-radius:14px; padding:14px 26px; text-align:left; margin-bottom:14px;">
-<div style="font-size:0.42em; font-weight:700; text-transform:uppercase; letter-spacing:0.09em; color:#d9b054; margin-bottom:4px;">🎯 Mensagem principal</div>
-<div style="font-size:0.68em; font-weight:600; color:#ffffff; line-height:1.3;">A sobrevida mediana global é de <span style="color:#d9b054;">13,9 meses</span>, com gradientes marcantes por estadiamento, escolaridade e cirurgia; a diferença por sexo é modesta.</div>
+<div style="background:linear-gradient(135deg, #10241d, #1c2f24); border-radius:14px; padding:16px 26px; margin-bottom:16px; border-left:4px solid #b8862a;">
+<div style="font-size:0.68em; font-weight:600; color:#e8f0ea; line-height:1.5;">
+- O <b style="color:#d9b054;">estadiamento</b> no momento do diagnóstico é o maior separador de sobrevida observado neste estudo 
+- seguido por aspectos sociais:<b style="color:#d9b054;">escolaridade</b> e acesso à <b style="color:#d9b054;">cirurgia</b>.
+</div>
 </div>
 
 :::: {.columns}
 
-::: {.column width="56%"}
-<div style="background:#e3efe6; border:1.5px solid #3f6b52; border-radius:12px; padding:12px 16px; font-size:0.52em; color:#10241d; text-align:left; height:100%;">
-<h3 style="font-size:1.15em; font-weight:700; color:#10241d; margin:0 0 8px 0;">3.1.1 Principais Achados</h3>
-<div style="display:flex; gap:10px; align-items:baseline; padding:3px 0;"><span style="flex:0 0 6.4em; font-family:'Courier New',monospace; font-size:0.85em; font-weight:700; padding:1px 7px; border-radius:5px; background:#dcead9; color:#3f6b52; text-align:center;">GERAL</span><span>Mediana global de <b style="color:#3f6b52;">13,9 meses</b> (IC 95%: 12,8–15,0) · 2.774 óbitos em 4.231</span></div>
-<div style="display:flex; gap:10px; align-items:baseline; padding:3px 0;"><span style="flex:0 0 6.4em; font-family:'Courier New',monospace; font-size:0.85em; font-weight:700; padding:1px 7px; border-radius:5px; background:#dcead9; color:#3f6b52; text-align:center;">SEXO</span><span>Masculino <b style="color:#3f6b52;">14,9</b> vs feminino <b style="color:#3f6b52;">12,2</b> meses · log-rank p = 0,044, diferença limítrofe</span></div>
-<div style="display:flex; gap:10px; align-items:baseline; padding:3px 0;"><span style="flex:0 0 6.4em; font-family:'Courier New',monospace; font-size:0.85em; font-weight:700; padding:1px 7px; border-radius:5px; background:#dcead9; color:#3f6b52; text-align:center;">ESCOLARI</span><span>Mediana cresce com a escolaridade: <b style="color:#3f6b52;">6,5</b> (analfabeto) → <b style="color:#3f6b52;">28,5</b> meses (superior)</span></div>
-<div style="display:flex; gap:10px; align-items:baseline; padding:3px 0;"><span style="flex:0 0 6.4em; font-family:'Courier New',monospace; font-size:0.85em; font-weight:700; padding:1px 7px; border-radius:5px; background:#dcead9; color:#3f6b52; text-align:center;">ECGRUP</span><span>Estágio IV <b style="color:#3f6b52;">5,3</b> meses vs estágio II <b style="color:#3f6b52;">48,3</b>; estágio I sem mediana atingida</span></div>
-<div style="display:flex; gap:10px; align-items:baseline; padding:3px 0;"><span style="flex:0 0 6.4em; font-family:'Courier New',monospace; font-size:0.85em; font-weight:700; padding:1px 7px; border-radius:5px; background:#dcead9; color:#3f6b52; text-align:center;">CATEATEND</span><span>SUS <b style="color:#3f6b52;">31,4</b> · Particular <b style="color:#3f6b52;">24,6</b> · Convênio <b style="color:#3f6b52;">12,5</b> meses; SUS acima do Convênio, a investigar</span></div>
-<div style="display:flex; gap:10px; align-items:baseline; padding:3px 0;"><span style="flex:0 0 6.4em; font-family:'Courier New',monospace; font-size:0.85em; font-weight:700; padding:1px 7px; border-radius:5px; background:#dcead9; color:#3f6b52; text-align:center;">CIRURGIA</span><span>Sem cirurgia <b style="color:#3f6b52;">8,8</b> meses; com cirurgia, mediana não atingida (35,8% de óbitos vs 75,4%)</span></div>
-<div style="display:flex; gap:10px; align-items:baseline; padding:3px 0;"><span style="flex:0 0 6.4em; font-family:'Courier New',monospace; font-size:0.85em; font-weight:700; padding:1px 7px; border-radius:5px; background:#dcead9; color:#3f6b52; text-align:center;">RADIO</span><span>Com radioterapia <b style="color:#3f6b52;">25,5</b> vs <b style="color:#3f6b52;">13,5</b> meses sem (n = 188 tratados)</span></div>
-<div style="display:flex; gap:10px; align-items:baseline; padding:3px 0;"><span style="flex:0 0 6.4em; font-family:'Courier New',monospace; font-size:0.85em; font-weight:700; padding:1px 7px; border-radius:5px; background:#dcead9; color:#3f6b52; text-align:center;">QUIMIO</span><span>Com quimioterapia <b style="color:#3f6b52;">18,6</b> vs <b style="color:#3f6b52;">9,5</b> meses sem</span></div>
-<div style="display:flex; gap:10px; align-items:baseline; padding:3px 0;"><span style="flex:0 0 6.4em; font-family:'Courier New',monospace; font-size:0.85em; font-weight:700; padding:1px 7px; border-radius:5px; background:#dcead9; color:#3f6b52; text-align:center;">IDADE</span><span>Mediana de <b style="color:#3f6b52;">63 anos</b> (Q1–Q3: 56–70) · média de 62,2</span></div>
+::: {.column width="32%"}
+
+<div style="display:flex; flex-direction:column; gap:10px;">
+
+<div style="background:#e3efe6; border:1.5px solid #3f6b52; border-radius:12px; padding:10px 14px;">
+<div style="font-size:0.42em; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:#3f6b52;">Estadiamento</div>
+<div style="font-size:0.55em; color:#10241d; margin-top:4px;">
+Estágio I <span style="color:#6b7d73;">— mediana →</span> <b style="color:#3f6b52;">não atingida</b>
+</div>
+<div style="font-size:0.55em; color:#10241d;">
+Estágio IV <span style="color:#6b7d73;">— mediana →</span> <b style="color:#3f6b52;">5,3 meses</b>
+</div>
+</div>
+
+<div style="background:#e3efe6; border:1.5px solid #3f6b52; border-radius:12px; padding:10px 14px;">
+<div style="font-size:0.42em; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:#3f6b52;">Cirurgia</div>
+<div style="font-size:0.55em; color:#10241d; margin-top:4px;">
+Sim <span style="color:#6b7d73;">— mediana →</span> <b style="color:#3f6b52;">não atingida</b>
+</div>
+<div style="font-size:0.55em; color:#10241d;">
+Não <span style="color:#6b7d73;">— mediana →</span> <b style="color:#3f6b52;">8,8 meses</b>
+</div>
+<div style="font-size:0.46em; color:#6b7d73; margin-top:6px; font-style:italic;">apenas 24,9% dos pacientes foram operados</div>
+</div>
+
+<div style="background:#e3efe6; border:1.5px solid #3f6b52; border-radius:12px; padding:10px 14px;">
+<div style="font-size:0.42em; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:#3f6b52;">Escolaridade</div>
+<div style="font-size:0.55em; color:#10241d; margin-top:4px;">
+Analfabeto <span style="color:#6b7d73;">— mediana →</span> <b style="color:#3f6b52;">6,5 meses</b>
+</div>
+<div style="font-size:0.55em; color:#10241d;">
+Ensino superior <span style="color:#6b7d73;">— mediana →</span> <b style="color:#3f6b52;">28,5 meses</b>
+</div>
+</div>
+
 </div>
 :::
 
-::: {.column width="2%"}
+::: {.column width="34%"}
+<div style="background:#f4f8f5; border:1.5px solid rgba(63,107,82,0.4); border-radius:12px; padding:14px 16px; height:100%;">
+<h3 style="font-size:1.0em; font-weight:700; color:#3f6b52; margin:0 0 12px 0;">Melhor Tratamento</h3>
+
+<div style="display:flex; flex-direction:column; gap:9px; font-size:0.55em; color:#10241d;">
+<div style="display:flex; gap:8px;"><span style="color:#3f6b52; font-weight:700;">—</span><span><b>Cirurgia</b>: associada ao maior ganho isolado de sobrevida</span></div>
+<div style="display:flex; gap:8px;"><span style="color:#3f6b52; font-weight:700;">—</span><span><b>Radioterapia</b>: sobrevida maior entre tratados <em style="color:#6b7d73;">(requer mais estudo)</em></span></div>
+<div style="display:flex; gap:8px;"><span style="color:#3f6b52; font-weight:700;">—</span><span><b>Quimioterapia</b>: sobrevida inicial maior entre tratados, com inversão <em style="color:#6b7d73;">(requer mais estudo)</em></span></div>
+</div>
+
+<div style="margin-top:14px; padding-top:10px; border-top:1px dashed rgba(63,107,82,0.3); font-size:0.48em; color:#6b7d73; line-height:1.4;">
+<b style="color:#3f6b52;">Atendimento:</b> requer mais estudo para firmar a diferença entre SUS e Particular
+</div>
+</div>
 :::
 
-::: {.column width="42%"}
-<div style="background:#faf1de; border:1.5px solid #b8862a; border-radius:12px; padding:12px 16px; font-size:0.52em; color:#10241d; text-align:left; margin-bottom:14px;">
-<h3 style="font-size:1.15em; font-weight:700; color:#10241d; margin:0 0 8px 0;">3.1.2 Limitações</h3>
-<div style="display:flex; gap:8px; padding:3px 0;"><span style="color:#b8862a;">▪</span><span>34,4% de censuras (1.457 de 4.231)</span></div>
-<div style="display:flex; gap:8px; padding:3px 0;"><span style="color:#b8862a;">▪</span><span>"Sem informação" em 23,5% de ESCOLARI e 15,8% de ECGRUP</span></div>
-<div style="display:flex; gap:8px; padding:3px 0;"><span style="color:#b8862a;">▪</span><span>Categorias pequenas: Particular (n = 75) e Radioterapia (n = 188)</span></div>
-<div style="display:flex; gap:8px; padding:3px 0;"><span style="color:#b8862a;">▪</span><span>Análise univariada, sem ajuste por outras covariáveis</span></div>
-<div style="display:flex; gap:8px; padding:3px 0;"><span style="color:#b8862a;">▪</span><span>Maior sobrevida com tratamentos pode refletir seleção de pacientes (associação, não causa)</span></div>
-<div style="display:flex; gap:8px; padding:3px 0;"><span style="color:#b8862a;">▪</span><span>Óbito por outra causa tratado como censura</span></div>
+::: {.column width="32%"}
+<div style="background:#faf1de; border:1.5px solid #b8862a; border-radius:12px; padding:14px 16px; height:100%;">
+<h3 style="font-size:1.0em; font-weight:700; color:#10241d; margin:0 0 4px 0;">Melhor Perfil</h3>
+<div style="font-size:0.46em; color:#7a5a12; margin-bottom:12px;">combinação de fatores associados à maior sobrevida</div>
+
+<div style="display:flex; flex-direction:column; gap:8px; font-size:0.58em; color:#10241d;">
+<div><b>Sexo</b> masculino</div>
+<div><b>Ensino</b> superior</div>
+<div><b>Estágio</b> I</div>
+<div>Atendimento <b>particular</b></div>
+<div>Realizou <b>cirurgia</b></div>
+<div>Realizou <b>radioterapia</b></div>
 </div>
-<div style="background:#faf1de; border:1.5px solid #b8862a; border-radius:12px; padding:12px 16px; font-size:0.52em; color:#10241d; text-align:left;">
-<h3 style="font-size:1.15em; font-weight:700; color:#10241d; margin:0 0 8px 0;">3.1.3 Próximos Passos</h3>
-<div style="display:flex; gap:8px; padding:3px 0;"><span style="color:#b8862a;">▪</span><span>Parte II: modelagem paramétrica das curvas de sobrevida</span></div>
-<div style="display:flex; gap:8px; padding:3px 0;"><span style="color:#b8862a;">▪</span><span>Ajuste multivariado por estadiamento, escolaridade e tratamentos</span></div>
 </div>
+
+<div style="background:#faf1de; border:1.5px solid #b8862a; border-radius:12px; padding:12px 20px; margin-top:14px;">
+<div style="font-size:0.55em; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:#10241d; margin-bottom:8px;">Limitações</div>
+<div style="display:flex; flex-wrap:wrap; gap:20px; font-size:0.5em; color:#10241d; line-height:1.4;">
+<div>— <b>Análise univariada</b>: os gradientes acima se sobrepõem e não foram isolados entre si</div>
+<div>— <b>34,4%</b> de censuras e <b>23,5%</b> "sem informação" em ESCOLARI</div>
+<div>— Categorias pequenas: Particular (n=75), Radioterapia (n=188)</div>
+</div>
+</div>
+
 :::
 
 ::::
