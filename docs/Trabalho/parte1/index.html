@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.9.32">
 
   <meta name="author" content="Caio Salviano (caiosalviano@id.uff.br)">
-  <title>ANÁLISE DE SOBREVIVÊNCIA - Câncer de Fígado</title>
+  <title>Análise de Sobrevivência Câncer de Fígado</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -131,7 +131,7 @@
     <div class="slides">
 
 <section id="title-slide" data-background-image="media/capa.png" data-background-size="cover" style="transform: translateY(-15px);" class="quarto-title-block center">
-  <h1 class="title"><span style="color: #d9b054;">ANÁLISE DE SOBREVIVÊNCIA - Câncer de Fígado</span></h1>
+  <h1 class="title"><span style="color: #d9b054;">Análise de Sobrevivência<br>Câncer de Fígado</span></h1>
   <p class="subtitle"><span style="font-size: 26px; color: #cfe0d5;"><strong>Parte I: Análise Não Paramétrica</strong></span></p>
 
 <div class="quarto-title-authors">
@@ -597,45 +597,44 @@ Amplitude interquartílica
 
 </div>
 <div style="font-size:0.5em; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#6b7d73;">
-Dicotomização pela mediana
+Comparação por desfecho
 </div>
+<div style="background:#ffffff; border:1px solid rgba(184,134,42,0.4); border-radius:10px; padding:9px 12px; display:flex; flex-direction:column; gap:6px;">
 <div style="display:flex; align-items:center; gap:10px;">
-<div style="flex:0 0 auto; font-size:0.58em; padding:3px 12px; border-radius:99px; font-weight:700; background:rgba(184,134,42,0.15); color:#7a5a12; border:0.5px solid rgba(184,134,42,0.4);">
-IDADE
+<div style="font-family:'Courier New',monospace; font-size:0.58em; font-weight:700; padding:2px 9px; border-radius:5px; background:#b8862a; color:#ffffff;">
+geom_boxplot()
 </div>
-<div style="color:#b8862a; font-size:0.8em;">
-➜
+<div style="font-family:'Courier New',monospace; font-size:0.58em; font-weight:700; padding:2px 9px; border-radius:5px; background:#b8862a; color:#ffffff;">
+geom_violin()
 </div>
-<div style="flex:0 0 auto; font-family:'Courier New',monospace; font-size:0.58em; font-weight:700; padding:3px 10px; border-radius:5px; background:#b8862a; color:#ffffff;">
-median()
 </div>
-<div style="color:#b8862a; font-size:0.8em;">
-➜
+<div style="font-size:0.5em; color:#10241d; line-height:1.3;">
+Distribuição da idade comparada entre os grupos:
 </div>
-<div style="flex:1; display:flex; flex-direction:column; gap:5px;">
-<div style="background:#ffffff; border:1px solid rgba(184,134,42,0.4); border-radius:8px; padding:3px 10px; font-size:0.52em; font-weight:600; color:#7a5a12; text-align:center;">
-Abaixo da mediana
+<div style="display:flex; flex-wrap:wrap; gap:6px;">
+<div style="font-size:0.52em; padding:1px 10px; border-radius:99px; font-weight:600; background:rgba(63,107,82,0.12); color:#2c5943; border:0.5px solid rgba(63,107,82,0.35);">
+Óbito por câncer
 </div>
-<div style="background:#ffffff; border:1px solid rgba(184,134,42,0.4); border-radius:8px; padding:3px 10px; font-size:0.52em; font-weight:600; color:#7a5a12; text-align:center;">
-Acima da mediana
+<div style="font-size:0.52em; padding:1px 10px; border-radius:99px; font-weight:600; background:rgba(184,134,42,0.15); color:#7a5a12; border:0.5px solid rgba(184,134,42,0.4);">
+Censura
+</div>
+<div style="font-size:0.52em; padding:1px 10px; border-radius:99px; font-weight:600; background:rgba(16,36,29,0.1); color:#10241d; border:0.5px solid rgba(16,36,29,0.3);">
+Total
 </div>
 </div>
 </div>
 <div style="font-size:0.46em; font-style:italic; color:#6b7d73;">
-Mediana observada da idade: 63 anos
+Mediana observada da idade: 63 anos (Q1–Q3: 56–70)
 </div>
 <div style="border-top:1px solid rgba(184,134,42,0.3); margin-top:2px;">
 
 </div>
 <div style="font-size:0.5em; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#6b7d73;">
-Após dicotomização
+Aplicada a
 </div>
-<div style="display:flex; gap:10px;">
-<div style="font-family:'Courier New',monospace; font-size:0.58em; font-weight:700; padding:3px 12px; border-radius:5px; background:#b8862a; color:#ffffff;">
-survfit()
-</div>
-<div style="font-family:'Courier New',monospace; font-size:0.58em; font-weight:700; padding:3px 12px; border-radius:5px; background:#b8862a; color:#ffffff;">
-survdiff()
+<div style="display:flex; flex-wrap:wrap; gap:6px;">
+<div style="font-size:0.52em; padding:1px 10px; border-radius:99px; font-weight:600; background:rgba(184,134,42,0.1); color:#7a5a12; border:0.5px solid rgba(184,134,42,0.35);">
+IDADE
 </div>
 </div>
 </div>
@@ -936,50 +935,52 @@ Percentuais calculados sobre o total de 4.231 pacientes. “In situ” não poss
 <section id="conclusão-1" class="slide level2" data-number="4.1">
 <h2><span class="header-section-number">4.1</span> Conclusão</h2>
 <div style="background:linear-gradient(135deg, #10241d, #1c2f24); border-radius:14px; padding:16px 26px; margin-bottom:16px; border-left:4px solid #b8862a;">
-<div style="font-size:0.68em; font-weight:600; color:#e8f0ea; line-height:1.5;">
-<ul>
-<li>O <b style="color:#d9b054;">estadiamento</b> no momento do diagnóstico é o maior separador de sobrevida observado neste estudo</li>
-<li>seguido por aspectos sociais:<b style="color:#d9b054;">escolaridade</b> e acesso à <b style="color:#d9b054;">cirurgia</b>.</li>
-</ul>
+<div style="display:flex; flex-direction:column; gap:4px; font-size:0.68em; font-weight:600; color:#e8f0ea; line-height:1.5;">
+<div style="display:flex; gap:8px;">
+<span style="color:#b8862a;">▪</span><span>A sobrevida mediana global foi de <b style="color:#d9b054;">13,9 meses</b>; o <b style="color:#d9b054;">estadiamento</b> no diagnóstico é o maior separador de sobrevida observado</span>
+</div>
+<div style="display:flex; gap:8px;">
+<span style="color:#b8862a;">▪</span><span>seguido por aspectos sociais: <b style="color:#d9b054;">escolaridade</b> e acesso à <b style="color:#d9b054;">cirurgia</b> — reforça a importância do diagnóstico precoce e do acesso equitativo ao tratamento</span>
+</div>
 </div>
 </div>
 <div class="columns">
 <div class="column" style="width:32%;">
-<div style="display:flex; flex-direction:column; gap:10px;">
-<div style="background:#e3efe6; border:1.5px solid #3f6b52; border-radius:12px; padding:10px 14px;">
+<div style="display:flex; flex-direction:column; gap:10px; height:100%;">
+<div style="background:#e3efe6; border:1.5px solid #3f6b52; border-radius:12px; padding:10px 14px; flex:1;">
 <div style="font-size:0.42em; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:#3f6b52;">
 Estadiamento
 </div>
 <div style="font-size:0.55em; color:#10241d; margin-top:4px;">
-<p>Estágio I <span style="color:#6b7d73;">— mediana →</span> <b style="color:#3f6b52;">não atingida</b></p>
+Estágio I <span style="color:#6b7d73;">— mediana →</span> <b style="color:#3f6b52;">não atingida</b>
 </div>
 <div style="font-size:0.55em; color:#10241d;">
-<p>Estágio IV <span style="color:#6b7d73;">— mediana →</span> <b style="color:#3f6b52;">5,3 meses</b></p>
+Estágio IV <span style="color:#6b7d73;">— mediana →</span> <b style="color:#3f6b52;">5,3 meses</b>
 </div>
 </div>
-<div style="background:#e3efe6; border:1.5px solid #3f6b52; border-radius:12px; padding:10px 14px;">
+<div style="background:#e3efe6; border:1.5px solid #3f6b52; border-radius:12px; padding:10px 14px; flex:1;">
 <div style="font-size:0.42em; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:#3f6b52;">
 Cirurgia
 </div>
 <div style="font-size:0.55em; color:#10241d; margin-top:4px;">
-<p>Sim <span style="color:#6b7d73;">— mediana →</span> <b style="color:#3f6b52;">não atingida</b></p>
+Sim <span style="color:#6b7d73;">— mediana →</span> <b style="color:#3f6b52;">não atingida</b>
 </div>
 <div style="font-size:0.55em; color:#10241d;">
-<p>Não <span style="color:#6b7d73;">— mediana →</span> <b style="color:#3f6b52;">8,8 meses</b></p>
+Não <span style="color:#6b7d73;">— mediana →</span> <b style="color:#3f6b52;">8,8 meses</b>
 </div>
 <div style="font-size:0.46em; color:#6b7d73; margin-top:6px; font-style:italic;">
 apenas 24,9% dos pacientes foram operados
 </div>
 </div>
-<div style="background:#e3efe6; border:1.5px solid #3f6b52; border-radius:12px; padding:10px 14px;">
+<div style="background:#e3efe6; border:1.5px solid #3f6b52; border-radius:12px; padding:10px 14px; flex:1;">
 <div style="font-size:0.42em; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:#3f6b52;">
 Escolaridade
 </div>
 <div style="font-size:0.55em; color:#10241d; margin-top:4px;">
-<p>Analfabeto <span style="color:#6b7d73;">— mediana →</span> <b style="color:#3f6b52;">6,5 meses</b></p>
+Analfabeto <span style="color:#6b7d73;">— mediana →</span> <b style="color:#3f6b52;">6,5 meses</b>
 </div>
 <div style="font-size:0.55em; color:#10241d;">
-<p>Ensino superior <span style="color:#6b7d73;">— mediana →</span> <b style="color:#3f6b52;">28,5 meses</b></p>
+Ensino superior <span style="color:#6b7d73;">— mediana →</span> <b style="color:#3f6b52;">28,5 meses</b>
 </div>
 </div>
 </div>
@@ -1004,11 +1005,12 @@ Melhor Tratamento
 </div>
 </div>
 </div><div class="column" style="width:32%;">
-<div style="background:#faf1de; border:1.5px solid #b8862a; border-radius:12px; padding:14px 16px; height:100%;">
-<h3 style="font-size:1.0em; font-weight:700; color:#10241d; margin:0 0 4px 0;">
+<div style="display:flex; flex-direction:column; gap:14px; height:100%;">
+<div style="background:#f4f8f5; border:1.5px solid rgba(63,107,82,0.4); border-radius:12px; padding:14px 16px; flex:1;">
+<h3 style="font-size:1.0em; font-weight:700; color:#3f6b52; margin:0 0 4px 0;">
 Melhor Perfil
 </h3>
-<div style="font-size:0.46em; color:#7a5a12; margin-bottom:12px;">
+<div style="font-size:0.46em; color:#6b7d73; margin-bottom:12px;">
 combinação de fatores associados à maior sobrevida
 </div>
 <div style="display:flex; flex-direction:column; gap:8px; font-size:0.58em; color:#10241d;">
@@ -1032,19 +1034,17 @@ Realizou <b>radioterapia</b>
 </div>
 </div>
 </div>
-<div style="background:#faf1de; border:1.5px solid #b8862a; border-radius:12px; padding:12px 20px; margin-top:14px;">
-<div style="font-size:0.55em; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:#10241d; margin-bottom:8px;">
+<div style="background:#faf1de; border:1.5px solid #b8862a; border-radius:12px; padding:12px 20px;">
+<div style="font-size:0.5em; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:#10241d; margin-bottom:8px;">
 Limitações
 </div>
-<div style="display:flex; flex-wrap:wrap; gap:20px; font-size:0.5em; color:#10241d; line-height:1.4;">
-<div>
-— <b>Análise univariada</b>: os gradientes acima se sobrepõem e não foram isolados entre si
+<div style="display:flex; flex-direction:column; gap:5px; font-size:0.4em; color:#10241d; line-height:1.4;">
+<div style="display:flex; gap:8px;">
+<span style="color:#b8862a;">—</span><span>Análise univariada</span>
 </div>
-<div>
-— <b>34,4%</b> de censuras e <b>23,5%</b> “sem informação” em ESCOLARI
+<div style="display:flex; gap:8px;">
+<span style="color:#b8862a;">—</span><span>Categorias pequenas: Particular (n = 75), Radioterapia (n = 188)</span>
 </div>
-<div>
-— Categorias pequenas: Particular (n=75), Radioterapia (n=188)
 </div>
 </div>
 </div>

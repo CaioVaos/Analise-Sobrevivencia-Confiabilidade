@@ -30,7 +30,7 @@
   {
     "objectID": "Trabalho/parte1/index.html#contexto-do-estudo",
     "href": "Trabalho/parte1/index.html#contexto-do-estudo",
-    "title": "ANÁLISE DE SOBREVIVÊNCIA - Câncer de Fígado",
+    "title": "Análise de SobrevivênciaCâncer de Fígado",
     "section": "1.1 Contexto do Estudo",
     "text": "1.1 Contexto do Estudo\n\n\n\n\n\nA Base de Dados\n\n\nFOSP · RHC\n\n\n\n\n\n🗂️ Fonte dos dados\n\n\nFOSP\n\n\nFundação Oncocentro de São Paulo · Registro Hospitalar de Câncer (RHC)\n\n\n\n\n🩺 Tipo de câncer\n\n\nC22\n\n\nFígado e vias biliares intra-hepáticas · CID-O\n\n\n\n\n👥 População\n\n\n≥ 18 anos\n\n\nAdultos, sem tratamento oncológico prévio à admissão\n\n\n\n\n📅 Período\n\n\n2014–2019\n\n\nAno do diagnóstico\n\n\n\n\n\n\n\n\n\n\nPor que Estudar?\n\n\nRelevância\n\n\n\n\n\n65,6%\n\n\nóbito por câncer\n\n\n\n\n⚠️ Prognóstico\n\n\nCâncer de fígado tem prognóstico reservado e alta letalidade\n\n\n2.774 dos 4.231 pacientes desta base evoluíram a óbito por câncer\n\n\n\n\n💡 Aplicações do estudo\n\n\n\n\n1\n\n\nPlanejamento assistencial\n\n\n\n\n2\n\n\nPriorização de cuidados\n\n\n\n\n3\n\n\nIdentificação precoce de grupos de risco"
   },
@@ -100,7 +100,7 @@
   {
     "objectID": "Trabalho/parte1/index.html#detalhamento",
     "href": "Trabalho/parte1/index.html#detalhamento",
-    "title": "ANÁLISE DE SOBREVIVÊNCIA - Câncer de Fígado",
+    "title": "Análise de SobrevivênciaCâncer de Fígado",
     "section": "1.2 Detalhamento",
     "text": "1.2 Detalhamento\n\n\n\n\nEvento & Tempo\n\n\n\n\n📅 Diagnóstico\n\n\nDTDIAG\n\n\n\n\n⏱️ tempo (meses)\n\n\n\n\n\n\n▶\n\n\n\n\n\n📅 Última informação\n\n\nDTULTINFO\n\n\n\n\n\n💀\n\n\n\nEvento de interesse\n\n\nÓbito por câncer\n\n\n\nULTINFO = 3\n\n\ncens = 1\n\n\n\n\n\n\nCensura\n\n\n🚫 Pacientes ao final do estudo\n\n\n\nULTINFO = 1\n\n\nVivos, com câncer\n\n\n\n\nULTINFO = 2\n\n\nVivos, SOE\n\n\n\n\nULTINFO = 4\n\n\nÓbito por outra causa\n\n\n\n→ tempo real até o evento não observado (censura à direita) · cens = 0\n\n\n\n\n\n\n\nVariáveis do Estudo\n\n\n\n\n⏱️ Tempo\n\n\ntempo\n\n\nmeses entre diagnóstico e última informação\n\n\n\n\n💀 Evento / Censura\n\n\ncens\n\n\n1 = óbito por câncer · 0 = censura\n\n\n\n\n\n\n🏷️ Covariáveis Qualitativas\n\n\n7\n\n\n\n\nSEXO\n\n\nESCOLARI\n\n\nECGRUP\n\n\nCATEATEND\n\n\nCIRURGIA\n\n\nRADIO\n\n\nQUIMIO\n\n\n\n\n\n\n🔢 Covariável Quantitativa\n\n\n1\n\n\n\n\nIDADE\n\n\n— idade ao diagnóstico, em anos"
   },
@@ -114,70 +114,70 @@
   {
     "objectID": "Trabalho/parte1/index.html#descritivo",
     "href": "Trabalho/parte1/index.html#descritivo",
-    "title": "ANÁLISE DE SOBREVIVÊNCIA - Câncer de Fígado",
+    "title": "Análise de SobrevivênciaCâncer de Fígado",
     "section": "3.1 Descritivo",
     "text": "3.1 Descritivo\n\n\n\n\n👥 Observações\n\n\n4.231\n\n\npacientes com câncer de fígado (C22)\n\n\n\n\n\n\n\n💀 Ocorrências do evento\n\n\n2.774\n\n\n65,6% · óbito por câncer\n\n\n\n\n\n\n\n🚫 Censuras\n\n\n1.457\n\n\n34,4% · sem óbito por câncer\n\n\n\n\n\nEvento · 65,6%\n\n\nCensura · 34,4%\n\n\n\n\n\n\nEstadiamentoECGRUP\n\n\nIn situ00,0%\n\n\nEstágio I62114,7%\n\n\nEstágio II82519,5%\n\n\nEstágio III67716,0%\n\n\nEstágio IV98423,3%\n\n\nSem informação66815,8%\n\n\nNão se aplica45610,8%\n\n\n\n\n\n\n\nEscolaridadeESCOLARI\n\n\nAnalfabeto1543,6%\n\n\nFund. incompleto1.20128,4%\n\n\nFund. completo79018,7%\n\n\nEnsino médio70316,6%\n\n\nEnsino superior3909,2%\n\n\nSem informação99323,5%\n\n\n\n\n\n\n\nSexoSEXO\n\n\nMasculino2.88668,2%\n\n\nFeminino1.34531,8%\n\n\n\n\nAtendimentoCATEATEND\n\n\nSUS43810,4%\n\n\nConvênio3.71887,9%\n\n\nParticular751,8%\n\n\n\n\n\n\n\nTratamentos\n\n\nCirurgia\n\n\nSim1.05524,9%\n\n\nNão3.17675,1%\n\n\nRadioterapia\n\n\nSim1884,4%\n\n\nNão4.04395,6%\n\n\nQuimioterapia\n\n\nSim1.57737,3%\n\n\nNão2.65462,7%\n\n\n\n\nPercentuais calculados sobre o total de 4.231 pacientes. “In situ” não possui casos em C22."
   },
   {
     "objectID": "Trabalho/parte1/index.html#sem-estratos",
     "href": "Trabalho/parte1/index.html#sem-estratos",
-    "title": "ANÁLISE DE SOBREVIVÊNCIA - Câncer de Fígado",
+    "title": "Análise de SobrevivênciaCâncer de Fígado",
     "section": "3.2 Sem Estratos",
     "text": "3.2 Sem Estratos"
   },
   {
     "objectID": "Trabalho/parte1/index.html#qualitativa---sexo",
     "href": "Trabalho/parte1/index.html#qualitativa---sexo",
-    "title": "ANÁLISE DE SOBREVIVÊNCIA - Câncer de Fígado",
+    "title": "Análise de SobrevivênciaCâncer de Fígado",
     "section": "3.3 Qualitativa - Sexo",
     "text": "3.3 Qualitativa - Sexo"
   },
   {
     "objectID": "Trabalho/parte1/index.html#qualitativa---escolaridade",
     "href": "Trabalho/parte1/index.html#qualitativa---escolaridade",
-    "title": "ANÁLISE DE SOBREVIVÊNCIA - Câncer de Fígado",
+    "title": "Análise de SobrevivênciaCâncer de Fígado",
     "section": "3.4 Qualitativa - Escolaridade",
     "text": "3.4 Qualitativa - Escolaridade"
   },
   {
     "objectID": "Trabalho/parte1/index.html#qualitativa---estadiamento",
     "href": "Trabalho/parte1/index.html#qualitativa---estadiamento",
-    "title": "ANÁLISE DE SOBREVIVÊNCIA - Câncer de Fígado",
+    "title": "Análise de SobrevivênciaCâncer de Fígado",
     "section": "3.5 Qualitativa - Estadiamento",
     "text": "3.5 Qualitativa - Estadiamento"
   },
   {
     "objectID": "Trabalho/parte1/index.html#qualitativa---categoria-de-atendimento",
     "href": "Trabalho/parte1/index.html#qualitativa---categoria-de-atendimento",
-    "title": "ANÁLISE DE SOBREVIVÊNCIA - Câncer de Fígado",
+    "title": "Análise de SobrevivênciaCâncer de Fígado",
     "section": "3.6 Qualitativa - Categoria de Atendimento",
     "text": "3.6 Qualitativa - Categoria de Atendimento"
   },
   {
     "objectID": "Trabalho/parte1/index.html#qualitativa---cirurgia",
     "href": "Trabalho/parte1/index.html#qualitativa---cirurgia",
-    "title": "ANÁLISE DE SOBREVIVÊNCIA - Câncer de Fígado",
+    "title": "Análise de SobrevivênciaCâncer de Fígado",
     "section": "3.7 Qualitativa - Cirurgia",
     "text": "3.7 Qualitativa - Cirurgia"
   },
   {
     "objectID": "Trabalho/parte1/index.html#qualitativa---radioterapia",
     "href": "Trabalho/parte1/index.html#qualitativa---radioterapia",
-    "title": "ANÁLISE DE SOBREVIVÊNCIA - Câncer de Fígado",
+    "title": "Análise de SobrevivênciaCâncer de Fígado",
     "section": "3.8 Qualitativa - Radioterapia",
     "text": "3.8 Qualitativa - Radioterapia"
   },
   {
     "objectID": "Trabalho/parte1/index.html#qualitativa---quimioterapia",
     "href": "Trabalho/parte1/index.html#qualitativa---quimioterapia",
-    "title": "ANÁLISE DE SOBREVIVÊNCIA - Câncer de Fígado",
+    "title": "Análise de SobrevivênciaCâncer de Fígado",
     "section": "3.9 Qualitativa - Quimioterapia",
     "text": "3.9 Qualitativa - Quimioterapia"
   },
   {
     "objectID": "Trabalho/parte1/index.html#quantitativa---idade",
     "href": "Trabalho/parte1/index.html#quantitativa---idade",
-    "title": "ANÁLISE DE SOBREVIVÊNCIA - Câncer de Fígado",
+    "title": "Análise de SobrevivênciaCâncer de Fígado",
     "section": "3.10 Quantitativa - Idade",
     "text": "3.10 Quantitativa - Idade"
   },
@@ -191,15 +191,15 @@
   {
     "objectID": "Trabalho/parte1/index.html#conclusão-1",
     "href": "Trabalho/parte1/index.html#conclusão-1",
-    "title": "ANÁLISE DE SOBREVIVÊNCIA - Câncer de Fígado",
+    "title": "Análise de SobrevivênciaCâncer de Fígado",
     "section": "4.1 Conclusão",
-    "text": "4.1 Conclusão\n\n\n\nO estadiamento no momento do diagnóstico é o maior separador de sobrevida observado neste estudo\nseguido por aspectos sociais:escolaridade e acesso à cirurgia.\n\n\n\n\n\n\n\n\nEstadiamento\n\n\nEstágio I — mediana → não atingida\n\n\nEstágio IV — mediana → 5,3 meses\n\n\n\n\nCirurgia\n\n\nSim — mediana → não atingida\n\n\nNão — mediana → 8,8 meses\n\n\napenas 24,9% dos pacientes foram operados\n\n\n\n\nEscolaridade\n\n\nAnalfabeto — mediana → 6,5 meses\n\n\nEnsino superior — mediana → 28,5 meses\n\n\n\n\n\n\nMelhor Tratamento\n\n\n\n—Cirurgia: associada ao maior ganho isolado de sobrevida\n\n\n—Radioterapia: sobrevida maior entre tratados (requer mais estudo)\n\n\n—Quimioterapia: sobrevida inicial maior entre tratados, com inversão (requer mais estudo)\n\n\n\nAtendimento: requer mais estudo para firmar a diferença entre SUS e Particular\n\n\n\n\n\nMelhor Perfil\n\n\ncombinação de fatores associados à maior sobrevida\n\n\n\nSexo masculino\n\n\nEnsino superior\n\n\nEstágio I\n\n\nAtendimento particular\n\n\nRealizou cirurgia\n\n\nRealizou radioterapia\n\n\n\n\n\nLimitações\n\n\n\n— Análise univariada: os gradientes acima se sobrepõem e não foram isolados entre si\n\n\n— 34,4% de censuras e 23,5% “sem informação” em ESCOLARI\n\n\n— Categorias pequenas: Particular (n=75), Radioterapia (n=188)"
+    "text": "4.1 Conclusão\n\n\n\n▪A sobrevida mediana global foi de 13,9 meses; o estadiamento no diagnóstico é o maior separador de sobrevida observado\n\n\n▪seguido por aspectos sociais: escolaridade e acesso à cirurgia — reforça a importância do diagnóstico precoce e do acesso equitativo ao tratamento\n\n\n\n\n\n\n\n\nEstadiamento\n\n\nEstágio I — mediana → não atingida\n\n\nEstágio IV — mediana → 5,3 meses\n\n\n\n\nCirurgia\n\n\nSim — mediana → não atingida\n\n\nNão — mediana → 8,8 meses\n\n\napenas 24,9% dos pacientes foram operados\n\n\n\n\nEscolaridade\n\n\nAnalfabeto — mediana → 6,5 meses\n\n\nEnsino superior — mediana → 28,5 meses\n\n\n\n\n\n\nMelhor Tratamento\n\n\n\n—Cirurgia: associada ao maior ganho isolado de sobrevida\n\n\n—Radioterapia: sobrevida maior entre tratados (requer mais estudo)\n\n\n—Quimioterapia: sobrevida inicial maior entre tratados, com inversão (requer mais estudo)\n\n\n\nAtendimento: requer mais estudo para firmar a diferença entre SUS e Particular\n\n\n\n\n\n\nMelhor Perfil\n\n\ncombinação de fatores associados à maior sobrevida\n\n\n\nSexo masculino\n\n\nEnsino superior\n\n\nEstágio I\n\n\nAtendimento particular\n\n\nRealizou cirurgia\n\n\nRealizou radioterapia\n\n\n\n\n\nLimitações\n\n\n\n—Análise univariada\n\n\n—Categorias pequenas: Particular (n = 75), Radioterapia (n = 188)"
   },
   {
     "objectID": "Trabalho/parte1/index.html#metodologia-1",
     "href": "Trabalho/parte1/index.html#metodologia-1",
-    "title": "ANÁLISE DE SOBREVIVÊNCIA - Câncer de Fígado",
+    "title": "Análise de SobrevivênciaCâncer de Fígado",
     "section": "2.1 Metodologia",
-    "text": "2.1 Metodologia\n\n\n\n\n🏷️ Covariáveis Qualitativas\n\n\n\n1\n\n\n\n\nsurvfit()\n\n\nKaplan-Meier\n\n\n\nEstimação das curvas de sobrevida\n\n\n\n\n\n2\n\n\n\n\nsurvdiff()\n\n\nLog-Rank\n\n\n\nTeste de igualdade das curvas de sobrevida\n\n\n\n\n\n3\n\n\n\n\nsurvdiff(rho=1)\n\n\nPeto-Peto\n\n\n\nTeste com maior peso às diferenças no início do seguimento\n\n\n\n\n\n4\n\n\n\n\npairwise_survdiff()\n\n\nHolm-Bonferroni\n\n\n\nComparações par a par com correção para múltiplos testes\n\n\n\n\nAplicada a\n\n\n\nSEXO\n\n\nESCOLARI\n\n\nECGRUP\n\n\nCATEATEND\n\n\nCIRURGIA\n\n\nRADIO\n\n\nQUIMIO\n\n\n\n\n\n\n\n\n🔢 Covariável Quantitativa\n\n\nMedidas-resumo\n\n\n\nMédia\n\n\nDesvio-padrão\n\n\nMediana\n\n\nAmplitude interquartílica\n\n\n\n\n\n\nDicotomização pela mediana\n\n\n\nIDADE\n\n\n➜\n\n\nmedian()\n\n\n➜\n\n\n\nAbaixo da mediana\n\n\nAcima da mediana\n\n\n\n\nMediana observada da idade: 63 anos\n\n\n\n\n\nApós dicotomização\n\n\n\nsurvfit()\n\n\nsurvdiff()"
+    "text": "2.1 Metodologia\n\n\n\n\n🏷️ Covariáveis Qualitativas\n\n\n\n1\n\n\n\n\nsurvfit()\n\n\nKaplan-Meier\n\n\n\nEstimação das curvas de sobrevida\n\n\n\n\n\n2\n\n\n\n\nsurvdiff()\n\n\nLog-Rank\n\n\n\nTeste de igualdade das curvas de sobrevida\n\n\n\n\n\n3\n\n\n\n\nsurvdiff(rho=1)\n\n\nPeto-Peto\n\n\n\nTeste com maior peso às diferenças no início do seguimento\n\n\n\n\n\n4\n\n\n\n\npairwise_survdiff()\n\n\nHolm-Bonferroni\n\n\n\nComparações par a par com correção para múltiplos testes\n\n\n\n\nAplicada a\n\n\n\nSEXO\n\n\nESCOLARI\n\n\nECGRUP\n\n\nCATEATEND\n\n\nCIRURGIA\n\n\nRADIO\n\n\nQUIMIO\n\n\n\n\n\n\n\n\n🔢 Covariável Quantitativa\n\n\nMedidas-resumo\n\n\n\nMédia\n\n\nDesvio-padrão\n\n\nMediana\n\n\nAmplitude interquartílica\n\n\n\n\n\n\nComparação por desfecho\n\n\n\n\ngeom_boxplot()\n\n\ngeom_violin()\n\n\n\nDistribuição da idade comparada entre os grupos:\n\n\n\nÓbito por câncer\n\n\nCensura\n\n\nTotal\n\n\n\n\nMediana observada da idade: 63 anos (Q1–Q3: 56–70)\n\n\n\n\n\nAplicada a\n\n\n\nIDADE"
   }
 ]
