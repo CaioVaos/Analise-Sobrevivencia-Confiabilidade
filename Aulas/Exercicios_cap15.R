@@ -11,7 +11,7 @@ cens<-c(rep(1,16),0)
 log10_wbc<-c(3.36,2.88,3.63,3.41,3.78,4.02,
              4.00,4.23,3.73,3.85,3.97,
              4.51,4.54,5.00,5.00,4.72,5.00)
-dados1<-read.csv("Downloads/AIDS.csv")
+dados1<-read.csv("Aulas/Data/DadosAIDS2.csv")
 
 ajuste_exp<-flexsurvreg(data=dados1, 
                         Surv(tempo,status)~tratam,

@@ -106,7 +106,7 @@ P_valor_gama = pchisq(TRV_gama,1,lower.tail=F)
 
 # Exercicio ----
 
-dados1 <-  read.csv("Downloads/DadosAIDS.csv")
+dados1 <-  read.csv("Aulas/Data/DadosAIDS.csv")
 
 ajuste_exp<-flexsurvreg(Surv(tempo, status) ~ 1, dist = "exp", data=dados1)
 ajuste_wei<-flexsurvreg(Surv(tempo, status) ~ 1, dist = "weibull", data=dados1)
