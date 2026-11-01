@@ -219,351 +219,260 @@ data.frame(
 )
 
 # 8 ----
+dados8 <- read.csv("Aulas/Data/DadosAIDS_cap13.csv")
 
-dados1 <- read.csv("Aulas/Data/DadosAIDS.csv")
+## Ajuste dos modelos ----
 
-# Ajuste dos modelos ----
-ajuste_exp <- flexsurvreg(Surv(tempo, status) ~ 1, dist = "exp", data = dados1)
-ajuste_wei <- flexsurvreg(Surv(tempo, status) ~ 1, dist = "weibull", data = dados1)
-ajuste_lognorm <- flexsurvreg(Surv(tempo, status) ~ 1, dist = "lnorm", data = dados1)
-ajuste_gama <- flexsurvreg(Surv(tempo, status) ~ 1, dist = "gamma", data = dados1)
-ajuste_gengama <- flexsurvreg(Surv(tempo, status) ~ 1, dist = "gengamma", data = dados1)
+ajuste_exp     <- flexsurvreg(Surv(tempos, cens) ~ 1, dist = "exp",      data = dados8)
+ajuste_wei     <- flexsurvreg(Surv(tempos, cens) ~ 1, dist = "weibull",  data = dados8)
+ajuste_lognorm <- flexsurvreg(Surv(tempos, cens) ~ 1, dist = "lnorm",    data = dados8)
+ajuste_gama    <- flexsurvreg(Surv(tempos, cens) ~ 1, dist = "gamma",    data = dados8)
+ajuste_gengama <- flexsurvreg(Surv(tempos, cens) ~ 1, dist = "gengamma", data = dados8)
 
-# 1 - Graficos: sobrevivencia, risco e risco acumulado ----
-
-ekm <- survfit(Surv(tempo, status) ~ 1, data = dados1)
-
-# Sobrevivencia
-plot(ekm, xlab = "Tempo", ylab = "S(t)", main = "Sobrevivencia",
-     conf.int = FALSE, col = "black")
-lines(ajuste_exp, type = "survival", col = 2, ci = FALSE)
-lines(ajuste_wei, type = "survival", col = 3, ci = FALSE)
-lines(ajuste_lognorm, type = "survival", col = 4, ci = FALSE)
-lines(ajuste_gama, type = "survival", col = 5, ci = FALSE)
-lines(ajuste_gengama, type = "survival", col = 6, ci = FALSE)
-
-legend("topright",
-       legend = c("Kaplan-Meier", "Exponencial", "Weibull",
-                  "LogNormal", "Gama", "Gama Generalizada"),
-       col = 1:6, lty = 1, cex = 0.7)
-
-# Risco acumulado: Nelson-Aalen
-ena <- survfit(Surv(tempo, status) ~ 1, data = dados1, type = "fh")
-
-plot(ena, fun = "cumhaz", xlab = "Tempo",
-     ylab = expression(Lambda(t)), main = "Risco acumulado",
-     conf.int = FALSE, col = "black")
-lines(ajuste_exp, type = "cumhaz", col = 2, ci = FALSE)
-lines(ajuste_wei, type = "cumhaz", col = 3, ci = FALSE)
-lines(ajuste_lognorm, type = "cumhaz", col = 4, ci = FALSE)
-lines(ajuste_gama, type = "cumhaz", col = 5, ci = FALSE)
-lines(ajuste_gengama, type = "cumhaz", col = 6, ci = FALSE)
-
-legend("topleft",
-       legend = c("Nelson-Aalen", "Exponencial", "Weibull",
-                  "LogNormal", "Gama", "Gama Generalizada"),
-       col = 1:6, lty = 1, cex = 0.7)
-
-# Taxa de risco
-plot(ajuste_exp, type = "hazard", col = 2, ci = FALSE,
-     xlab = "Tempo", ylab = expression(lambda(t)),
-     main = "Taxa de risco")
-lines(ajuste_wei, type = "hazard", col = 3, ci = FALSE)
-lines(ajuste_lognorm, type = "hazard", col = 4, ci = FALSE)
-lines(ajuste_gama, type = "hazard", col = 5, ci = FALSE)
-lines(ajuste_gengama, type = "hazard", col = 6, ci = FALSE)
-
-legend("topright",
-       legend = c("Exponencial", "Weibull", "LogNormal",
-                  "Gama", "Gama Generalizada"),
-       col = 2:6, lty = 1, cex = 0.7)
-
-# 2 - Probabilidade de obito antes de 800 dias ----
-
-t <- 800
-
-prob_800 <- data.frame(
-  Modelo = c("Kaplan-Meier", "Exponencial", "Weibull",
-             "LogNormal", "Gama", "Gama Generalizada"),
-  Probabilidade = c(
-    1 - summary(ekm, times = t)$surv,
-    1 - summary(ajuste_exp, t = t)[[1]]$est,
-    1 - summary(ajuste_wei, t = t)[[1]]$est,
-    1 - summary(ajuste_lognorm, t = t)[[1]]$est,
-    1 - summary(ajuste_gama, t = t)[[1]]$est,
-    1 - summary(ajuste_gengama, t = t)[[1]]$est
-  )
+ajustes8 <- list(
+  "Exponencial"       = ajuste_exp,
+  "Weibull"           = ajuste_wei,
+  "Log-Normal"        = ajuste_lognorm,
+  "Gama"              = ajuste_gama,
+  "Gama Generalizada" = ajuste_gengama
 )
+cores <- 2:6
 
-prob_800$Porcentagem <- round(100 * prob_800$Probabilidade, 2)
-prob_800
+## 1) S(t), risco e risco acumulado x não paramétrico ----
+# (o plot do flexsurv já traz Kaplan-Meier / risco suavizado / Nelson-Aalen)
 
-# 3 - AIC e BIC ----
+tipos <- c("survival", "hazard", "cumhaz")
+ylabs <- c(expression(hat(S)(t)), expression(hat(lambda)(t)), expression(hat(Lambda)(t)))
 
-AIC <- c(AIC(ajuste_exp), AIC(ajuste_wei),
-         AIC(ajuste_lognorm), AIC(ajuste_gama),
-         AIC(ajuste_gengama))
+par(mfrow = c(1, 3))
+for (j in 1:3) {
+  plot(ajustes8[[1]], type = tipos[j], xlab = "Tempo (dias)", ylab = ylabs[j],
+       lwd.ci = 0, lty.ci = 0, col = cores[1])
+  for (i in 2:5)
+    lines(ajustes8[[i]], type = tipos[j], lwd.ci = 0, lty.ci = 0, col = cores[i])
+  legend("topright", legend = names(ajustes8), fill = cores, cex = 0.7)
+}
+par(mfrow = c(1, 1))
 
-BIC <- c(BIC(ajuste_exp), BIC(ajuste_wei),
-         BIC(ajuste_lognorm), BIC(ajuste_gama),
-         BIC(ajuste_gengama))
+## 2) P(morrer antes de 800 dias) = 1 - S(800) ----
 
-Modelos <- c("Exponencial", "Weibull", "LogNormal",
-             "Gama", "Gama Generalizada")
+ekm8 <- survfit(Surv(tempos, cens) ~ 1, data = dados8)
 
-Comparacao <- data.frame(Modelos, AIC, BIC)
+prob800 <- data.frame(
+  Modelo = c("Kaplan-Meier", names(ajustes8)),
+  Prob   = c(1 - summary(ekm8, times = 800)$surv,
+             sapply(ajustes8, function(a) 1 - summary(a, t = 800)[[1]]$est)),
+  row.names = NULL
+)
+prob800$Porcentagem <- round(100 * prob800$Prob, 2)
+prob800
+
+## 3) Escolha do modelo ----
+
+### AIC e BIC
+Comparacao <- data.frame(
+  Modelos = names(ajustes8),
+  AIC = sapply(ajustes8, function(a) a$AIC),
+  BIC = sapply(ajustes8, function(a) a$BIC),
+  row.names = NULL
+)
 Comparacao[order(Comparacao$AIC), ]
 Comparacao[order(Comparacao$BIC), ]
 
-# 4 - Teste da Razao de Verossimilhancas (TRV) ----
-
-TRV_exp <- 2 * (ajuste_gengama$loglik - ajuste_exp$loglik)
-P_valor_exp <- pchisq(TRV_exp, df = 2, lower.tail = FALSE)
-
-TRV_wei <- 2 * (ajuste_gengama$loglik - ajuste_wei$loglik)
-P_valor_wei <- pchisq(TRV_wei, df = 1, lower.tail = FALSE)
-
+### TRV (modelos x Gama Generalizada)
+TRV_exp    <- 2 * (ajuste_gengama$loglik - ajuste_exp$loglik)
+TRV_wei    <- 2 * (ajuste_gengama$loglik - ajuste_wei$loglik)
 TRV_lognorm <- 2 * (ajuste_gengama$loglik - ajuste_lognorm$loglik)
-P_valor_lognorm <- pchisq(TRV_lognorm, df = 1, lower.tail = FALSE)
+TRV_gama   <- 2 * (ajuste_gengama$loglik - ajuste_gama$loglik)
 
-TRV_gama <- 2 * (ajuste_gengama$loglik - ajuste_gama$loglik)
-P_valor_gama <- pchisq(TRV_gama, df = 1, lower.tail = FALSE)
-
-Resultados_TRV <- data.frame(
-  Modelo = c("Exponencial", "Weibull", "LogNormal", "Gama"),
-  TRV = c(TRV_exp, TRV_wei, TRV_lognorm, TRV_gama),
-  P_valor = c(P_valor_exp, P_valor_wei,
-              P_valor_lognorm, P_valor_gama)
+data.frame(
+  Comparacao = c("Exponencial x GG", "Weibull x GG", "LogNormal x GG", "Gama x GG"),
+  TRV     = c(TRV_exp, TRV_wei, TRV_lognorm, TRV_gama),
+  P_valor = c(pchisq(TRV_exp,    2, lower.tail = FALSE),
+              pchisq(TRV_wei,    1, lower.tail = FALSE),
+              pchisq(TRV_lognorm, 1, lower.tail = FALSE),
+              pchisq(TRV_gama,   1, lower.tail = FALSE))
 )
 
-Resultados_TRV
-
-# 5 - Graficos de comparacao Kaplan-Meier x modelos ----
-
-tempo_ekm <- ekm$time
-surv_ekm <- ekm$surv
-
-s_exp <- summary(ajuste_exp, t = tempo_ekm)[[1]]$est
-s_wei <- summary(ajuste_wei, t = tempo_ekm)[[1]]$est
-s_lognorm <- summary(ajuste_lognorm, t = tempo_ekm)[[1]]$est
-s_gama <- summary(ajuste_gama, t = tempo_ekm)[[1]]$est
-s_gengama <- summary(ajuste_gengama, t = tempo_ekm)[[1]]$est
+### Gráfico: Kaplan-Meier x modelo (pontos próximos da reta = bom ajuste)
+Surv_ekm <- data.frame(Tempo = ekm8$time, Surv_EKM = ekm8$surv)
 
 par(mfrow = c(2, 3))
-
-plot(surv_ekm, s_exp, xlab = "Kaplan-Meier", ylab = "Exponencial")
-abline(0, 1, lty = 2)
-
-plot(surv_ekm, s_wei, xlab = "Kaplan-Meier", ylab = "Weibull")
-abline(0, 1, lty = 2)
-
-plot(surv_ekm, s_lognorm, xlab = "Kaplan-Meier", ylab = "LogNormal")
-abline(0, 1, lty = 2)
-
-plot(surv_ekm, s_gama, xlab = "Kaplan-Meier", ylab = "Gama")
-abline(0, 1, lty = 2)
-
-plot(surv_ekm, s_gengama, xlab = "Kaplan-Meier", ylab = "Gama Generalizada")
-abline(0, 1, lty = 2)
-
+for (nm in names(ajustes8)) {
+  s_par <- summary(ajustes8[[nm]], t = Surv_ekm$Tempo)[[1]]$est
+  plot(Surv_ekm$Surv_EKM, s_par, xlab = "S(t): Kaplan-Meier", ylab = paste("S(t):", nm))
+  abline(0, 1)
+}
 par(mfrow = c(1, 1))
 
+### Gráfico: linearização (Exponencial, Weibull e Log-Normal)
+ok <- Surv_ekm$Surv_EKM > 0 & Surv_ekm$Surv_EKM < 1
+S  <- Surv_ekm$Surv_EKM[ok]
+t  <- Surv_ekm$Tempo[ok]
+
+par(mfrow = c(1, 3))
+plot(t,      -log(S),      xlab = "t",      ylab = "-log(S(t))",      main = "Exponencial")
+plot(log(t), log(-log(S)), xlab = "log(t)", ylab = "log(-log(S(t)))", main = "Weibull")
+plot(log(t), qnorm(S),     xlab = "log(t)", ylab = "Phi^-1(S(t))",    main = "Log-Normal")
+par(mfrow = c(1, 1))
+
+# Conclusão:
+# (modelo apoiado por gráficos + AIC/BIC + TRV; em empate, o mais simples)
+
+
 # 9 ----
+# dados9 <- read.csv("Aulas/Data/AIDS_cap15.csv")        # colunas: tempo, status, tratam
 
-require(survival)
-require(flexsurv)
-require(dplyr)
-require(ggplot2)
-require(qqplotr)
+dados9$tratam <- factor(dados9$tratam)
+table(dados9$tratam)
 
-dados1 <- read.csv("Aulas/Data/DadosAIDS2.csv")
-dados1$tratam <- factor(dados1$tratam)
+## Teste prévio: tratam discrimina as curvas? ----
 
-# 1 - Ajuste dos modelos ----
+survdiff(Surv(tempo, status) ~ tratam, data = dados9)                         # LogRank
+logrank_test(Surv(tempo, status) ~ tratam, type = "Peto-Peto", data = dados9) # Peto-Peto
 
-ajuste_exp <- flexsurvreg(Surv(tempo, status) ~ tratam,
-                          dist = "exp", data = dados1)
+## 1) Ajuste dos 5 modelos ----
 
-ajuste_wei <- flexsurvreg(Surv(tempo, status) ~ tratam,
-                          dist = "weibull", data = dados1)
+ajuste_exp     <- flexsurvreg(Surv(tempo, status) ~ tratam, dist = "exponential", data = dados9)
+ajuste_wei     <- flexsurvreg(Surv(tempo, status) ~ tratam, dist = "weibull",     data = dados9)
+ajuste_lognorm <- flexsurvreg(Surv(tempo, status) ~ tratam, dist = "lognormal",   data = dados9)
+ajuste_gama    <- flexsurvreg(Surv(tempo, status) ~ tratam, dist = "gamma",       data = dados9)
+ajuste_gengama <- flexsurvreg(Surv(tempo, status) ~ tratam, dist = "gengamma",    data = dados9)
 
-ajuste_lognorm <- flexsurvreg(Surv(tempo, status) ~ tratam,
-                              dist = "lognormal", data = dados1)
-
-ajuste_gama <- flexsurvreg(Surv(tempo, status) ~ tratam,
-                           dist = "gamma", data = dados1)
-
-ajuste_gengama <- flexsurvreg(Surv(tempo, status) ~ tratam,
-                              dist = "gengamma", data = dados1)
-
-# 2 - Comparacao dos modelos: AIC e BIC ----
-
-Modelos <- c("Exponencial", "Weibull", "LogNormal",
-             "Gama", "Gama Generalizada")
-
-Comparacao <- data.frame(
-  Modelo = Modelos,
-  AIC = c(AIC(ajuste_exp), AIC(ajuste_wei),
-          AIC(ajuste_lognorm), AIC(ajuste_gama),
-          AIC(ajuste_gengama)),
-  BIC = c(BIC(ajuste_exp), BIC(ajuste_wei),
-          BIC(ajuste_lognorm), BIC(ajuste_gama),
-          BIC(ajuste_gengama))
+ajustes9 <- list(
+  "Exponencial"       = ajuste_exp,
+  "Weibull"           = ajuste_wei,
+  "Log-Normal"        = ajuste_lognorm,
+  "Gama"              = ajuste_gama,
+  "Gama Generalizada" = ajuste_gengama
 )
 
+tidy(ajuste_exp)
+tidy(ajuste_wei)
+tidy(ajuste_lognorm)
+tidy(ajuste_gama)
+tidy(ajuste_gengama)
+
+## 2) Escolha do modelo: AIC, BIC e TRV ----
+
+Comparacao <- data.frame(
+  Modelos = names(ajustes9),
+  AIC = sapply(ajustes9, function(a) a$AIC),
+  BIC = sapply(ajustes9, function(a) a$BIC),
+  row.names = NULL
+)
 Comparacao[order(Comparacao$AIC), ]
 Comparacao[order(Comparacao$BIC), ]
 
-# 3 - Teste da Razao de Verossimilhancas (TRV) ----
-
-TRV_exp <- 2 * (ajuste_gengama$loglik - ajuste_exp$loglik)
-P_valor_exp <- pchisq(TRV_exp, df = 2, lower.tail = FALSE)
-
-TRV_wei <- 2 * (ajuste_gengama$loglik - ajuste_wei$loglik)
-P_valor_wei <- pchisq(TRV_wei, df = 1, lower.tail = FALSE)
-
+TRV_exp     <- 2 * (ajuste_gengama$loglik - ajuste_exp$loglik)
+TRV_wei     <- 2 * (ajuste_gengama$loglik - ajuste_wei$loglik)
 TRV_lognorm <- 2 * (ajuste_gengama$loglik - ajuste_lognorm$loglik)
-P_valor_lognorm <- pchisq(TRV_lognorm, df = 1, lower.tail = FALSE)
+TRV_gama    <- 2 * (ajuste_gengama$loglik - ajuste_gama$loglik)
 
-TRV_gama <- 2 * (ajuste_gengama$loglik - ajuste_gama$loglik)
-P_valor_gama <- pchisq(TRV_gama, df = 1, lower.tail = FALSE)
-
-TRV <- data.frame(
-  Comparacao = c("Exponencial x GG", "Weibull x GG",
-                 "LogNormal x GG", "Gama x GG"),
-  Estatistica = c(TRV_exp, TRV_wei, TRV_lognorm, TRV_gama),
-  P_valor = c(P_valor_exp, P_valor_wei,
-              P_valor_lognorm, P_valor_gama)
+data.frame(
+  Comparacao = c("Exponencial x GG", "Weibull x GG", "LogNormal x GG", "Gama x GG"),
+  TRV     = c(TRV_exp, TRV_wei, TRV_lognorm, TRV_gama),
+  P_valor = c(pchisq(TRV_exp,     2, lower.tail = FALSE),
+              pchisq(TRV_wei,     1, lower.tail = FALSE),
+              pchisq(TRV_lognorm, 1, lower.tail = FALSE),
+              pchisq(TRV_gama,    1, lower.tail = FALSE))
 )
 
-TRV
+# Modelo final (troque o nome conforme AIC/BIC/TRV e resíduos)
+nome_final   <- "Log-Normal"
+modelo_final <- ajustes9[[nome_final]]
+modelo_final
 
-# 4 - Definir o modelo final ----
-# Escolha o modelo com base em AIC, BIC, TRV e diagnosticos.
+## 3) Resíduos ----
 
-modelo_final <- ajuste_lognorm
-
-# 5 - Residuos de Cox-Snell ----
-
+### Cox-Snell
 ResiduoCS <- coxsnell_flexsurvreg(modelo_final)$est
 
-ekm <- survfit(Surv(ResiduoCS, dados1$status) ~ 1)
-
 par(mfrow = c(1, 2))
+ekm_cs <- survfit(Surv(ResiduoCS, dados9$status) ~ 1, type = "kaplan-meier")
+plot(ekm_cs, fun = "cumhaz", xlab = "Resíduos de Cox-Snell", ylab = "Função de risco acumulado")
+abline(0, 1, col = "red")
 
-plot(ekm, fun = "cumhaz",
-     xlab = "Residuos de Cox-Snell",
-     ylab = "Risco acumulado",
-     main = "Cox-Snell: risco acumulado")
-
-abline(0, 1, col = "red", lty = 2)
-
-plot(ekm,
-     xlab = "Residuos de Cox-Snell",
-     ylab = "Sobrevivencia",
-     main = "Cox-Snell: sobrevivencia")
-
+plot(ekm_cs, xlab = "Resíduos de Cox-Snell", ylab = "Função de sobrevivência")
 ResiduoCS <- sort(ResiduoCS)
-lines(ResiduoCS, exp(-ResiduoCS), col = "red", lty = 2)
-
+lines(ResiduoCS, exp(-ResiduoCS), col = "red")
 par(mfrow = c(1, 1))
 
-# 6 - Residuos quantilicos aleatorizados ----
-
+### Quantílico aleatorizado
 set.seed(123)
+Residuo <- numeric(nrow(dados9))
 
-survival <- cdf <- quantilic <- Residuo <- numeric(nrow(dados1))
-
-for (i in 1:nrow(dados1)) {
-
-  survival[i] <- summary(
-    modelo_final,
-    type = "survival",
-    newdata = dados1[i, , drop = FALSE],
-    t = dados1$tempo[i]
-  )[[1]]$est
-
-  cdf[i] <- 1 - survival[i]
-
-  if (dados1$status[i] == 1) {
-    quantilic[i] <- cdf[i]
-  } else {
-    quantilic[i] <- runif(1, min = cdf[i], max = 1)
-  }
-
-  Residuo[i] <- qnorm(quantilic[i])
+for (i in 1:nrow(dados9)) {
+  surv_i <- summary(modelo_final, type = "survival",
+                    newdata = dados9[i, , drop = FALSE],
+                    t = dados9$tempo[i])[[1]]$est
+  cdf_i <- 1 - surv_i
+  u <- if (dados9$status[i] == 1) cdf_i else runif(1, min = cdf_i, max = 1)
+  Residuo[i] <- qnorm(u)
 }
 
 ggplot(data.frame(Residuo), aes(sample = Residuo)) +
   stat_qq_band(fill = "lightblue") +
   stat_qq_line() +
   stat_qq_point() +
-  xlab("Quantis teoricos") +
-  ylab("Quantis amostrais") +
+  xlab("Quantis Teóricos") +
+  ylab("Quantis Amostrais") +
   theme_bw()
 
-# 7 - Razao de tempos medianos ----
-# Para modelo AFT LogNormal
+## 4) Distribuição aproximada do tempo de vida ----
+# Log-Normal: T ~ LogNormal(mu_i = b0 + b1*B (+ b2*C + b3*D), sigma)
+# Weibull:    T ~ Weibull(kappa_i = exp(b0 + b1*B + ...), gamma)
+# Exp./Gama:  rate_i = exp(b0 + ...) | Gama Gen.: mu_i = b0 + ...
+modelo_final$res
+coef(modelo_final)
 
-coef_tratam <- coef(modelo_final)["tratam1"]
+## 5) Razão de tempos medianos (RTM) ----
+# Exponencial e Gama: exp(-coef), com intervalo invertido. Demais: exp(coef).
 
-RTM <- exp(coef_tratam)
+sinal <- ifelse(nome_final %in% c("Exponencial", "Gama"), -1, 1)
+termos <- grep("^tratam", names(coef(modelo_final)), value = TRUE)
 
-IC_RTM <- exp(
-  coef_tratam +
-    c(-1, 1) * 1.96 *
-    sqrt(vcov(modelo_final)["tratam1", "tratam1"])
-)
+Est <- exp(sinal * coef(modelo_final)[termos])
+IC  <- exp(sinal * confint(modelo_final)[termos, , drop = FALSE])
+if (sinal == -1) IC <- IC[, 2:1, drop = FALSE]
+colnames(IC) <- c("2.5 %", "97.5 %")
+cbind(RTM = Est, IC)
 
-RTM
-IC_RTM
+# Interpretação: RTM > 1 -> tempo mediano maior que o do grupo de referência (A);
+# RTM < 1 -> menor. Significativo se o IC não contém 1.
 
+## 6) Sobrevivência e risco por tratamento ----
 
-# 8 - Graficos de sobrevivencia e risco por tratamento ----
-
-grupos <- data.frame(
-  tratam = factor(levels(dados1$tratam),
-                  levels = levels(dados1$tratam))
-)
+grupos <- levels(dados9$tratam)
+tgraf  <- seq(1, max(dados9$tempo), length.out = 100)
 
 par(mfrow = c(1, 2))
+plot(modelo_final, newdata = list(tratam = grupos[1]), type = "survival", t = tgraf,
+     col = 1, col.obs = "white", ci = FALSE,
+     xlab = "Dias", ylab = "Função de sobrevivência estimada")
+for (i in 2:length(grupos))
+  lines(modelo_final, newdata = list(tratam = grupos[i]), type = "survival",
+        t = tgraf, col = i, ci = FALSE)
+legend("topright", legend = grupos, col = seq_along(grupos), lty = 1, title = "Tratamento")
 
-plot(modelo_final, newdata = grupos,
-     type = "survival", ci = FALSE,
-     xlab = "Tempo", ylab = "S(t)",
-     main = "Sobrevivencia por tratamento",
-     col = seq_len(nrow(grupos)), lwd = 2)
-
-legend("topright", legend = levels(dados1$tratam),
-       col = seq_len(nrow(grupos)), lty = 1, lwd = 2,
-       title = "Tratamento")
-
-plot(modelo_final, newdata = grupos,
-     type = "hazard", ci = FALSE,
-     xlab = "Tempo", ylab = expression(lambda(t)),
-     main = "Risco por tratamento",
-     col = seq_len(nrow(grupos)), lwd = 2)
-
-legend("topright", legend = levels(dados1$tratam),
-       col = seq_len(nrow(grupos)), lty = 1, lwd = 2,
-       title = "Tratamento")
-
+plot(modelo_final, newdata = list(tratam = grupos[1]), type = "hazard", t = tgraf,
+     col = 1, col.obs = "white", ci = FALSE,
+     xlab = "Dias", ylab = "Função de risco estimada")
+for (i in 2:length(grupos))
+  lines(modelo_final, newdata = list(tratam = grupos[i]), type = "hazard",
+        t = tgraf, col = i, ci = FALSE)
+legend("topright", legend = grupos, col = seq_along(grupos), lty = 1, title = "Tratamento")
 par(mfrow = c(1, 1))
 
-# 9 - Tempos medios e medianos por grupo ----
-# Para o modelo LogNormal
+## 7) Tempos médio e mediano por grupo ----
 
-mu0 <- coef(modelo_final)["meanlog"]
-beta <- coef(modelo_final)["tratam1"]
-sigma <- exp(coef(modelo_final)["sdlog"])
-
-# Grupo de referencia
-mu <- c(mu0, mu0 + beta)
-
-Tabela_Tempos <- data.frame(
-  Tratamento = levels(dados1$tratam),
-  Mediana = exp(mu),
-  Media = exp(mu + sigma^2 / 2)
-)
-
-Tabela_Tempos
+resumo <- do.call(rbind, lapply(grupos, function(g) {
+  nd  <- list(tratam = g)
+  med <- summary(modelo_final, newdata = nd, type = "median")[[1]]
+  mea <- tryCatch(summary(modelo_final, newdata = nd, type = "mean")[[1]],
+                  error = function(e) data.frame(est = NA, lcl = NA, ucl = NA))
+  data.frame(Tratamento = g,
+             Media = mea$est, Media_L95 = mea$lcl, Media_U95 = mea$ucl,
+             Mediana = med$est, Mediana_L95 = med$lcl, Mediana_U95 = med$ucl)
+}))
+resumo
