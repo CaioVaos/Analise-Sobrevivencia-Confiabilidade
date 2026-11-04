@@ -1,28 +1,26 @@
 # Lista 2 - Analise de Sobrevivencia e Confiabilidade
+# (rodar com a raiz do projeto como diretório de trabalho: dados em Aulas/Data/)
 
 # Setup ----
 
-# install.packages("tidyverse")
 # install.packages("survival")
 # install.packages("flexsurv")
-# install.packages("reslife")
+# install.packages("ggplot2")
 # install.packages("qqplotr")
 # install.packages("coin")
 
-library(tidyverse)
 library(survival)
 library(flexsurv)
-library(reslife)
 library(ggplot2)
-library(qqplotr) 
+library(qqplotr)
 library(coin)
 
 # 1 ----
 #
 ## EXPONENCIAL:
-# Risco constante: sem memória. Não depende do tempo já decorrido.
+# Risco constante: h(t) = alpha. Sem memória: não depende do tempo já decorrido.
 #
-## WEIBULL:
+## WEIBULL (forma gamma):
 # Risco monótono:
 # gamma < 1: decrescente
 # gamma = 1: constante (Exponencial)
@@ -30,30 +28,28 @@ library(coin)
 #
 ## LOG-NORMAL:
 # Risco não monótono (unimodal):
-# cresce até um máximo e depois decresce, tendendo a zero.
+# parte de 0, cresce até um máximo e depois decresce, tendendo a 0.
 #
-## GAMA:
-# Risco monótono, tendendo a um limite constante:
+## GAMA (forma alpha, taxa beta):
+# Risco monótono, convergindo para beta quando t -> infinito:
 # alpha < 1: decrescente
 # alpha = 1: constante (Exponencial)
 # alpha > 1: crescente
 
 # 2 ----
 #
-## GAMA GENERALIZADO:
-# Família guarda-chuva: inclui Exponencial, Weibull, Gama e Log-Normal.
+## GAMA GENERALIZADO (3 parâmetros):
+# Família guarda-chuva: contém Exponencial, Weibull e Gama como casos
+# particulares e a Log-Normal como caso limite
+# (flexsurv: Weibull Q = 1 | Gama Q = sigma | Exp. Q = sigma = 1 | Log-Normal Q -> 0).
 #
-# Serve como modelo de referência para comparar modelos mais simples
-# pelo Teste da Razão de Verossimilhanças (TRV).
-# Se o modelo simples não é rejeitado, prefere-se o mais parcimonioso.
+# Papel: modelo de referência. Ajusta-se o GG e testa-se, pelo TRV, se um
+# modelo mais simples é suficiente (se não rejeita H0, prefere-se o mais simples).
 #
-# Função de risco flexível: pode ser crescente, decrescente,
-# unimodal ou apresentar formato de banheira.
-#
-# Possui mais parâmetros (3): maior flexibilidade, mas maior
-# risco de sobreajuste e instabilidade de estimação.
+# Risco muito flexível: crescente, decrescente, constante, unimodal ou banheira.
+# Custo: mais parâmetros -> maior risco de sobreajuste e instabilidade numérica.
 
-#  3 ----
+# 3 ----
 
 alpha <- 100
 gam   <- 2
@@ -62,77 +58,79 @@ S_weibull <- function(t) exp(-(t / alpha)^gam)
 
 ## a) ----
 
-S_weibull(30)
-S_weibull(45)
-# 91,4% dos ratos estão livres de tumor aos 30 dias 
-# 81,7% dos ratos estão livres de tumor aos 45 dias.
+S_weibull(c(30, 45))
+pweibull(c(30, 45), shape = gam, scale = alpha, lower.tail = FALSE)  # conferência
+# 91,4% dos ratos estão livres de tumor aos 30 dias
+# 81,7% dos ratos estão livres de tumor aos 45 dias
 
 ## b) ----
 
 alpha * gamma(1 + 1 / gam)
-# 88.62 dias
+# 88,62 dias
 
 ## c) ----
 
 alpha * log(2)^(1 / gam)
-# 83.26 dias
-qweibull(0.5, shape = gam, scale = alpha)
+qweibull(0.5, shape = gam, scale = alpha)  # conferência
+# 83,26 dias
 
 ## d) ----
-h_weibull <- function(t) (gam / alpha) * (t / alpha)^(gam - 1)
-h_weibull(c(30, 45, 60))          # 0.006 0.009 0.012
 
-# Interpretação: 
-# o risco é crescente (gamma = 2 > 1)
-# Entre os ratos que ainda não têm tumor no instante t, a taxa instantânea de aparecimento
-# do tumor é de 0,6% por dia aos 30 dias, 0,9% aos 45 dias e 1,2% aos 60 dias
-# quanto mais tempo de exposição à substância, maior a propensão ao tumor.
+h_weibull <- function(t) (gam / alpha) * (t / alpha)^(gam - 1)
+h_weibull(c(30, 45, 60))
+# 0.006 0.009 0.012
+
+# Interpretação:
+# gamma = 2 > 1: risco crescente (h(t) = 0,0002*t).
+# Entre os ratos ainda sem tumor no instante t, a taxa instantânea de
+# aparecimento do tumor é de cerca de 0,6% por dia aos 30 dias,
+# 0,9% aos 45 e 1,2% aos 60: quanto maior a exposição, maior a propensão ao tumor.
 
 # 4 ----
-#
-# No papel
+# Papel
 
 # 5 ----
 #
-# Nos modelos Weibull, LogNormal e Gama, as equações
-# de máxima verossimilhança são não lineares e não permitem
-# isolar os parâmetros por fórmulas explícitas.
+# Nos modelos Weibull, Log-Normal e Gama, a log-verossimilhança é não linear
+# nos parâmetros (ex.: (t/kappa)^gamma na Weibull; Phi(.) na Log-Normal;
+# Gamma(alpha) e gama incompleta na Gama). O sistema de equações de
+# verossimilhança U(theta) = 0 não permite isolar os parâmetros por fórmulas
+# explícitas. Na Exponencial há um só parâmetro e a equação se resolve direto.
 #
-# Utilizamos métodos de otimização numérica iterativos,
-# como Newton-Raphson, BFGS ou Nelder-Mead.
-# O algoritmo parte de valores iniciais e maximiza a
-# log-verossimilhança até atingir a convergência.
-#
-# No R, esse processo é realizado automaticamente por
-# funções de ajuste dos modelos de sobrevivência.
+# Solução: métodos numéricos iterativos (Newton-Raphson, BFGS...), que partem de
+# valores iniciais e maximizam l(theta) até convergir. O flexsurv usa
+# optim (BFGS) e faz isso automaticamente.
 
 # 6 ----
 #
-## 1) KAPLAN-MEIER x MODELO PARAMÉTRICO:
-# Compara S_KM(t) com S_modelo(t).
-# Quanto mais próximas as curvas, melhor o ajuste gráfico.
+## 1) KAPLAN-MEIER x MODELO PARAMÉTRICO (gráfico):
+# Plota S_KM(t) contra S_modelo(t) nos mesmos tempos.
+# Pontos sobre a reta y = x: bom ajuste.
+# Descarta bem modelos ruins, mas é subjetivo.
 #
-## 2) LINEARIZAÇÃO GRÁFICA:
-# Transforma S(t) para obter uma relação linear sob o modelo:
-# Exponencial:    -log(S(t))       x t
-# Weibull:        log(-log(S(t)))  x log(t)
-# Log-Normal:     Phi^(-1)(S(t))   x log(t)
-# Log-Logística:  log((1-S(t))/S(t)) x log(t)
-# Quanto mais próximos os pontos de uma reta, melhor o ajuste.
+## 2) LINEARIZAÇÃO (gráfico):
+# Transforma S(t) de modo que fique linear se o modelo for adequado:
+# Exponencial:    -log(S(t))          x t
+# Weibull:        log(-log(S(t)))     x log(t)
+# Log-Normal:     Phi^(-1)(S(t))      x log(t)
+# Log-Logística:  log((1-S(t))/S(t))  x log(t)
+# Quanto mais próximo de uma reta, melhor. Não existe para Gama e GG;
+# também é subjetivo.
 #
 ## 3) AIC E BIC:
 # AIC = -2*l(theta_hat) + 2*k
 # BIC = -2*l(theta_hat) + k*log(n)
-# Comparam a qualidade do ajuste penalizando a complexidade.
-# Menor valor = modelo preferível.
-# Podem comparar modelos aninhados ou não aninhados.
+# Premiam o ajuste e penalizam o nº de parâmetros k (BIC penaliza mais se n > 7).
+# Escolhe-se o MENOR valor. Servem para modelos aninhados ou não, mas são
+# apenas relativos: se todos os modelos forem ruins, não avisam.
 #
 ## 4) TESTE DA RAZÃO DE VEROSSIMILHANÇAS (TRV):
-# Compara apenas modelos aninhados, como modelos simples
-# com a Gama Generalizada.
-# H0: o modelo mais simples é suficiente.
-# p-valor > alpha: não rejeita H0; prefere o modelo simples.
-# p-valor <= alpha: rejeita H0; prefere o modelo completo.
+# Só para modelos aninhados (modelo simples x Gama Generalizada).
+# Lambda = 2*[l(complexo) - l(simples)] ~ qui-quadrado(gl = p - q)
+# H0: o modelo simples é suficiente.
+# p-valor > alpha: não rejeita H0, prefere o simples.
+# p-valor <= alpha: rejeita H0, prefere o completo.
+# Não serve, por ex., para Weibull x Log-Normal ou para a Log-Logística.
 
 # 7 ----
 
@@ -148,34 +146,48 @@ tempos<-c(
 cens<-c(rep(1,45),rep(0,15))
 dados<-data.frame(tempos,cens)
 
-
 ## a) ----
 
 ajuste_wei <- flexsurvreg(Surv(tempos, cens) ~ 1, dist = "weibull", data = dados)
+ajuste_wei
 
-### estimativas
-
+### Estimativas
 ajuste_wei$res
-# shape = 1.28131
-# scale = 1993.21512
+# shape (gamma) = 1.281
+# scale (kappa) = 1993.2
+#
+# Obtidas por máxima verossimilhança: L = prod f(t_i)^d_i * S(t_i)^(1-d_i)
+# (a censura entra via S), maximizada numericamente (optim/BFGS) na escala log
+# dos parâmetros, a partir de valores iniciais automáticos.
 
-### Por máxima verossimilhança 
+### Erros-padrão
+# Matriz de covariâncias = inversa da (-Hessiana) da log-verossimilhança no EMV
+# (normalidade assintótica do EMV). Calculada na escala log (res.t e cov);
+# na escala original, método delta: se(theta) = theta_hat * se(log(theta_hat)).
+ep_log <- sqrt(diag(ajuste_wei$cov))
+ep_log
+ajuste_wei$res[, "est"] * ep_log
+# shape = 0.161 ; scale = 231.9  (iguais à coluna se da saída)
 
-### erros-padrão
-ajuste_wei$res
-# shape = 0.1614857
-# scale = 231.9023378
-
-
-### Intervalo de Wald na escala log
-ajuste_wei$res
-# est   ;     L95%    ;    U95%
-# shape = 1.000865    ; 1.640335
-# scale = 1586.793431 ; 2503.732655
+### Intervalos de confiança
+# Wald na escala log (garante parâmetros > 0), depois exponencial:
+# exp( log(theta_hat) +- z_0.975 * se_log )
+cbind(inf = exp(ajuste_wei$res.t[, "est"] - qnorm(0.975) * ep_log),
+      sup = exp(ajuste_wei$res.t[, "est"] + qnorm(0.975) * ep_log))
+# shape: [1.001 ; 1.640]   scale: [1586.8 ; 2503.7]
+# (limite inferior do shape muito próximo de 1: a Exponencial fica no limiar)
 
 ### Tempo mediano de falha
+# Princípio da invariância: mediana = kappa_hat * log(2)^(1/gamma_hat)
+ajuste_wei$res["scale", "est"] * log(2)^(1 / ajuste_wei$res["shape", "est"])
+# 1497.4 horas
+
+set.seed(123)
 summary(ajuste_wei, type = "median", cl = 0.95, se = TRUE)
-# [1181.497 ; 1896.046]
+# IC: o flexsurv simula B = 1000 vetores de parâmetros de N(theta_hat, cov),
+# calcula a mediana em cada um e toma os percentis 2,5% e 97,5%.
+# Por ser simulação, o IC muda um pouco entre execuções (por isso a semente).
+# IC ~ [1170 ; 1900] horas
 
 ## b) ----
 
@@ -184,6 +196,10 @@ ajuste_lognorm <- flexsurvreg(Surv(tempos, cens) ~ 1, dist = "lnorm",    data = 
 ajuste_llogis  <- flexsurvreg(Surv(tempos, cens) ~ 1, dist = "llogis",   data = dados)
 ajuste_gama    <- flexsurvreg(Surv(tempos, cens) ~ 1, dist = "gamma",    data = dados)
 ajuste_gengama <- flexsurvreg(Surv(tempos, cens) ~ 1, dist = "gengamma", data = dados)
+
+sum(dados$cens) / sum(dados$tempos)
+ajuste_exp$res["rate", "est"]
+# 0.0004956 nos dois
 
 ajustes7 <- list(
   "Exponencial"       = ajuste_exp,
@@ -194,15 +210,18 @@ ajustes7 <- list(
   "Gama Generalizada" = ajuste_gengama
 )
 
-### AIC/BIC 
+### AIC/BIC
 data.frame(
   Modelo = names(ajustes7),
   logLik = sapply(ajustes7, function(a) a$loglik),
   AIC    = sapply(ajustes7, function(a) a$AIC),
-  BIC    = sapply(ajustes7, function(a) a$BIC)
+  BIC    = sapply(ajustes7, function(a) a$BIC),
+  row.names = NULL
 )
+# Menores AIC e BIC: Log-Normal (769.4 / 773.5),
+# seguida da Log-Logística (770.5 / 774.7).
 
-### TRV  ----
+### TRV (x Gama Generalizada; a Log-Logística não é aninhada)
 TRV_exp    <- 2 * (ajuste_gengama$loglik - ajuste_exp$loglik)
 TRV_wei    <- 2 * (ajuste_gengama$loglik - ajuste_wei$loglik)
 TRV_lnorm  <- 2 * (ajuste_gengama$loglik - ajuste_lognorm$loglik)
@@ -217,6 +236,11 @@ data.frame(
                  pchisq(TRV_lnorm, 1, lower.tail = FALSE),
                  pchisq(TRV_gama,  1, lower.tail = FALSE))
 )
+# Rejeitados: Exponencial (p = 0.006), Weibull (0.010), Gama (0.024).
+# Não rejeitado: Log-Normal (p = 0.449).
+
+# Conclusão: Log-Normal.
+# Critério principal: AIC/BIC (menor valor), confirmado pelo TRV.
 
 # 8 ----
 dados8 <- read.csv("Aulas/Data/DadosAIDS_cap13.csv")
@@ -253,6 +277,8 @@ for (j in 1:3) {
   legend("topright", legend = names(ajustes8), fill = cores, cex = 0.7)
 }
 par(mfrow = c(1, 1))
+# Descritivamente: a Exponencial é a que mais se afasta da estimativa não
+# paramétrica; Log-Normal e Gama Generalizada são as que mais se aproximam.
 
 ## 2) P(morrer antes de 800 dias) = 1 - S(800) ----
 
@@ -266,6 +292,7 @@ prob800 <- data.frame(
 )
 prob800$Porcentagem <- round(100 * prob800$Prob, 2)
 prob800
+# KM 34,3% | Exp 32,8% | Weibull 35,5% | Log-Normal 37,9% | Gama 34,8% | GG 37,9%
 
 ## 3) Escolha do modelo ----
 
@@ -278,21 +305,24 @@ Comparacao <- data.frame(
 )
 Comparacao[order(Comparacao$AIC), ]
 Comparacao[order(Comparacao$BIC), ]
+# Menores AIC e BIC: Log-Normal (1539.8 / 1546.3)
 
 ### TRV (modelos x Gama Generalizada)
-TRV_exp    <- 2 * (ajuste_gengama$loglik - ajuste_exp$loglik)
-TRV_wei    <- 2 * (ajuste_gengama$loglik - ajuste_wei$loglik)
+TRV_exp     <- 2 * (ajuste_gengama$loglik - ajuste_exp$loglik)
+TRV_wei     <- 2 * (ajuste_gengama$loglik - ajuste_wei$loglik)
 TRV_lognorm <- 2 * (ajuste_gengama$loglik - ajuste_lognorm$loglik)
-TRV_gama   <- 2 * (ajuste_gengama$loglik - ajuste_gama$loglik)
+TRV_gama    <- 2 * (ajuste_gengama$loglik - ajuste_gama$loglik)
 
 data.frame(
   Comparacao = c("Exponencial x GG", "Weibull x GG", "LogNormal x GG", "Gama x GG"),
   TRV     = c(TRV_exp, TRV_wei, TRV_lognorm, TRV_gama),
-  P_valor = c(pchisq(TRV_exp,    2, lower.tail = FALSE),
-              pchisq(TRV_wei,    1, lower.tail = FALSE),
+  P_valor = c(pchisq(TRV_exp,     2, lower.tail = FALSE),
+              pchisq(TRV_wei,     1, lower.tail = FALSE),
               pchisq(TRV_lognorm, 1, lower.tail = FALSE),
-              pchisq(TRV_gama,   1, lower.tail = FALSE))
+              pchisq(TRV_gama,    1, lower.tail = FALSE))
 )
+# Rejeitados: Exponencial (p = 0.001), Weibull (0.026), Gama (0.012).
+# Não rejeitado: Log-Normal (p = 0.936).
 
 ### Gráfico: Kaplan-Meier x modelo (pontos próximos da reta = bom ajuste)
 Surv_ekm <- data.frame(Tempo = ekm8$time, Surv_EKM = ekm8$surv)
@@ -306,30 +336,34 @@ for (nm in names(ajustes8)) {
 par(mfrow = c(1, 1))
 
 ### Gráfico: linearização (Exponencial, Weibull e Log-Normal)
-ok <- Surv_ekm$Surv_EKM > 0 & Surv_ekm$Surv_EKM < 1
-S  <- Surv_ekm$Surv_EKM[ok]
-t  <- Surv_ekm$Tempo[ok]
+ok   <- Surv_ekm$Surv_EKM > 0 & Surv_ekm$Surv_EKM < 1
+s_km <- Surv_ekm$Surv_EKM[ok]
+t_km <- Surv_ekm$Tempo[ok]
 
 par(mfrow = c(1, 3))
-plot(t,      -log(S),      xlab = "t",      ylab = "-log(S(t))",      main = "Exponencial")
-plot(log(t), log(-log(S)), xlab = "log(t)", ylab = "log(-log(S(t)))", main = "Weibull")
-plot(log(t), qnorm(S),     xlab = "log(t)", ylab = "Phi^-1(S(t))",    main = "Log-Normal")
+plot(t_km,      -log(s_km),      xlab = "t",      ylab = "-log(S(t))",      main = "Exponencial")
+plot(log(t_km), log(-log(s_km)), xlab = "log(t)", ylab = "log(-log(S(t)))", main = "Weibull")
+plot(log(t_km), qnorm(s_km),     xlab = "log(t)", ylab = "Phi^-1(S(t))",    main = "Log-Normal")
 par(mfrow = c(1, 1))
 
-# Conclusão:
-# (modelo apoiado por gráficos + AIC/BIC + TRV; em empate, o mais simples)
-
+# Conclusão: Log-Normal.
+# Apoiado por AIC/BIC (menores) e TRV (não rejeitado contra a GG);
+# nos gráficos a Exponencial é a que pior se ajusta.
+# Obs.: em t = 800 a Log-Normal superestima um pouco a probabilidade de óbito
+# (37,9% contra 34,3% da KM), embora seja o melhor ajuste global.
 
 # 9 ----
-# dados9 <- read.csv("Aulas/Data/AIDS_cap15.csv")        # colunas: tempo, status, tratam
+dados9 <- read.csv("Aulas/Data/AIDS_cap15.csv")   # colunas: tempo, status, tratam
 
-dados9$tratam <- factor(dados9$tratam)
+dados9$tratam <- factor(dados9$tratam)            # referência: A (nenhum)
 table(dados9$tratam)
 
 ## Teste prévio: tratam discrimina as curvas? ----
 
 survdiff(Surv(tempo, status) ~ tratam, data = dados9)                         # LogRank
 logrank_test(Surv(tempo, status) ~ tratam, type = "Peto-Peto", data = dados9) # Peto-Peto
+# LogRank p = 7e-15 | Peto-Peto p = 2.4e-10: rejeitam igualdade das curvas
+# -> tratam entra na regressão.
 
 ## 1) Ajuste dos 5 modelos ----
 
@@ -363,6 +397,7 @@ Comparacao <- data.frame(
 )
 Comparacao[order(Comparacao$AIC), ]
 Comparacao[order(Comparacao$BIC), ]
+# Menores AIC e BIC: Log-Normal (1489.2 / 1505.5)
 
 TRV_exp     <- 2 * (ajuste_gengama$loglik - ajuste_exp$loglik)
 TRV_wei     <- 2 * (ajuste_gengama$loglik - ajuste_wei$loglik)
@@ -377,8 +412,10 @@ data.frame(
               pchisq(TRV_lognorm, 1, lower.tail = FALSE),
               pchisq(TRV_gama,    1, lower.tail = FALSE))
 )
+# Rejeitados: Exponencial (p = 0.019), Weibull (0.016), Gama (0.008).
+# Não rejeitado: Log-Normal (p = 0.234).
 
-# Modelo final (troque o nome conforme AIC/BIC/TRV e resíduos)
+# Modelo final: Log-Normal (menor AIC e BIC, e não rejeitado pelo TRV)
 nome_final   <- "Log-Normal"
 modelo_final <- ajustes9[[nome_final]]
 modelo_final
@@ -420,11 +457,10 @@ ggplot(data.frame(Residuo), aes(sample = Residuo)) +
   theme_bw()
 
 ## 4) Distribuição aproximada do tempo de vida ----
-# Log-Normal: T ~ LogNormal(mu_i = b0 + b1*B (+ b2*C + b3*D), sigma)
-# Weibull:    T ~ Weibull(kappa_i = exp(b0 + b1*B + ...), gamma)
-# Exp./Gama:  rate_i = exp(b0 + ...) | Gama Gen.: mu_i = b0 + ...
+
 modelo_final$res
-coef(modelo_final)
+# T_i ~ LogNormal(mu_i = 5.518 + 1.825*B + 3.124*C + 2.626*D ; sigma = 1.537)
+# (A = referência; B, C, D = indicadoras do tratamento)
 
 ## 5) Razão de tempos medianos (RTM) ----
 # Exponencial e Gama: exp(-coef), com intervalo invertido. Demais: exp(coef).
@@ -437,9 +473,14 @@ IC  <- exp(sinal * confint(modelo_final)[termos, , drop = FALSE])
 if (sinal == -1) IC <- IC[, 2:1, drop = FALSE]
 colnames(IC) <- c("2.5 %", "97.5 %")
 cbind(RTM = Est, IC)
+# B: 6.21 [3.43 ; 11.21]
+# C: 22.75 [9.04 ; 57.23]
+# D: 13.82 [3.38 ; 56.57]
 
-# Interpretação: RTM > 1 -> tempo mediano maior que o do grupo de referência (A);
-# RTM < 1 -> menor. Significativo se o IC não contém 1.
+# Interpretação: em relação ao grupo A (sem terapia), o tempo mediano de
+# sobrevivência é ~6,2 vezes maior com B (mono), ~22,7 vezes com C (combinada)
+# e ~13,8 vezes com D (potente). Todas significativas (IC não contém 1).
+# C e D têm IC muito amplos (D tem só 1 óbito em 14 pacientes).
 
 ## 6) Sobrevivência e risco por tratamento ----
 
@@ -463,9 +504,12 @@ for (i in 2:length(grupos))
         t = tgraf, col = i, ci = FALSE)
 legend("topright", legend = grupos, col = seq_along(grupos), lty = 1, title = "Tratamento")
 par(mfrow = c(1, 1))
+# A sobrevivência é menor no A e maior nos grupos com terapia.
+# Risco unimodal em todos; o do grupo A é o mais alto e tem pico mais cedo.
 
 ## 7) Tempos médio e mediano por grupo ----
 
+set.seed(123)
 resumo <- do.call(rbind, lapply(grupos, function(g) {
   nd  <- list(tratam = g)
   med <- summary(modelo_final, newdata = nd, type = "median")[[1]]
@@ -476,3 +520,8 @@ resumo <- do.call(rbind, lapply(grupos, function(g) {
              Mediana = med$est, Mediana_L95 = med$lcl, Mediana_U95 = med$ucl)
 }))
 resumo
+# Mediana (dias): A 249 | B 1546 | C 5666 | D 3443
+# Média (dias):   A 812 | B 5035 | C 18460 | D 11218
+# Cuidado: a média da Log-Normal é muito sensível à cauda e as medianas de
+# C e D passam do tempo máximo de acompanhamento (3228 dias): extrapolação.
+# Preferir a mediana na interpretação.
