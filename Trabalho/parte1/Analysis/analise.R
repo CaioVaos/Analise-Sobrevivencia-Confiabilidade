@@ -281,7 +281,7 @@ linha_mediana_grupos <- function(km_object, palette, grupos,
 
 # 2. Leitura e Filtros ---------------------------------------------------------
 
-df <- read_parquet("Trabalho/parte1/data/FOSP.parquet") %>%
+df <- read_parquet("Trabalho/data/FOSP.parquet") %>%
   mutate(
     across(where(is.character), ~ iconv(.x, from = "latin1", to = "UTF-8"))
   ) %>%
@@ -346,7 +346,7 @@ df <- df %>%
                     labels = c("Não", "Sim"))
   )
 
-saveRDS(df, "Trabalho/parte1/data/df_final.RDS")
+saveRDS(df, "Trabalho/data/df_final.RDS")
 
 # 4. Análise Descritiva --------------------------------------------------------
 
@@ -358,7 +358,7 @@ summary(df)
 
 # 5. Análise Sem Covariáveis ---------------------------------------------------
 
-df <- readRDS("Trabalho/parte1/data/df_final.RDS")
+df <- readRDS("Trabalho/data/df_final.RDS")
 
 # Paleta
 cor_navy    <- "#10241d"
@@ -473,7 +473,7 @@ saveRDS(
 
 # 6. Análise por Covariáveis Qualitativas --------------------------------------
 
-df <- readRDS("Trabalho/parte1/data/df_final.RDS")
+df <- readRDS("Trabalho/data/df_final.RDS")
 
 # Paleta
 cor_navy    <- "#10241d"
@@ -1089,7 +1089,7 @@ saveRDS(curva_quimio, "Trabalho/parte1/plots/curva_quimio.RDS")
 
 # 7. Análise por Covariáveis Quantitativas -------------------------------------
 
-df <- readRDS("Trabalho/parte1/data/df_final.RDS")
+df <- readRDS("Trabalho/data/df_final.RDS")
 
 # Paleta
 cor_navy    <- "#10241d"
