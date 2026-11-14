@@ -192,12 +192,12 @@ Fundação Oncocentro de São Paulo (FOSP) · Câncer de Fígado (C22)
 </div>
 </div>
 
-<div class="tl-item tl-pending">
+<div class="tl-item">
 <div class="tl-icon">🧬</div>
 <div class="tl-body">
 <span class="tl-tag">Parte II</span>
-<div class="tl-title">Modelos Paramétricos e Regressão</div>
-<div class="tl-desc">Em breve</div>
+<div class="tl-title">Modelos Paramétricos</div>
+<div class="tl-desc">Ajuste de distribuições paramétricas, seleção de variáveis e RTM</div>
 <a href="Trabalho/parte2/" class="btn">Visualizar →</a>
 </div>
 </div>

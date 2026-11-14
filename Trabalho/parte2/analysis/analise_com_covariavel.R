@@ -4,8 +4,14 @@
 # REQUER: rode antes "analise_sem_covariavel.R" (gera df_parte2.RDS,
 # base_analitica.RDS e tabelas_parte1.RDS). Execute da raiz do projeto.
 # Metodologia (Cap. 16): filtro p < 0,25 (Log-Rank/Peto-Peto); seleção em 5
-# passos por TRV a 10% na Gama Generalizada; troca da distribuição ao final;
-# diagnóstico (Cox-Snell e quantílicos aleatorizados); RTM = exp(±coef).
+# passos na Gama Generalizada; troca da distribuição ao final; diagnóstico
+# (Cox-Snell e quantílicos aleatorizados); RTM = exp(±coef).
+#
+# NOVIDADE (amostra grande): a seleção NÃO usa apenas o p-valor. Cada passo
+# reporta BIC e ΔBIC, e o termo só entra/fica se p(TRV) < 0,10 E ΔBIC > 0.
+#   ΔBIC = BIC(modelo SEM o termo) − BIC(modelo COM o termo)
+#   ΔBIC > 0  ->  BIC prefere o modelo COM o termo (mesma convenção da
+#                 tabela de reavaliação 5.9: positivo = o termo contribui).
 # =============================================================================
 
 # 1. Setup --------------------------------------------------------------------
@@ -143,29 +149,46 @@ salva_plot <- function(p, nome, w = 10, h = 6.5) {
          width = w, height = h, dpi = 200, bg = "white")
 }
 
-# Funções de seleção (Cap. 16) -------------------------------------------------
+# Funções de seleção (Cap. 16) — AGORA com BIC -------------------------------
+# Decisão combinada: o termo entra/fica somente se p(TRV) < alfa E dBIC > 0.
+# dBIC = BIC(sem o termo) − BIC(com o termo); > 0 = BIC prefere COM o termo.
+# A coluna Decisao registra desacordos: "(BIC)" = significativo mas BIC não
+# apoia; "(TRV)" = BIC apoia mas não significativo.
+
 # Passos 1, 3, 4 e 5: acrescenta, uma a uma, cada variável de `novas` ao `base`
 trv_adicionar <- function(base, novas, dist = "gengamma", alfa = 0.10) {
   if (length(novas) == 0) return(NULL)
-  m0  <- ajusta(base, dist)
+  m0  <- ajusta(base, dist)                          # modelo SEM o termo
   out <- do.call(rbind, lapply(novas, function(v) {
-    cbind(Variavel = v, trv(ajusta(c(base, v), dist), m0))
+    m1 <- ajusta(c(base, v), dist)                   # modelo COM o termo
+    cbind(Variavel = v, trv(m1, m0),
+          BIC  = m1$BIC,                             # BIC do modelo com o termo
+          dBIC = m0$BIC - m1$BIC)                    # > 0: BIC prefere com o termo
   }))
-  out$Decisao <- ifelse(out$P_valor < alfa, "entra", "não entra")
+  out$Decisao <- with(out, ifelse(P_valor < alfa & dBIC > 0, "entra",
+                           ifelse(P_valor < alfa, "não entra (BIC)",
+                           ifelse(dBIC > 0, "não entra (TRV)", "não entra"))))
   out
 }
+
 # Passo 2: retira, uma a uma, cada variável do modelo múltiplo
 trv_retirar <- function(vars, dist = "gengamma", alfa = 0.10) {
-  m1  <- ajusta(vars, dist)
+  m1  <- ajusta(vars, dist)                          # modelo COMPLETO
   out <- do.call(rbind, lapply(vars, function(v) {
-    cbind(Variavel = v, trv(m1, ajusta(setdiff(vars, v), dist)))
+    m0 <- ajusta(setdiff(vars, v), dist)             # modelo SEM v
+    cbind(Variavel = v, trv(m1, m0),
+          BIC  = m0$BIC,                             # BIC do modelo sem v
+          dBIC = m0$BIC - m1$BIC)                    # > 0: BIC prefere MANTER v
   }))
-  out$Decisao <- ifelse(out$P_valor < alfa, "fica", "sai")
+  out$Decisao <- with(out, ifelse(P_valor < alfa & dBIC > 0, "fica",
+                           ifelse(P_valor < alfa, "sai (BIC)",
+                           ifelse(dBIC > 0, "sai (TRV)", "sai"))))
   out
 }
 
 # 5. Etapa II — Modelos com covariáveis ----------------------------------------
 alfa_sel <- 0.10   # nível do TRV na seleção (Cap. 16)
+# Regra combinada (amostra grande): p(TRV) < alfa_sel E dBIC > 0.
 
 # 5.1 Filtro inicial (Log-Rank e Peto-Peto, p < 0,25) ----
 qualitativas <- c("SEXO", "ESCOLARI", "ECGRUP", "CATEATEND",
@@ -185,7 +208,6 @@ filtro$Passa_filtro <- pmin(filtro$Logrank_pvalor, filtro$Peto_pvalor) < 0.25
 filtro
 
 # 5.2 Covariáveis candidatas (justificativa clínica) ----
-# Fora: RADIO (poucos tratados) e CATEATEND (Particular muito pequeno).
 candidatas <- c("ECGRUP", "CIRURGIA", "QUIMIO", "ESCOLARI", "SEXO", "IDADE10")
 justificativas <- c(
   ECGRUP    = "Extensão da doença no diagnóstico (principal fator prognóstico)",
@@ -200,30 +222,28 @@ justificativas <- c(
 # 5.3 Passo 1: uma covariável por vez contra o modelo nulo (Gama Generalizada) -
 passo1   <- trv_adicionar(character(0), candidatas, alfa = alfa_sel)
 passo1
-retidas1 <- passo1$Variavel[passo1$P_valor < alfa_sel]
+retidas1 <- passo1$Variavel[passo1$Decisao == "entra"]
 stopifnot(length(retidas1) > 0)
 
 # 5.4 Passo 2: modelo múltiplo, retirando uma variável por vez ----
 passo2   <- trv_retirar(retidas1, alfa = alfa_sel)
 passo2
-retidas2 <- passo2$Variavel[passo2$P_valor < alfa_sel]
+retidas2 <- passo2$Variavel[passo2$Decisao == "fica"]
 stopifnot(length(retidas2) > 0)
 
 # 5.5 Passo 3: reentrada das descartadas no passo 2 ----
 descartadas2 <- setdiff(retidas1, retidas2)
 passo3   <- trv_adicionar(retidas2, descartadas2, alfa = alfa_sel)
 passo3
-retidas3 <- c(retidas2, passo3$Variavel[passo3$P_valor < alfa_sel])
+retidas3 <- c(retidas2, passo3$Variavel[passo3$Decisao == "entra"])
 
 # 5.6 Passo 4: reavaliação das excluídas no passo 1 ----
 excluidas1 <- setdiff(candidatas, retidas1)
 passo4   <- trv_adicionar(retidas3, excluidas1, alfa = alfa_sel)
 passo4
-retidas4 <- c(retidas3, passo4$Variavel[passo4$P_valor < alfa_sel])
+retidas4 <- c(retidas3, passo4$Variavel[passo4$Decisao == "entra"])
 
 # 5.7 Passo 5: interações duplas, uma a uma, com justificativa clínica ----
-# ECGRUP × CIRURGIA: acesso à cirurgia depende do estágio
-# ECGRUP × QUIMIO  : quimioterapia mais frequente nos estágios avançados
 interacoes <- list(c("ECGRUP", "CIRURGIA"), c("ECGRUP", "QUIMIO"))
 elegiveis  <- Filter(function(p) all(p %in% retidas4), interacoes)
 passo5 <- NULL
@@ -232,7 +252,7 @@ if (length(elegiveis) > 0) {
   passo5 <- trv_adicionar(retidas4, termos_inter, alfa = alfa_sel)
 }
 passo5
-inter_ret  <- if (!is.null(passo5)) passo5$Variavel[passo5$P_valor < alfa_sel] else character(0)
+inter_ret  <- if (!is.null(passo5)) passo5$Variavel[passo5$Decisao == "entra"] else character(0)
 vars_final <- c(retidas4, inter_ret)
 vars_final
 
@@ -245,7 +265,6 @@ tab_ic2[order(tab_ic2$AIC), ]
 tab_ic2[order(tab_ic2$BIC), ]
 tab_trv2
 
-# Menor AIC entre os não rejeitados pelo TRV (p > 0,05); confira também o BIC.
 compat2 <- c("Gama Generalizada", tab_trv2$Modelo[tab_trv2$P_valor > 0.05])
 dist_final_nome <- tab_ic2$Modelo[tab_ic2$Modelo %in% compat2][
   which.min(tab_ic2$AIC[tab_ic2$Modelo %in% compat2])]
@@ -258,8 +277,7 @@ modelo_final
 saveRDS(modelo_final, file.path(dir_saida, "modelo_final.RDS"))
 
 # 5.9 Reavaliação dos termos na distribuição escolhida ----
-# Efeitos principais envolvidos em interações retidas não saem isoladamente
-# (hierarquia do modelo). dAIC/dBIC > 0: retirar o termo piora o ajuste.
+# dAIC/dBIC > 0: retirar o termo piora o ajuste (mesma convenção de dBIC acima).
 protegidas <- unique(unlist(strsplit(inter_ret, "*", fixed = TRUE)))
 termos_av  <- c(setdiff(retidas4, protegidas), inter_ret)
 tab_reavalia <- do.call(rbind, lapply(termos_av, function(v) {
@@ -272,7 +290,7 @@ tab_reavalia
 
 # 5.10 Diagnóstico: resíduos de Cox-Snell (Cap. 16.6.1) ----
 ResiduoCS <- coxsnell_flexsurvreg(modelo_final)$est
-stopifnot(length(ResiduoCS) == nrow(df))   # mesma amostra do ajuste
+stopifnot(length(ResiduoCS) == nrow(df))
 ekm_cs <- survfit(Surv(ResiduoCS, df$cens) ~ 1, type = "kaplan-meier")
 
 png(file.path(dir_plots, "coxsnell.png"), width = 1800, height = 800, res = 200)
@@ -291,11 +309,7 @@ legend("topright", c("KM dos resíduos", "Exp(1) esperada"),
 dev.off()
 
 # 5.11 Diagnóstico: resíduos quantílicos aleatorizados (Cap. 16.6.2) ----
-# Semente fixa: o QQ-plot dos slides não muda a cada renderização.
 set.seed(2026)
-
-# Caminho rápido: S(t_i | x_i) calculado direto da distribuição ajustada,
-# para todos os pacientes de uma vez (equivale ao loop do livro).
 S_vec <- tryCatch({
   pars <- modelo_final$dlist$pars
   loc  <- modelo_final$dlist$location
@@ -307,14 +321,13 @@ S_vec <- tryCatch({
   eta <- if (length(termos) > 0) as.numeric(X %*% b[colnames(X)]) else rep(0, nrow(df))
   tr  <- modelo_final$dlist$transforms[[loc]]
   inv <- modelo_final$dlist$inv.transforms[[loc]]
-  par_loc <- inv(tr(res[loc, "est"]) + eta)   # ex.: meanlog_i, scale_i, rate_i...
+  par_loc <- inv(tr(res[loc, "est"]) + eta)
   args <- setNames(lapply(pars, function(p) {
     if (p == loc) par_loc else rep(res[p, "est"], nrow(df))
   }), pars)
   1 - do.call(modelo_final$dfns$p, c(list(q = df$tempo), args))
 }, error = function(e) NULL)
 
-# Verificação contra o cálculo do Cap. 16 (summary por paciente) em 10 indivíduos
 verifica <- function(S) {
   idx <- seq_len(min(10, nrow(df)))
   s_ref <- vapply(idx, function(i) {
@@ -337,7 +350,6 @@ if (!is.null(S_vec) && verifica(S_vec)) {
   }
 }
 
-# Evento: u = F(t); censura: u ~ U(F(t), 1). Mesma ordem de sorteios do loop.
 u <- cdf
 idx_cens <- which(df$cens == 0)
 u[idx_cens] <- runif(length(idx_cens), min = cdf[idx_cens], max = 1)
@@ -353,9 +365,7 @@ p_qq_quantilico <- ggplot(data.frame(Residuo), aes(sample = Residuo)) +
 salva_plot(p_qq_quantilico, "qq_quantilico", w = 9, h = 7)
 
 # 5.12 Interpretação: razões de tempos medianos (RTM) ----
-# Exponencial e Gama: efeito na TAXA -> RTM = exp(-coef) (IC invertido).
-# Demais (efeito na escala/locação): RTM = exp(coef). IDADE10: por 10 anos.
-tidy(modelo_final)   # estimativas na escala dos coeficientes (como no livro)
+tidy(modelo_final)
 
 res_mod    <- modelo_final$res
 termos_cov <- setdiff(rownames(res_mod), modelo_final$dlist$pars)
@@ -364,7 +374,6 @@ est <- exp(sinal * res_mod[termos_cov, "est"])
 lo  <- exp(sinal * res_mod[termos_cov, "L95%"])
 up  <- exp(sinal * res_mod[termos_cov, "U95%"])
 if (sinal == -1) { tmp <- lo; lo <- up; up <- tmp }
-# p de Wald (mesmo teste exibido pelo tidy/print do flexsurv)
 p_wald <- 2 * pnorm(-abs(res_mod[termos_cov, "est"] / res_mod[termos_cov, "se"]))
 
 tab_rtm <- data.frame(
@@ -378,7 +387,6 @@ tab_rtm <- data.frame(
 )
 tab_rtm$Significativo <- tab_rtm$IC_inf > 1 | tab_rtm$IC_sup < 1
 
-# Rótulos legíveis (trata interações "A:B" -> "A × B")
 rotulos_var <- c(ECGRUP = "Estadiamento", CIRURGIA = "Cirurgia",
                  QUIMIO = "Quimioterapia", ESCOLARI = "Escolaridade",
                  SEXO = "Sexo", IDADE10 = "Idade (+10 anos)")
@@ -397,9 +405,6 @@ rotulo_termo <- function(t) {
 tab_rtm$Rotulo <- vapply(tab_rtm$Termo, rotulo_termo, character(1))
 tab_rtm
 
-# Leitura: RTM < 1 -> tempo mediano menor que o da referência; RTM > 1 -> maior.
-# Com interações retidas, efeitos principais valem na categoria de referência
-# da outra variável: interprete em conjunto.
 p_forest_rtm <- ggplot(tab_rtm, aes(x = RTM, y = reorder(Rotulo, RTM),
                                     color = Significativo)) +
   geom_vline(xintercept = 1, linetype = "dashed", color = cor_media) +
@@ -420,8 +425,6 @@ p_forest_rtm <- ggplot(tab_rtm, aes(x = RTM, y = reorder(Rotulo, RTM),
 salva_plot(p_forest_rtm, "forest_rtm", w = 9.5, h = 7)
 
 # 5.13 Perfis previstos: favorável x desfavorável ----
-# Perfis ilustrativos: nível de maior/menor RTM principal (idade: quartis).
-# Com interações retidas, revise e defina manualmente abaixo.
 vars_principais <- vars_final[!grepl("*", vars_final, fixed = TRUE)]
 rtm_de <- function(termo) {
   i <- match(termo, tab_rtm$Termo)
@@ -452,7 +455,7 @@ perfil_des <- as.data.frame(setNames(lapply(vars_principais, escolhe, FALSE), va
 perfil_fav
 perfil_des
 
-t_grid <- seq(0.05, max(df$tempo), length.out = 200)   # definido aqui (não depender da Etapa I)
+t_grid <- seq(0.05, max(df$tempo), length.out = 200)
 s_fav <- summary(modelo_final, newdata = perfil_fav, type = "survival",
                  t = t_grid, ci = FALSE)[[1]]
 s_des <- summary(modelo_final, newdata = perfil_des, type = "survival",
@@ -471,7 +474,6 @@ p_perfis <- ggplot(df_perfis, aes(x = tempo, y = S, color = Perfil)) +
   tema_km
 salva_plot(p_perfis, "curvas_perfis", w = 10, h = 6.5)
 
-# Tempos medianos previstos por perfil (com IC) -> tabela para o slide
 med_fav <- summary(modelo_final, newdata = perfil_fav, type = "median")[[1]]
 med_des <- summary(modelo_final, newdata = perfil_des, type = "median")[[1]]
 tab_medianas <- data.frame(
@@ -502,12 +504,10 @@ if (ausentes == "categoria") {
     tab_sens$RTM_principal <- tab_rtm$RTM[match(tab_sens$Termo, tab_rtm$Termo)]
     tab_sens$Mesma_direcao <- with(tab_sens, (RTM_cc > 1) == (RTM_principal > 1))
     tab_sens
-    # Conclusões estáveis: mesma direção e magnitude parecida nos dois ajustes.
   }
 }
 
 # 7. Tabelas para os slides -----------------------------------------------------
-# Etapa I: lida do arquivo salvo (fallback: reajusta os modelos nulos)
 arq_t1 <- file.path(dir_saida, "tabelas_parte1.RDS")
 if (file.exists(arq_t1)) {
   tabelas_parte1 <- readRDS(arq_t1)
@@ -530,7 +530,7 @@ tabelas_parte2 <- list(
 )
 saveRDS(tabelas_parte2, file.path(dir_saida, "tabelas_parte2.RDS"))
 
-# Versões FORMATADAS (vírgula decimal, "< 0,001") para preencher o index.qmd ----
+# Versões FORMATADAS (agora com BIC e dBIC nos passos) ----
 fmt_ic <- function(t) data.frame(Modelo = t$Modelo, logLik = fmt_num(t$logLik, 1),
                                  AIC = fmt_num(t$AIC, 1), BIC = fmt_num(t$BIC, 1))
 fmt_trv <- function(t) data.frame(Comparacao = t$Comparacao, TRV = fmt_num(t$TRV, 2),
@@ -540,7 +540,10 @@ fmt_passo <- function(t) {
   if (is.null(t)) return(NULL)
   data.frame(Variavel = gsub("*", " × ", t$Variavel, fixed = TRUE),
              TRV = fmt_num(t$TRV, 2), gl = t$gl,
-             p_valor = formatar_p(t$P_valor), Decisao = t$Decisao)
+             p_valor = formatar_p(t$P_valor),
+             BIC = fmt_num(t$BIC, 1),
+             dBIC = fmt_num(t$dBIC, 1),
+             Decisao = t$Decisao)
 }
 
 filtro_slide <- data.frame(
@@ -552,7 +555,6 @@ filtro_slide <- data.frame(
   Candidata = c(ifelse(filtro$Variavel %in% candidatas, "sim", "não"), "sim")
 )
 
-# Tabela combinada do slide "Distribuição com Covariáveis"
 p_gg  <- tab_trv2$P_valor[match(tab_ic2$Modelo, tab_trv2$Modelo)]
 dec2  <- tab_trv2$Decisao[match(tab_ic2$Modelo, tab_trv2$Modelo)]
 dist_etapa2_slide <- data.frame(
@@ -577,6 +579,7 @@ decisoes2 <- list(
   vars_final  = vars_final,
   formula     = paste("Surv(tempo, cens) ~", paste(vars_final, collapse = " + ")),
   interacoes  = inter_ret,
+  criterio_selecao = "TRV a 10% combinado com BIC: entra/fica se p < 0,10 e dBIC > 0",
   forma_risco = forma_risco(dist_final_nome, modelo_final),
   nota_quimio = if ("QUIMIO" %in% vars_final)
     "QUIMIO: curvas se cruzam na Parte I; a RTM resume o efeito médio e deve ser lida com cautela (possível violação de tempo acelerado)."
@@ -612,6 +615,7 @@ tabelas_slides <- list(
 saveRDS(tabelas_slides, file.path(dir_saida, "tabelas_slides.RDS"))
 
 cat("\nn analítico:", nrow(df), "| óbitos:", sum(df$cens == 1), "| ausentes:", ausentes,
+    "\nRegra de seleção:", decisoes2$criterio_selecao,
     "\nCandidatas:", paste(candidatas, collapse = ", "),
     "\nModelo final: ~", paste(vars_final, collapse = " + "),
     "\nDistribuição final:", dist_final_nome, "|", decisoes2$forma_risco,

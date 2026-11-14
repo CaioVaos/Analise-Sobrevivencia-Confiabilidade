@@ -34,6 +34,7 @@
   </style>
   <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-2740581606dc327e82f18f789b69d8a0.css">
   <link rel="stylesheet" href="custom.css">
+  <link rel="stylesheet" href="parte2.css">
   <link href="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -160,7 +161,7 @@
 <h3 class="ttl">
 O que a Parte I estabeleceu
 </h3>
-<div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+<div class="g2">
 <div class="in-g">
 <div class="lbl">
 👥 Pacientes
@@ -296,7 +297,7 @@ Interpretação em termos de tempo mediano de sobrevida
 <h3 class="ttl">
 População de análise
 </h3>
-<div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+<div class="g2">
 <div class="in-g">
 <div class="lbl">
 👥 n analítico
@@ -355,7 +356,7 @@ Decisões de base
 Tempo = 0
 </div>
 <div class="txt">
-Removidos <b>21 pacientes</b> com tempo de seguimento igual a zero (14 óbitos e 7 censuras).
+Removidos <b>21 pacientes</b> com tempo de seguimento igual a zero (14 óbitos e 7 censuras): <b>log(0)</b> inviabiliza Weibull, Log-normal e Gama.
 </div>
 </div>
 <div class="in-d">
@@ -597,7 +598,7 @@ Mesmos critérios da Etapa I, agora <b>com covariáveis</b>
 </div>
 </div>
 <div>
-<span class="fn"><span class="math inline">\(AIC&lt;/span&gt; &lt;span class="fn"&gt;\)</span>BIC</span> <span class="fn">TRV</span>
+<span class="fn">$AIC</span> <span class="fn">$BIC</span> <span class="fn">TRV</span>
 </div>
 </div>
 </div><div class="column" style="width:2%;">
@@ -648,83 +649,89 @@ IDADE reportada por 10 anos
 </section>
 <section id="etapa-i-kaplan-meier-modelos" class="slide level2" data-number="3.1">
 <h2><span class="header-section-number">3.1</span> Etapa I · Kaplan-Meier × Modelos</h2>
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="plots/km_vs_modelos.png" class="quarto-figure quarto-figure-center" height="510"></p>
-</figure>
+<div class="msg">
+<span class="msg-k">Leitura</span><span>Quanto mais próximos da diagonal, melhor o ajuste: a <b>Gama Generalizada</b> é a que mais se aproxima; a <b>exponencial</b> é a que mais se afasta.</span>
+</div>
+<div class="plot">
+<p><img data-src="plots/km_vs_modelos.png" height="430"></p>
 </div>
 </section>
 <section id="etapa-i-linearização" class="slide level2" data-number="3.2">
 <h2><span class="header-section-number">3.2</span> Etapa I · Linearização</h2>
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="plots/linearizacao.png" class="quarto-figure quarto-figure-center" style="width:100.0%"></p>
-</figure>
+<div class="msg">
+<span class="msg-k">Leitura</span><span>A <b>exponencial</b> sai claramente da reta; Weibull e log-normal ficam mais próximas, mas com desvios nas caudas. Gama e Gama Generalizada não têm linearização.</span>
+</div>
+<div class="plot">
+<p><img data-src="plots/linearizacao.png" style="width:100.0%"></p>
 </div>
 </section>
 <section id="etapa-i-aic-e-bic" class="slide level2" data-number="3.3">
 <h2><span class="header-section-number">3.3</span> Etapa I · AIC e BIC</h2>
+<div class="msg">
+<span class="msg-k">Resultado</span><span><b>Gama Generalizada</b> tem o menor AIC e o menor BIC; a log-normal, a segunda melhor, fica <b>41 pontos de AIC</b> acima (regra prática: ΔAIC &gt; 10 indica suporte desprezível).</span>
+</div>
 <div class="columns">
-<div class="column" style="width:40%;">
+<div class="column" style="width:44%;">
 <div class="c-g">
 <h3 class="ttl">
 Critérios de informação
 </h3>
-<div class="lin lin-h" style="grid-template-columns:1.6fr 1fr 1fr;">
-<span>Modelo</span><span>AIC</span><span>BIC</span>
+<div class="lin lin-h" style="grid-template-columns:1.7fr 1fr 1fr .9fr;">
+<span>Modelo</span><span>AIC</span><span>BIC</span><span>ΔAIC</span>
 </div>
-<div class="lin" style="grid-template-columns:1.6fr 1fr 1fr;">
-<span>Exponencial</span><b>25.344,7</b><b>25.351,0</b>
+<div class="lin lin-best" style="grid-template-columns:1.7fr 1fr 1fr .9fr;">
+<span>Gama Generalizada</span><span>23.469,4</span><span>23.488,5</span><span>0</span>
 </div>
-<div class="lin" style="grid-template-columns:1.6fr 1fr 1fr;">
-<span>Weibull</span><b>23.942,7</b><b>23.955,3</b>
+<div class="lin" style="grid-template-columns:1.7fr 1fr 1fr .9fr;">
+<span>Log-normal</span><span>23.510,9</span><span>23.523,6</span><span>+41,4</span>
 </div>
-<div class="lin" style="grid-template-columns:1.6fr 1fr 1fr;">
-<span>Log-normal</span><b>23.510,9</b><b>23.523,6</b>
+<div class="lin" style="grid-template-columns:1.7fr 1fr 1fr .9fr;">
+<span>Weibull</span><span>23.942,7</span><span>23.955,3</span><span>+473,2</span>
 </div>
-<div class="lin" style="grid-template-columns:1.6fr 1fr 1fr;">
-<span>Gama</span><b>24.182,5</b><b>24.195,1</b>
+<div class="lin" style="grid-template-columns:1.7fr 1fr 1fr .9fr;">
+<span>Gama</span><span>24.182,5</span><span>24.195,1</span><span>+713,0</span>
 </div>
-<div class="lin" style="grid-template-columns:1.6fr 1fr 1fr; color:#d9b054;">
-<span><b>Gama Generalizada</b></span><b>23.469,4</b><b>23.488,5</b>
+<div class="lin" style="grid-template-columns:1.7fr 1fr 1fr .9fr;">
+<span>Exponencial</span><span>25.344,7</span><span>25.351,0</span><span>+1.875,2</span>
 </div>
 <div class="sub">
-Menor AIC e menor BIC: <b>Gama Generalizada</b>
+Ordenado por AIC; a ordem pelo BIC é a mesma.
 </div>
 </div>
 </div><div class="column" style="width:2%;">
 
-</div><div class="column" style="width:58%;">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="plots/curvas_modelos.png" class="quarto-figure quarto-figure-center" style="width:100.0%"></p>
-</figure>
+</div><div class="column" style="width:54%;">
+<div class="plot">
+<p><img data-src="plots/curvas_modelos.png" style="width:100.0%"></p>
 </div>
 </div></div>
 </section>
 <section id="etapa-i-teste-da-razão-de-verossimilhanças" class="slide level2" data-number="3.4">
 <h2><span class="header-section-number">3.4</span> Etapa I · Teste da Razão de Verossimilhanças</h2>
+<div class="msg">
+<span class="msg-k">Resultado</span><span>Com n = 4.210, o TRV detecta até desvios pequenos: <b>todos os modelos simples são rejeitados</b>. A log-normal é a mais próxima (TRV = 43,4), mas ainda inadequada.</span>
+</div>
 <div class="c-d">
 <h3 class="ttl">
 Cada modelo contra a Gama Generalizada
 </h3>
-<div class="lin lin-h" style="grid-template-columns:1.6fr 1fr 0.6fr 1fr 1.4fr;">
-<span>Comparação</span><span>TRV</span><span>gl</span><span>p-valor</span><span>Decisão</span>
+<div class="lin lin-h" style="grid-template-columns:1.6fr 1fr .6fr 1fr 1.3fr;">
+<span>Comparação</span><span>TRV</span><span>gl</span><span>p-valor</span><span>Decisão (5%)</span>
 </div>
-<div class="lin" style="grid-template-columns:1.6fr 1fr 0.6fr 1fr 1.4fr;">
-<span>Exponencial × GG</span><b>1.879,24</b><span>2</span><b>&lt; 0,001</b><span class="no">rejeitado</span>
+<div class="lin" style="grid-template-columns:1.6fr 1fr .6fr 1fr 1.3fr;">
+<span>Exponencial × GG</span><b>1.879,24</b><span>2</span><b>&lt; 0,001</b><span><span class="tg tg-no">rejeitado</span></span>
 </div>
-<div class="lin" style="grid-template-columns:1.6fr 1fr 0.6fr 1fr 1.4fr;">
-<span>Weibull × GG</span><b>475,21</b><span>1</span><b>&lt; 0,001</b><span class="no">rejeitado</span>
+<div class="lin" style="grid-template-columns:1.6fr 1fr .6fr 1fr 1.3fr;">
+<span>Weibull × GG</span><b>475,21</b><span>1</span><b>&lt; 0,001</b><span><span class="tg tg-no">rejeitado</span></span>
 </div>
-<div class="lin" style="grid-template-columns:1.6fr 1fr 0.6fr 1fr 1.4fr;">
-<span>Log-normal × GG</span><b>43,44</b><span>1</span><b>&lt; 0,001</b><span class="no">rejeitado</span>
+<div class="lin" style="grid-template-columns:1.6fr 1fr .6fr 1fr 1.3fr;">
+<span>Log-normal × GG</span><b>43,44</b><span>1</span><b>&lt; 0,001</b><span><span class="tg tg-no">rejeitado</span></span>
 </div>
-<div class="lin" style="grid-template-columns:1.6fr 1fr 0.6fr 1fr 1.4fr;">
-<span>Gama × GG</span><b>715,01</b><span>1</span><b>&lt; 0,001</b><span class="no">rejeitado</span>
+<div class="lin" style="grid-template-columns:1.6fr 1fr .6fr 1fr 1.3fr;">
+<span>Gama × GG</span><b>715,01</b><span>1</span><b>&lt; 0,001</b><span><span class="tg tg-no">rejeitado</span></span>
 </div>
 <div class="sub">
-Com n = 4.210, o TRV detecta até desvios pequenos: <b>todos os modelos simples são rejeitados</b>. A log-normal é a mais próxima (TRV = 43,4), mas ainda inadequada → mantém-se a Gama Generalizada.
+p &gt; 0,05 indicaria que o modelo simples é compatível com a Gama Generalizada; aqui isso não ocorre em nenhum caso → mantém-se a Gama Generalizada.
 </div>
 </div>
 </section>
@@ -757,7 +764,7 @@ Evidências
 3
 </div>
 <div class="txt">
-<b>AIC / BIC:</b> menores valores para a Gama Generalizada.
+<b>AIC / BIC:</b> menores valores para a Gama Generalizada (ΔAIC = 41 para a log-normal).
 </div>
 </div>
 <div class="in-g item">
@@ -779,69 +786,176 @@ Distribuição escolhida
 <div style="font-size:1.6em; font-weight:800; color:#ffffff;">
 Gama Generalizada
 </div>
-<div style="font-size:0.58em; color:#cfe0d5; line-height:1.4;">
-Q = −0,42 (IC95% −0,54 a −0,29) · forma de risco flexível, não constante; engloba as demais distribuições como casos particulares. Mortalidade concentrada nos primeiros meses após o diagnóstico.
+<div style="font-size:.58em; color:#cfe0d5; line-height:1.45;">
+Q = −0,42 (IC95% −0,54 a −0,29): forma de risco flexível, não constante; engloba as demais distribuições como casos particulares.
+</div>
+<div style="font-size:.58em; color:#cfe0d5; line-height:1.45; border-top:1px solid rgba(217,176,84,.35); padding-top:8px;">
+Weibull (forma = 0,60) e Gama (forma = 0,52), ambas &lt; 1, apontam <b style="color:#d9b054;">risco decrescente</b>: mortalidade concentrada nos primeiros meses após o diagnóstico.
 </div>
 </div>
 </div></div>
 </section>
 <section id="etapa-ii-covariáveis-candidatas" class="slide level2" data-number="3.6">
 <h2><span class="header-section-number">3.6</span> Etapa II · Covariáveis Candidatas</h2>
+<div class="msg">
+<span class="msg-k">Critério</span><span>As <b>7 covariáveis qualitativas passam</b> no filtro de 0,25: com n grande o filtro quase não elimina, e a escolha das <b>6 candidatas é clínica</b>.</span>
+</div>
 <div class="c-g">
-<div class="lin lin-h" style="grid-template-columns:1.1fr 2.8fr 0.9fr 0.9fr;">
-<span>Variável</span><span>Justificativa clínica</span><span>Log-Rank</span><span>Peto-Peto</span>
+<div class="lin lin-h" style="grid-template-columns:1.5fr 2.8fr .8fr .8fr .9fr;">
+<span>Variável</span><span>Justificativa clínica</span><span>Log-Rank</span><span>Peto-Peto</span><span>Status</span>
 </div>
-<div class="lin" style="grid-template-columns:1.1fr 2.8fr 0.9fr 0.9fr;">
-<b>ECGRUP</b><span>Extensão da doença no diagnóstico; maior separador na Parte I</span><span>&lt; 0,001</span><span>&lt; 0,001</span>
+<div class="lin" style="grid-template-columns:1.5fr 2.8fr .8fr .8fr .9fr;">
+<span><b>Estadiamento</b> <span class="sub">ECGRUP</span></span><span>Extensão da doença no diagnóstico; maior separador na Parte I</span><span>&lt; 0,001</span><span>&lt; 0,001</span><span class="tg tg-ok">candidata</span>
 </div>
-<div class="lin" style="grid-template-columns:1.1fr 2.8fr 0.9fr 0.9fr;">
-<b>CIRURGIA</b><span>Único tratamento potencialmente curativo</span><span>&lt; 0,001</span><span>&lt; 0,001</span>
+<div class="lin" style="grid-template-columns:1.5fr 2.8fr .8fr .8fr .9fr;">
+<span><b>Cirurgia</b> <span class="sub">CIRURGIA</span></span><span>Único tratamento potencialmente curativo</span><span>&lt; 0,001</span><span>&lt; 0,001</span><span class="tg tg-ok">candidata</span>
 </div>
-<div class="lin" style="grid-template-columns:1.1fr 2.8fr 0.9fr 0.9fr;">
-<b>QUIMIO</b><span>Tratamento sistêmico; curvas se cruzam na Parte I</span><span>&lt; 0,001</span><span>&lt; 0,001</span>
+<div class="lin" style="grid-template-columns:1.5fr 2.8fr .8fr .8fr .9fr;">
+<span><b>Quimioterapia</b> <span class="sub">QUIMIO</span></span><span>Tratamento sistêmico; curvas se cruzam na Parte I</span><span>&lt; 0,001</span><span>&lt; 0,001</span><span class="tg tg-ok">candidata</span>
 </div>
-<div class="lin" style="grid-template-columns:1.1fr 2.8fr 0.9fr 0.9fr;">
-<b>ESCOLARI</b><span>Marcador de acesso a diagnóstico e cuidado</span><span>&lt; 0,001</span><span>&lt; 0,001</span>
+<div class="lin" style="grid-template-columns:1.5fr 2.8fr .8fr .8fr .9fr;">
+<span><b>Escolaridade</b> <span class="sub">ESCOLARI</span></span><span>Marcador de acesso a diagnóstico e cuidado</span><span>&lt; 0,001</span><span>&lt; 0,001</span><span class="tg tg-ok">candidata</span>
 </div>
-<div class="lin" style="grid-template-columns:1.1fr 2.8fr 0.9fr 0.9fr;">
-<b>SEXO</b><span>Diferença modesta na Parte I</span><span>0,046</span><span>0,049</span>
+<div class="lin" style="grid-template-columns:1.5fr 2.8fr .8fr .8fr .9fr;">
+<span><b>Sexo</b> <span class="sub">SEXO</span></span><span>Diferença modesta na Parte I</span><span>0,046</span><span>0,049</span><span class="tg tg-ok">candidata</span>
 </div>
-<div class="lin" style="grid-template-columns:1.1fr 2.8fr 0.9fr 0.9fr;">
-<b>IDADE</b><span>Quantitativa; entra por justificativa clínica (por 10 anos)</span><span>—</span><span>—</span>
+<div class="lin" style="grid-template-columns:1.5fr 2.8fr .8fr .8fr .9fr;">
+<span><b>Idade</b> <span class="sub">IDADE</span></span><span>Quantitativa: entra por justificativa clínica (por 10 anos)</span><span>—</span><span>—</span><span class="tg tg-ok">candidata</span>
+</div>
+<div class="lin lin-dim" style="grid-template-columns:1.5fr 2.8fr .8fr .8fr .9fr;">
+<span><b>Radioterapia</b> <span class="sub">RADIO</span></span><span>Poucos pacientes tratados (n = 188)</span><span>0,004</span><span>&lt; 0,001</span><span class="tg tg-ref">fora</span>
+</div>
+<div class="lin lin-dim" style="grid-template-columns:1.5fr 2.8fr .8fr .8fr .9fr;">
+<span><b>Atendimento</b> <span class="sub">CATEATEND</span></span><span>Categoria Particular com apenas 75 casos</span><span>&lt; 0,001</span><span>&lt; 0,001</span><span class="tg tg-ref">fora</span>
 </div>
 <div class="sub">
-Não candidatas: <b>RADIO</b> (188 tratados, 4,4%) e <b>CATEATEND</b> (Particular com 75 casos), por justificativa clínica. “Sem informação”/“Não se aplica” mantidos como categorias. Todas as candidatas passam no filtro de 0,25.
+“Sem informação” e “Não se aplica” mantidos como categorias próprias (ver Base Analítica).
 </div>
 </div>
 </section>
-<section id="etapa-ii-passos-1-e-2" class="slide level2" data-number="3.7">
-<h2><span class="header-section-number">3.7</span> Etapa II · Passos 1 e 2</h2>
+<section id="etapa-ii-seleção-em-resumo" class="slide level2" data-number="3.7">
+<h2><span class="header-section-number">3.7</span> Etapa II · Seleção em Resumo</h2>
+<div class="msg">
+<span class="msg-k">Resultado</span><span>Das <b>6 candidatas, 5 permanecem</b>: o <b>sexo</b> sai no passo 1 e não reentra; as <b>duas interações</b> testadas entram.</span>
+</div>
+<div class="funil">
+<div class="etp">
+<div class="lbl">
+Candidatas
+</div>
+<div class="n">
+6
+</div>
+<div class="s">
+ECGRUP · CIRURGIA · QUIMIO · ESCOLARI · SEXO · IDADE
+</div>
+</div>
+<div class="seta">
+▶
+</div>
+<div class="etp etp-d">
+<div class="lbl">
+Passo 1
+</div>
+<div class="n">
+5
+</div>
+<div class="s">
+SEXO fica de fora (p = 0,113)
+</div>
+</div>
+<div class="seta">
+▶
+</div>
+<div class="etp">
+<div class="lbl">
+Passo 2
+</div>
+<div class="n">
+5
+</div>
+<div class="s">
+nenhuma variável sai
+</div>
+</div>
+<div class="seta">
+▶
+</div>
+<div class="etp etp-d">
+<div class="lbl">
+Passos 3 e 4
+</div>
+<div class="n">
+5
+</div>
+<div class="s">
+nada a reentrar; SEXO não reentra (p = 0,914)
+</div>
+</div>
+<div class="seta">
+▶
+</div>
+<div class="etp">
+<div class="lbl">
+Passo 5
+</div>
+<div class="n">
++ 2
+</div>
+<div class="s">
+ECGRUP × CIRURGIA e ECGRUP × QUIMIO entram
+</div>
+</div>
+<div class="seta">
+▶
+</div>
+<div class="etp" style="background:#10241d; border-color:#d9b054;">
+<div class="lbl" style="color:#d9b054;">
+Modelo final
+</div>
+<div class="n" style="color:#d9b054;">
+5 + 2
+</div>
+<div class="s" style="color:#cfe0d5;">
+variáveis + interações · 26 parâmetros
+</div>
+</div>
+</div>
+<div class="formula">
+Surv(tempo, cens) ~ <span>ECGRUP + CIRURGIA + QUIMIO + ESCOLARI + IDADE10 + ECGRUP × CIRURGIA + ECGRUP × QUIMIO</span><br>distribuição: <span>Gama Generalizada</span> · n = 4.210 · 2.760 óbitos
+</div>
+</section>
+<section id="etapa-ii-passos-1-e-2" class="slide level2" data-number="3.8">
+<h2><span class="header-section-number">3.8</span> Etapa II · Passos 1 e 2</h2>
+<div class="msg">
+<span class="msg-k">Resultado</span><span>No passo 1 só o <b>sexo</b> (p = 0,113) não entra; no passo 2, com todas juntas, <b>nenhuma variável sai</b>.</span>
+</div>
 <div class="columns">
 <div class="column" style="width:49%;">
 <div class="c-g">
 <h3 class="ttl">
 Passo 1 · uma variável por vez
 </h3>
-<div class="lin lin-h" style="grid-template-columns:1.4fr 1fr 1fr;">
+<div class="lin lin-h" style="grid-template-columns:1.5fr 1fr 1fr;">
 <span>Variável</span><span>p (TRV)</span><span>Decisão</span>
 </div>
-<div class="lin" style="grid-template-columns:1.4fr 1fr 1fr;">
-<span>ECGRUP</span><b>&lt; 0,001</b><span class="ok">entra</span>
+<div class="lin" style="grid-template-columns:1.5fr 1fr 1fr;">
+<span>ECGRUP</span><b>&lt; 0,001</b><span class="tg tg-ok">entra</span>
 </div>
-<div class="lin" style="grid-template-columns:1.4fr 1fr 1fr;">
-<span>CIRURGIA</span><b>&lt; 0,001</b><span class="ok">entra</span>
+<div class="lin" style="grid-template-columns:1.5fr 1fr 1fr;">
+<span>CIRURGIA</span><b>&lt; 0,001</b><span class="tg tg-ok">entra</span>
 </div>
-<div class="lin" style="grid-template-columns:1.4fr 1fr 1fr;">
-<span>QUIMIO</span><b>&lt; 0,001</b><span class="ok">entra</span>
+<div class="lin" style="grid-template-columns:1.5fr 1fr 1fr;">
+<span>QUIMIO</span><b>&lt; 0,001</b><span class="tg tg-ok">entra</span>
 </div>
-<div class="lin" style="grid-template-columns:1.4fr 1fr 1fr;">
-<span>ESCOLARI</span><b>&lt; 0,001</b><span class="ok">entra</span>
+<div class="lin" style="grid-template-columns:1.5fr 1fr 1fr;">
+<span>ESCOLARI</span><b>&lt; 0,001</b><span class="tg tg-ok">entra</span>
 </div>
-<div class="lin" style="grid-template-columns:1.4fr 1fr 1fr;">
-<span>SEXO</span><b>0,113</b><span class="no">não entra</span>
+<div class="lin" style="grid-template-columns:1.5fr 1fr 1fr;">
+<span>IDADE (+10 anos)</span><b>&lt; 0,001</b><span class="tg tg-ok">entra</span>
 </div>
-<div class="lin" style="grid-template-columns:1.4fr 1fr 1fr;">
-<span>IDADE10</span><b>&lt; 0,001</b><span class="ok">entra</span>
+<div class="lin" style="grid-template-columns:1.5fr 1fr 1fr;">
+<span>SEXO</span><b>0,113</b><span class="tg tg-no">não entra</span>
 </div>
 </div>
 </div><div class="column" style="width:2%;">
@@ -851,23 +965,23 @@ Passo 1 · uma variável por vez
 <h3 class="ttl">
 Passo 2 · modelo múltiplo
 </h3>
-<div class="lin lin-h" style="grid-template-columns:1.4fr 1fr 1fr;">
+<div class="lin lin-h" style="grid-template-columns:1.5fr 1fr 1fr;">
 <span>Variável retirada</span><span>p (TRV)</span><span>Decisão</span>
 </div>
-<div class="lin" style="grid-template-columns:1.4fr 1fr 1fr;">
-<span>ECGRUP</span><b>&lt; 0,001</b><span class="ok">fica</span>
+<div class="lin" style="grid-template-columns:1.5fr 1fr 1fr;">
+<span>ECGRUP</span><b>&lt; 0,001</b><span class="tg tg-ok">fica</span>
 </div>
-<div class="lin" style="grid-template-columns:1.4fr 1fr 1fr;">
-<span>CIRURGIA</span><b>&lt; 0,001</b><span class="ok">fica</span>
+<div class="lin" style="grid-template-columns:1.5fr 1fr 1fr;">
+<span>CIRURGIA</span><b>&lt; 0,001</b><span class="tg tg-ok">fica</span>
 </div>
-<div class="lin" style="grid-template-columns:1.4fr 1fr 1fr;">
-<span>QUIMIO</span><b>&lt; 0,001</b><span class="ok">fica</span>
+<div class="lin" style="grid-template-columns:1.5fr 1fr 1fr;">
+<span>QUIMIO</span><b>&lt; 0,001</b><span class="tg tg-ok">fica</span>
 </div>
-<div class="lin" style="grid-template-columns:1.4fr 1fr 1fr;">
-<span>ESCOLARI</span><b>&lt; 0,001</b><span class="ok">fica</span>
+<div class="lin" style="grid-template-columns:1.5fr 1fr 1fr;">
+<span>ESCOLARI</span><b>&lt; 0,001</b><span class="tg tg-ok">fica</span>
 </div>
-<div class="lin" style="grid-template-columns:1.4fr 1fr 1fr;">
-<span>IDADE10</span><b>0,042</b><span class="ok">fica</span>
+<div class="lin" style="grid-template-columns:1.5fr 1fr 1fr;">
+<span>IDADE (+10 anos)</span><b>0,042</b><span class="tg tg-ok">fica</span>
 </div>
 <div class="sub">
 Nenhuma variável sai no passo 2.
@@ -875,8 +989,11 @@ Nenhuma variável sai no passo 2.
 </div>
 </div></div>
 </section>
-<section id="etapa-ii-passos-3-a-5" class="slide level2" data-number="3.8">
-<h2><span class="header-section-number">3.8</span> Etapa II · Passos 3 a 5</h2>
+<section id="etapa-ii-passos-3-a-5" class="slide level2" data-number="3.9">
+<h2><span class="header-section-number">3.9</span> Etapa II · Passos 3 a 5</h2>
+<div class="msg">
+<span class="msg-k">Resultado</span><span>O efeito marginal do <b>sexo desaparece após o ajuste</b> (p = 0,914). As interações <b>ECGRUP × CIRURGIA</b> e <b>ECGRUP × QUIMIO</b> são significativas.</span>
+</div>
 <div class="columns">
 <div class="column" style="width:49%;">
 <div class="c-g">
@@ -884,13 +1001,19 @@ Nenhuma variável sai no passo 2.
 Passos 3 e 4 · reentrada e reavaliação
 </h3>
 <div class="in-g">
+<div class="lbl">
+Passo 3 · reentrada das descartadas
+</div>
 <div class="txt">
-<b>Passo 3 — reentrada das descartadas:</b> nada a reentrar (nenhuma variável saiu no passo 2).
+Nada a reentrar: nenhuma variável saiu no passo 2.
 </div>
 </div>
 <div class="in-g">
+<div class="lbl">
+Passo 4 · reavaliação das excluídas no passo 1
+</div>
 <div class="txt">
-<b>Passo 4 — reavaliação das excluídas no passo 1:</b> SEXO com p (TRV) = 0,914 → <span class="no">não entra</span>. O efeito marginal do sexo desaparece após ajuste.
+<b>SEXO</b> · TRV = 0,01 · p = 0,914 → <span class="tg tg-no">não entra</span>
 </div>
 </div>
 </div>
@@ -906,7 +1029,7 @@ Passo 5 · interações (até duas)
 <b>ECGRUP × CIRURGIA</b> · cirurgia em 49% no estágio I e 11% no IV
 </div>
 <div class="sub">
-TRV = 27,52 (gl 5) · p &lt; 0,001 → <span class="ok">entra</span>
+TRV = 27,52 (gl 5) · p &lt; 0,001 → <span class="tg tg-ok">entra</span>
 </div>
 </div>
 <div class="in-d">
@@ -914,21 +1037,21 @@ TRV = 27,52 (gl 5) · p &lt; 0,001 → <span class="ok">entra</span>
 <b>ECGRUP × QUIMIO</b> · quimioterapia em 27% nos estágios I/II e 47% no IV
 </div>
 <div class="sub">
-TRV = 93,18 (gl 5) · p &lt; 0,001 → <span class="ok">entra</span>
+TRV = 93,18 (gl 5) · p &lt; 0,001 → <span class="tg tg-ok">entra</span>
 </div>
 </div>
 </div>
 </div></div>
 </section>
-<section id="etapa-ii-modelo-selecionado" class="slide level2" data-number="3.9">
-<h2><span class="header-section-number">3.9</span> Etapa II · Modelo Selecionado</h2>
+<section id="etapa-ii-modelo-selecionado" class="slide level2" data-number="3.10">
+<h2><span class="header-section-number">3.10</span> Etapa II · Modelo Selecionado</h2>
 <div class="columns">
 <div class="column" style="width:32%;">
 <div class="c-g">
 <h3 class="ttl">
 Permaneceram
 </h3>
-<div class="txt" style="display:flex; flex-direction:column; gap:7px; font-size:0.55em;">
+<div class="txt" style="display:flex; flex-direction:column; gap:8px; font-size:.55em;">
 <div>
 <b>ECGRUP</b> — principal fator prognóstico
 </div>
@@ -942,7 +1065,7 @@ Permaneceram
 <b>ESCOLARI</b> — acesso a cuidado
 </div>
 <div>
-<b>IDADE10</b> — limítrofe (p = 0,064), mantida pelo protocolo a 10%
+<b>IDADE (+10 anos)</b> — limítrofe (p = 0,064), mantida pelo protocolo a 10%
 </div>
 </div>
 </div>
@@ -953,7 +1076,7 @@ Permaneceram
 <h3 class="ttl">
 Saíram
 </h3>
-<div class="txt" style="display:flex; flex-direction:column; gap:7px; font-size:0.55em;">
+<div class="txt" style="display:flex; flex-direction:column; gap:8px; font-size:.55em;">
 <div>
 <b>SEXO</b> — passo 1 (p = 0,113); não reentrou no passo 4 (p = 0,914)
 </div>
@@ -969,7 +1092,7 @@ Saíram
 <h3 class="ttl">
 Interações
 </h3>
-<div class="txt" style="display:flex; flex-direction:column; gap:7px; font-size:0.55em;">
+<div class="txt" style="display:flex; flex-direction:column; gap:8px; font-size:.55em;">
 <div>
 <b>ECGRUP × CIRURGIA</b> (p &lt; 0,001)
 </div>
@@ -982,114 +1105,181 @@ Interações
 </div>
 </div>
 </div></div>
+<div class="formula">
+Surv(tempo, cens) ~ <span>ECGRUP + CIRURGIA + QUIMIO + ESCOLARI + IDADE10 + ECGRUP × CIRURGIA + ECGRUP × QUIMIO</span>
+</div>
 </section>
-<section id="etapa-ii-reavaliação-na-distribuição-final" class="slide level2" data-number="3.10">
-<h2><span class="header-section-number">3.10</span> Etapa II · Reavaliação na Distribuição Final</h2>
+<section id="etapa-ii-reavaliação-na-distribuição-final" class="slide level2" data-number="3.11">
+<h2><span class="header-section-number">3.11</span> Etapa II · Reavaliação na Distribuição Final</h2>
+<div class="msg">
+<span class="msg-k">Atenção</span><span>O <b>TRV a 10% mantém todos os termos</b>, mas o <b>BIC</b>, mais parcimonioso, retiraria <b>IDADE</b> e <b>ECGRUP × CIRURGIA</b>. A decisão segue o protocolo (TRV) e a relevância clínica.</span>
+</div>
 <div class="c-d">
 <h3 class="ttl">
 Retirada de cada termo (hierarquia respeitada)
 </h3>
-<div class="lin lin-h" style="grid-template-columns:1.8fr 1fr 0.6fr 1fr 1fr 1fr;">
-<span>Termo</span><span>TRV</span><span>gl</span><span>p-valor</span><span>ΔAIC</span><span>ΔBIC</span>
+<div class="lin lin-h" style="grid-template-columns:1.8fr .8fr .5fr .9fr .8fr .8fr 1.2fr;">
+<span>Termo</span><span>TRV</span><span>gl</span><span>p-valor</span><span>ΔAIC</span><span>ΔBIC</span><span>Leitura do BIC</span>
 </div>
-<div class="lin" style="grid-template-columns:1.8fr 1fr 0.6fr 1fr 1fr 1fr;">
-<span>ESCOLARI</span><b>42,02</b><span>5</span><b>&lt; 0,001</b><span>+32,0</span><span>+0,3</span>
+<div class="lin" style="grid-template-columns:1.8fr .8fr .5fr .9fr .8fr .8fr 1.2fr;">
+<span>ESCOLARI</span><b>42,02</b><span>5</span><b>&lt; 0,001</b><span class="pos">+32,0</span><span>+0,3</span><span class="tg tg-ref">indiferente</span>
 </div>
-<div class="lin" style="grid-template-columns:1.8fr 1fr 0.6fr 1fr 1fr 1fr;">
-<span>IDADE10</span><b>3,43</b><span>1</span><b>0,064</b><span>+1,4</span><span>−4,9</span>
+<div class="lin" style="grid-template-columns:1.8fr .8fr .5fr .9fr .8fr .8fr 1.2fr;">
+<span>IDADE (+10 anos)</span><b>3,43</b><span>1</span><b>0,064</b><span class="pos">+1,4</span><span class="neg">−4,9</span><span class="tg tg-gold">retiraria</span>
 </div>
-<div class="lin" style="grid-template-columns:1.8fr 1fr 0.6fr 1fr 1fr 1fr;">
-<span>ECGRUP × CIRURGIA</span><b>21,09</b><span>5</span><b>&lt; 0,001</b><span>+11,1</span><span>−20,6</span>
+<div class="lin" style="grid-template-columns:1.8fr .8fr .5fr .9fr .8fr .8fr 1.2fr;">
+<span>ECGRUP × CIRURGIA</span><b>21,09</b><span>5</span><b>&lt; 0,001</b><span class="pos">+11,1</span><span class="neg">−20,6</span><span class="tg tg-gold">retiraria</span>
 </div>
-<div class="lin" style="grid-template-columns:1.8fr 1fr 0.6fr 1fr 1fr 1fr;">
-<span>ECGRUP × QUIMIO</span><b>86,75</b><span>5</span><b>&lt; 0,001</b><span>+76,8</span><span>+45,0</span>
+<div class="lin" style="grid-template-columns:1.8fr .8fr .5fr .9fr .8fr .8fr 1.2fr;">
+<span>ECGRUP × QUIMIO</span><b>86,75</b><span>5</span><b>&lt; 0,001</b><span class="pos">+76,8</span><span class="pos">+45,0</span><span class="tg tg-ok">mantém</span>
 </div>
 <div class="sub">
-ΔAIC/ΔBIC &gt; 0: retirar o termo piora o ajuste. O BIC retiraria IDADE10 e ECGRUP×CIRURGIA, mas o <b>TRV a 10% os mantém</b>. Efeitos principais de ECGRUP, CIRURGIA e QUIMIO são protegidos pela hierarquia (não saem isoladamente).
+Δ &gt; 0: retirar o termo piora o ajuste. Os efeitos principais de ECGRUP, CIRURGIA e QUIMIO são protegidos pela hierarquia e não saem isoladamente.
 </div>
 </div>
 </section>
-<section id="etapa-ii-distribuição-com-covariáveis" class="slide level2" data-number="3.11">
-<h2><span class="header-section-number">3.11</span> Etapa II · Distribuição com Covariáveis</h2>
+<section id="etapa-ii-distribuição-com-covariáveis" class="slide level2" data-number="3.12">
+<h2><span class="header-section-number">3.12</span> Etapa II · Distribuição com Covariáveis</h2>
+<div class="msg">
+<span class="msg-k">Resultado</span><span>Com as covariáveis, a <b>Gama Generalizada</b> segue com o menor AIC e BIC e a <b>log-normal</b> é rejeitada a 5% (p &lt; 0,001): <b>mesma conclusão da Etapa I</b>.</span>
+</div>
 <div class="c-d">
 <h3 class="ttl">
 Modelo com as covariáveis selecionadas
 </h3>
-<div class="lin lin-h" style="grid-template-columns:1.6fr 1fr 1fr 1fr 1.4fr;">
-<span>Modelo</span><span>AIC</span><span>BIC</span><span>p (TRV × GG)</span><span>Decisão</span>
+<div class="lin lin-h" style="grid-template-columns:1.7fr 1fr .9fr 1fr 1fr 1.2fr;">
+<span>Modelo</span><span>AIC</span><span>ΔAIC</span><span>BIC</span><span>p (TRV × GG)</span><span>Decisão</span>
 </div>
-<div class="lin" style="grid-template-columns:1.6fr 1fr 1fr 1fr 1.4fr;">
-<span>Exponencial</span><b>22.214,9</b><b>22.367,2</b><b>&lt; 0,001</b><span class="no">rejeitado</span>
+<div class="lin lin-best" style="grid-template-columns:1.7fr 1fr .9fr 1fr 1fr 1.2fr;">
+<span>Gama Generalizada</span><span>21.488,8</span><span>0</span><span>21.653,8</span><span>—</span><span class="tg tg-gold">referência</span>
 </div>
-<div class="lin" style="grid-template-columns:1.6fr 1fr 1fr 1fr 1.4fr;">
-<span>Weibull</span><b>21.801,5</b><b>21.960,2</b><b>&lt; 0,001</b><span class="no">rejeitado</span>
+<div class="lin" style="grid-template-columns:1.7fr 1fr .9fr 1fr 1fr 1.2fr;">
+<span>Log-normal</span><span>21.500,6</span><span>+11,7</span><span>21.659,2</span><b>&lt; 0,001</b><span class="tg tg-no">rejeitado</span>
 </div>
-<div class="lin" style="grid-template-columns:1.6fr 1fr 1fr 1fr 1.4fr;">
-<span>Log-normal</span><b>21.500,6</b><b>21.659,2</b><b>0,0002</b><span class="no">rejeitado</span>
+<div class="lin" style="grid-template-columns:1.7fr 1fr .9fr 1fr 1fr 1.2fr;">
+<span>Weibull</span><span>21.801,5</span><span>+312,7</span><span>21.960,2</span><b>&lt; 0,001</b><span class="tg tg-no">rejeitado</span>
 </div>
-<div class="lin" style="grid-template-columns:1.6fr 1fr 1fr 1fr 1.4fr;">
-<span>Gama</span><b>21.960,2</b><b>22.118,8</b><b>&lt; 0,001</b><span class="no">rejeitado</span>
+<div class="lin" style="grid-template-columns:1.7fr 1fr .9fr 1fr 1fr 1.2fr;">
+<span>Gama</span><span>21.960,2</span><span>+471,4</span><span>22.118,8</span><b>&lt; 0,001</b><span class="tg tg-no">rejeitado</span>
 </div>
-<div class="lin" style="grid-template-columns:1.6fr 1fr 1fr 1fr 1.4fr; color:#d9b054;">
-<span><b>Gama Generalizada</b></span><b>21.488,8</b><b>21.653,8</b><b>—</b><span>referência</span>
+<div class="lin" style="grid-template-columns:1.7fr 1fr .9fr 1fr 1fr 1.2fr;">
+<span>Exponencial</span><span>22.214,9</span><span>+726,1</span><span>22.367,2</span><b>&lt; 0,001</b><span class="tg tg-no">rejeitado</span>
 </div>
 <div class="sub">
-A log-normal é a mais próxima (ΔAIC = 11,7; TRV = 13,7), mas rejeitada a 5%. <b>Distribuição final: Gama Generalizada</b> (Q = 0,17; IC95% 0,08–0,26), coerente com a Etapa I.
+A log-normal é a mais próxima (ΔAIC = 11,7; ΔBIC = 5,4; TRV = 13,7). <b>Distribuição final: Gama Generalizada</b> (Q = 0,17; IC95% 0,08–0,26). O sinal de Q difere da Etapa I (−0,42), o que pode refletir as covariáveis explicarem parte da heterogeneidade; a escolha da família não muda.
 </div>
 </div>
 </section>
-<section id="etapa-ii-diagnóstico" class="slide level2" data-number="3.12">
-<h2><span class="header-section-number">3.12</span> Etapa II · Diagnóstico</h2>
-<div class="columns">
-<div class="column" style="width:49%;">
-<div class="lbl" style="margin-bottom:6px;">
-Resíduos de Cox-Snell
+<section id="etapa-ii-diagnóstico-cox-snell" class="slide level2" data-number="3.13">
+<h2><span class="header-section-number">3.13</span> Etapa II · Diagnóstico · Cox-Snell</h2>
+<div class="msg">
+<span class="msg-k">Leitura</span><span>A KM dos resíduos acompanha a referência Exp(1) (reta de 45° no risco acumulado), indicando <b>adequação global</b>; desvios na cauda direita refletem poucos pacientes em risco.</span>
 </div>
-<p><img data-src="plots/coxsnell.png" style="width:100.0%"></p>
+<div class="plot">
+<p><img data-src="plots/coxsnell.png" style="width:88.0%"></p>
+</div>
+</section>
+<section id="etapa-ii-diagnóstico-resíduos-quantílicos" class="slide level2" data-number="3.14">
+<h2><span class="header-section-number">3.14</span> Etapa II · Diagnóstico · Resíduos Quantílicos</h2>
+<div class="columns">
+<div class="column" style="width:48%;">
+<div class="plot">
+<p><img data-src="plots/qq_quantilico.png" height="480"></p>
+</div>
 </div><div class="column" style="width:2%;">
 
-</div><div class="column" style="width:49%;">
-<div class="lbl" style="margin-bottom:6px;">
-Resíduos quantílicos aleatorizados
+</div><div class="column" style="width:50%;">
+<div class="c-g" style="height:auto;">
+<h3 class="ttl">
+Leitura
+</h3>
+<div class="in-g">
+<div class="txt">
+Pontos dentro da banda de confiança, salvo eventuais desvios nas caudas.
 </div>
-<p><img data-src="plots/qq_quantilico.png" style="width:100.0%"></p>
+</div>
+</div>
+<div style="height:12px;">
+
+</div>
+<div class="callout callout-none no-icon callout-style-simple">
+<div class="callout-body">
+<div class="callout-content">
+<b>Cautela com QUIMIO.</b> As curvas se cruzam na Parte I, o que ameaça a hipótese de tempo acelerado. O efeito não é lido isoladamente: ele depende do estágio (interação ECGRUP × QUIMIO).
+</div>
+</div>
+</div>
 </div></div>
-<div class="sub" style="margin-top:10px;">
-Cox-Snell: a KM dos resíduos acompanha a referência Exp(1) (reta de 45° no risco acumulado), indicando adequação global; desvios na cauda direita refletem poucos pacientes em risco. Quantílicos: pontos dentro da banda, salvo eventuais desvios nas caudas. <b>QUIMIO:</b> as curvas se cruzam na Parte I — cautela com a hipótese de tempo acelerado; o efeito é lido por estágio (interação).
-</div>
 </section>
-<section id="etapa-ii-razão-de-tempos-medianos" class="slide level2" data-number="3.13">
-<h2><span class="header-section-number">3.13</span> Etapa II · Razão de Tempos Medianos</h2>
-<img data-src="plots/forest_rtm.png" class="quarto-figure quarto-figure-center" height="540">
+<section id="etapa-ii-razão-de-tempos-medianos" class="slide level2" data-number="3.15">
+<h2><span class="header-section-number">3.15</span> Etapa II · Razão de Tempos Medianos</h2>
+<div class="columns">
+<div class="column" style="width:60%;">
+<div class="plot">
+<p><img data-src="plots/forest_rtm.png" height="540"></p>
+</div>
+</div><div class="column" style="width:2%;">
+
+</div><div class="column" style="width:38%;">
+<div class="c-g" style="height:auto;">
+<h3 class="ttl">
+Principais efeitos
+</h3>
+<div class="txt" style="display:flex; flex-direction:column; gap:7px; font-size:.52em;">
+<div>
+<b>Estadiamento</b> (vs I, sem tratamento): II 0,50 · III 0,12 · <b>IV 0,05</b> (0,04–0,07)
+</div>
+<div>
+<b>Cirurgia</b> (estágio I): <b>4,52</b> (3,23–6,32)
+</div>
+<div>
+<b>Escolaridade</b> (vs analfabeto): médio 1,36 · <b>superior 1,90</b> (1,39–2,60)
+</div>
+<div>
+<b>Idade</b> (+10 anos): 0,96 (0,92–1,00)
+</div>
+</div>
 <div class="sub">
 Referência: Estágio I · sem cirurgia · sem quimio · Analfabeto. Com interações, os efeitos principais valem na categoria de referência da outra variável.
 </div>
+</div>
+<div style="height:10px;">
+
+</div>
+<div class="callout callout-none no-icon callout-style-simple">
+<div class="callout-body">
+<div class="callout-content">
+<b>“Sem informação” no estadiamento</b> tem RTM 0,12, semelhante ao estágio III: não são dados ao acaso, o que <b>justifica mantê-los</b> como categoria.
+</div>
+</div>
+</div>
+</div></div>
 </section>
-<section id="etapa-ii-interpretando-as-interações" class="slide level2" data-number="3.14">
-<h2><span class="header-section-number">3.14</span> Etapa II · Interpretando as Interações</h2>
+<section id="etapa-ii-interpretando-as-interações" class="slide level2" data-number="3.16">
+<h2><span class="header-section-number">3.16</span> Etapa II · Interpretando as Interações</h2>
+<div class="msg">
+<span class="msg-k">Resultado</span><span><b>Cirurgia</b> associa-se a maior tempo mediano em todos os estágios, porém <b>menos no IV</b>; a <b>quimioterapia</b> não mostra efeito no estágio I e passa a ter associação crescente nos estágios avançados.</span>
+</div>
 <div class="columns">
 <div class="column" style="width:49%;">
 <div class="c-g">
 <h3 class="ttl">
 Cirurgia (vs não) por estágio
 </h3>
-<div class="lin lin-h" style="grid-template-columns:1.4fr 1fr;">
-<span>Estágio</span><span>RTM combinada</span>
+<div class="lin lin-h" style="grid-template-columns:.7fr 1.7fr 1.5fr;">
+<span>Estágio</span><span>RTM (IC95%)</span><span>Leitura</span>
 </div>
-<div class="lin" style="grid-template-columns:1.4fr 1fr;">
-<span>I</span><b>4,52</b>
+<div class="lin" style="grid-template-columns:.7fr 1.7fr 1.5fr;">
+<b>I</b><b>4,52</b><span class="tg tg-ref">estimativa pontual</span>
 </div>
-<div class="lin" style="grid-template-columns:1.4fr 1fr;">
-<span>II</span><b>5,12</b>
+<div class="lin" style="grid-template-columns:.7fr 1.7fr 1.5fr;">
+<b>II</b><b>5,12</b><span class="tg tg-ref">estimativa pontual</span>
 </div>
-<div class="lin" style="grid-template-columns:1.4fr 1fr;">
-<span>III</span><b>6,03</b>
+<div class="lin" style="grid-template-columns:.7fr 1.7fr 1.5fr;">
+<b>III</b><b>6,03</b><span class="tg tg-ref">estimativa pontual</span>
 </div>
-<div class="lin" style="grid-template-columns:1.4fr 1fr;">
-<span>IV</span><b>2,77</b>
-</div>
-<div class="sub">
-Benefício da cirurgia em todos os estágios, porém <b>menor no IV</b>.
+<div class="lin" style="grid-template-columns:.7fr 1.7fr 1.5fr;">
+<b>IV</b><b>2,77</b><span class="tg tg-ref">estimativa pontual</span>
 </div>
 </div>
 </div><div class="column" style="width:2%;">
@@ -1099,38 +1289,33 @@ Benefício da cirurgia em todos os estágios, porém <b>menor no IV</b>.
 <h3 class="ttl">
 Quimioterapia (vs não) por estágio
 </h3>
-<div class="lin lin-h" style="grid-template-columns:1.4fr 1fr;">
-<span>Estágio</span><span>RTM combinada</span>
+<div class="lin lin-h" style="grid-template-columns:.7fr 1.7fr 1.5fr;">
+<span>Estágio</span><span>RTM (IC95%)</span><span>Leitura</span>
 </div>
-<div class="lin" style="grid-template-columns:1.4fr 1fr;">
-<span>I</span><b>1,14</b>
+<div class="lin" style="grid-template-columns:.7fr 1.7fr 1.5fr;">
+<b>I</b><b>1,14</b><span class="tg tg-ref">estimativa pontual</span>
 </div>
-<div class="lin" style="grid-template-columns:1.4fr 1fr;">
-<span>II</span><b>1,27</b>
+<div class="lin" style="grid-template-columns:.7fr 1.7fr 1.5fr;">
+<b>II</b><b>1,27</b><span class="tg tg-ref">estimativa pontual</span>
 </div>
-<div class="lin" style="grid-template-columns:1.4fr 1fr;">
-<span>III</span><b>2,56</b>
+<div class="lin" style="grid-template-columns:.7fr 1.7fr 1.5fr;">
+<b>III</b><b>2,56</b><span class="tg tg-ref">estimativa pontual</span>
 </div>
-<div class="lin" style="grid-template-columns:1.4fr 1fr;">
-<span>IV</span><b>3,90</b>
-</div>
-<div class="sub">
-Sem efeito no estágio I; associação crescente nos estágios avançados.
+<div class="lin" style="grid-template-columns:.7fr 1.7fr 1.5fr;">
+<b>IV</b><b>3,90</b><span class="tg tg-ref">estimativa pontual</span>
 </div>
 </div>
 </div></div>
-<div class="sub" style="margin-top:8px;">
-RTM combinadas = produto dos efeitos (estimativas pontuais; IC requer a matriz de covariância). Demais efeitos: Estágio IV vs I = 0,05 (0,04–0,07) entre não tratados; Ensino superior vs Analfabeto = 1,90 (1,39–2,60); Idade (+10 anos) = 0,96 (0,92–1,00).
+<div class="sub" style="margin-top:10px; color:#cfe0d5;">
+Estimativas pontuais (produto dos efeitos); IC indisponível nesta renderização. Demais efeitos: Estágio IV vs I = 0,05 (0,04–0,07) entre não tratados; Ensino superior vs Analfabeto = 1,90 (1,39–2,60); Idade (+10 anos) = 0,96 (0,92–1,00).
 </div>
 </section>
-<section id="etapa-ii-perfis-previstos" class="slide level2" data-number="3.15">
-<h2><span class="header-section-number">3.15</span> Etapa II · Perfis Previstos</h2>
+<section id="etapa-ii-perfis-previstos" class="slide level2" data-number="3.17">
+<h2><span class="header-section-number">3.17</span> Etapa II · Perfis Previstos</h2>
 <div class="columns">
 <div class="column" style="width:58%;">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="plots/curvas_perfis.png" class="quarto-figure quarto-figure-center" style="width:100.0%"></p>
-</figure>
+<div class="plot">
+<p><img data-src="plots/curvas_perfis.png" style="width:100.0%"></p>
 </div>
 </div><div class="column" style="width:2%;">
 
@@ -1152,44 +1337,57 @@ Estágio IV · sem cirurgia · sem quimio · Analfabeto · 70 anos → <b>≈ 2,
 Favorável
 </div>
 <div class="txt">
-Estágio I · cirurgia · quimio · Ensino superior · 56 anos → mediana <b>não atingida no seguimento</b> (modelo extrapola ≈ 384 meses).
+Estágio I · cirurgia · quimio · Ensino superior · 56 anos → mediana <b>não atingida no seguimento</b> (o modelo extrapola ≈ 384 meses).
 </div>
 </div>
-<div class="sub">
-Perfis extremos e ilustrativos; a mediana favorável é extrapolação além do acompanhamento — leitura apenas qualitativa do contraste.
+<div class="callout callout-none no-icon callout-style-simple">
+<div class="callout-body">
+<div class="callout-content">
+<b>Leitura qualitativa.</b> Perfis extremos e ilustrativos; a mediana favorável é extrapolação além do acompanhamento (máx. 143 meses).
+</div>
+</div>
 </div>
 </div>
 </div></div>
 </section>
-<section id="etapa-ii-sensibilidade-casos-completos" class="slide level2" data-number="3.16">
-<h2><span class="header-section-number">3.16</span> Etapa II · Sensibilidade (casos completos)</h2>
+<section id="etapa-ii-sensibilidade-casos-completos" class="slide level2" data-number="3.18">
+<h2><span class="header-section-number">3.18</span> Etapa II · Sensibilidade (casos completos)</h2>
+<div class="msg">
+<span class="msg-k">Resultado</span><span>A <b>direção é preservada nos 16 termos</b> e as magnitudes são parecidas; só a <b>escolaridade superior atenua</b> (1,90 → 1,37). Conclusões estáveis ao tratamento dos ausentes.</span>
+</div>
 <div class="c-g">
 <h3 class="ttl">
 Reajuste sem “Sem informação” / “Não se aplica”
 </h3>
-<div class="lin lin-h" style="grid-template-columns:1.8fr 1fr 1fr 1fr;">
+<div class="lin lin-h" style="grid-template-columns:1.8fr 1fr 1.2fr 1fr;">
 <span>Termo</span><span>RTM principal</span><span>RTM casos completos</span><span>Mesma direção</span>
 </div>
-<div class="lin" style="grid-template-columns:1.8fr 1fr 1fr 1fr;">
-<span>Estágio II</span><b>0,50</b><b>0,52</b><span class="ok">sim</span>
+<div class="lin" style="grid-template-columns:1.8fr 1fr 1.2fr 1fr;">
+<span>Estágio II</span><b>0,50</b><b>0,52</b><span class="tg tg-ok">sim</span>
 </div>
-<div class="lin" style="grid-template-columns:1.8fr 1fr 1fr 1fr;">
-<span>Estágio III</span><b>0,12</b><b>0,15</b><span class="ok">sim</span>
+<div class="lin" style="grid-template-columns:1.8fr 1fr 1.2fr 1fr;">
+<span>Estágio III</span><b>0,12</b><b>0,15</b><span class="tg tg-ok">sim</span>
 </div>
-<div class="lin" style="grid-template-columns:1.8fr 1fr 1fr 1fr;">
-<span>Estágio IV</span><b>0,05</b><b>0,07</b><span class="ok">sim</span>
+<div class="lin" style="grid-template-columns:1.8fr 1fr 1.2fr 1fr;">
+<span>Estágio IV</span><b>0,05</b><b>0,07</b><span class="tg tg-ok">sim</span>
 </div>
-<div class="lin" style="grid-template-columns:1.8fr 1fr 1fr 1fr;">
-<span>Cirurgia (Sim)</span><b>4,52</b><b>4,36</b><span class="ok">sim</span>
+<div class="lin" style="grid-template-columns:1.8fr 1fr 1.2fr 1fr;">
+<span>Cirurgia (Sim)</span><b>4,52</b><b>4,36</b><span class="tg tg-ok">sim</span>
 </div>
-<div class="lin" style="grid-template-columns:1.8fr 1fr 1fr 1fr;">
-<span>Ensino superior</span><b>1,90</b><b>1,37</b><span class="ok">sim</span>
+<div class="lin" style="grid-template-columns:1.8fr 1fr 1.2fr 1fr;">
+<span>Quimioterapia (Sim)</span><b>1,14</b><b>1,30</b><span class="tg tg-ok">sim</span>
 </div>
-<div class="lin" style="grid-template-columns:1.8fr 1fr 1fr 1fr;">
-<span>Idade (+10 anos)</span><b>0,96</b><b>0,94</b><span class="ok">sim</span>
+<div class="lin" style="grid-template-columns:1.8fr 1fr 1.2fr 1fr;">
+<span>Ensino médio</span><b>1,36</b><b>1,12</b><span class="tg tg-ok">sim</span>
+</div>
+<div class="lin" style="grid-template-columns:1.8fr 1fr 1.2fr 1fr;">
+<span>Ensino superior</span><b>1,90</b><b>1,37</b><span class="tg tg-ok">sim</span>
+</div>
+<div class="lin" style="grid-template-columns:1.8fr 1fr 1.2fr 1fr;">
+<span>Idade (+10 anos)</span><b>0,96</b><b>0,94</b><span class="tg tg-ok">sim</span>
 </div>
 <div class="sub">
-Direção preservada em <b>todos os 16 termos</b>; magnitudes semelhantes (escolaridade superior atenua). Conclusões estáveis ao tratamento dos ausentes.
+8 dos 16 termos exibidos; os demais (escolaridades intermediárias e interações) também mantêm a direção.
 </div>
 </div>
 </section></section>
@@ -1201,8 +1399,8 @@ Direção preservada em <b>todos os 16 termos</b>; magnitudes semelhantes (escol
 <section id="conclusão-1" class="slide level2" data-number="4.1">
 <h2><span class="header-section-number">4.1</span> Conclusão</h2>
 <div class="c-k" style="margin-bottom:16px; border-left:4px solid #b8862a;">
-<div style="font-size:0.7em; font-weight:600; color:#e8f0ea; line-height:1.55;">
-<p>A distribuição <b style="color:#d9b054;">Gama Generalizada</b> descreveu melhor o tempo até o óbito, e <b style="color:#d9b054;">estadiamento, cirurgia, quimioterapia (por estágio), escolaridade e idade</b> permaneceram associadas à sobrevida quando analisadas em conjunto.</p>
+<div style="font-size:.7em; font-weight:600; color:#e8f0ea; line-height:1.55;">
+<p>A distribuição <b style="color:#d9b054;">Gama Generalizada</b> descreveu melhor o tempo até o óbito, e <b style="color:#d9b054;">estadiamento, cirurgia, quimioterapia (por estágio) e escolaridade</b> permaneceram associados à sobrevida quando analisados em conjunto; a <b style="color:#d9b054;">idade</b> teve associação limítrofe.</p>
 </div>
 </div>
 <div class="columns">
@@ -1211,7 +1409,7 @@ Direção preservada em <b>todos os 16 termos</b>; magnitudes semelhantes (escol
 <h3 class="ttl">
 Distribuição
 </h3>
-<div class="txt" style="font-size:0.55em;">
+<div class="txt" style="font-size:.55em;">
 Gama Generalizada nas duas etapas (menor AIC/BIC; modelos simples rejeitados pelo TRV). Risco flexível, não constante; Q = 0,17 no modelo final.
 </div>
 </div>
@@ -1222,7 +1420,7 @@ Gama Generalizada nas duas etapas (menor AIC/BIC; modelos simples rejeitados pel
 <h3 class="ttl">
 Maiores efeitos
 </h3>
-<div class="txt" style="display:flex; flex-direction:column; gap:7px; font-size:0.5em;">
+<div class="txt" style="display:flex; flex-direction:column; gap:7px; font-size:.5em;">
 <div>
 Estágio IV vs I (não tratados): <b>RTM 0,05</b> (0,04–0,07) · −95%
 </div>
@@ -1233,7 +1431,7 @@ Cirurgia no Estágio I: <b>RTM 4,52</b> (3,23–6,32)
 Ensino superior vs Analfabeto: <b>RTM 1,90</b> (1,39–2,60)
 </div>
 <div>
-QUIMIO no Estágio IV: <b>≈ 3,9</b> (combinada)
+Quimio no Estágio IV: <b>RTM ≈ 3,90</b> (combinada)
 </div>
 </div>
 </div>
@@ -1244,7 +1442,7 @@ QUIMIO no Estágio IV: <b>≈ 3,9</b> (combinada)
 <h3 class="ttl">
 Limitações
 </h3>
-<div class="txt" style="display:flex; flex-direction:column; gap:7px; font-size:0.5em;">
+<div class="txt" style="display:flex; flex-direction:column; gap:7px; font-size:.5em;">
 <div>
 — Estudo observacional: associação não é causa
 </div>
@@ -1270,10 +1468,10 @@ Limitações
 <div style="font-size:1.8em; font-weight:800; color:#d9b054;">
 Obrigado!
 </div>
-<div style="font-size:0.7em; color:#cfe0d5; margin-top:10px;">
+<div style="font-size:.7em; color:#cfe0d5; margin-top:10px;">
 Caio Salviano · caiosalviano@id.uff.br
 </div>
-<div style="font-size:0.6em; color:#cfe0d5;">
+<div style="font-size:.6em; color:#cfe0d5;">
 Universidade Federal Fluminense · Análise de Sobrevivência e Confiabilidade
 </div>
 </div>

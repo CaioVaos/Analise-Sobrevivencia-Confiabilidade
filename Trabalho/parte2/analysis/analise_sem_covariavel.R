@@ -9,6 +9,7 @@
 #   Trabalho/parte2/plots/*                -> .RDS e .PNG com os nomes do index.qmd
 # Metodologia (Cap. 13): 5 distribuições; escolha conjunta por KM x modelo,
 # linearização, AIC/BIC e TRV contra a Gama Generalizada.
+# (Não há seleção de variáveis nesta etapa — script inalterado.)
 # =============================================================================
 
 # 1. Setup --------------------------------------------------------------------
@@ -18,7 +19,7 @@ library(flexsurv)
 library(coin)
 library(ggplot2)
 library(qqplotr)
-library(broom)   # tidy() dos ajustes (como no Cap. 16)
+library(broom)
 
 dir_dados <- "Trabalho/data"
 dir_saida <- "Trabalho/parte2/data"
@@ -36,16 +37,11 @@ dists <- c(
 # 2. Decisões de base (única vez; a Etapa II lê o resultado salvo) -------------
 df <- as.data.frame(readRDS(file.path(dir_dados, "df_final.RDS")))
 
-# Decisão 1: tempo = 0 (registrados e óbitos removidos, para o slide)
 n_zero  <- sum(df$tempo <= 0)
 ev_zero <- sum(df$cens[df$tempo <= 0] == 1)
 cat("Pacientes com tempo = 0 removidos:", n_zero, "(", ev_zero, "óbitos )\n")
 df <- df %>% filter(tempo > 0)
 
-# Decisão 2: categorias sem informação
-# "categoria": mantém "Sem informação"/"Não se aplica" como categorias próprias
-#              (preserva o n; o TRV exige a mesma amostra em todos os modelos)
-# "completos": análise de casos completos
 ausentes <- "categoria"
 if (ausentes == "completos") {
   df <- df %>%
@@ -57,9 +53,8 @@ df <- df %>%
   mutate(
     ESCOLARI = droplevels(ESCOLARI),
     ECGRUP   = droplevels(ECGRUP),
-    IDADE10  = IDADE / 10                       # RTM por 10 anos
+    IDADE10  = IDADE / 10
   )
-# Referências explícitas (protegidas caso o nível não exista)
 if ("Analfabeto" %in% levels(df$ESCOLARI)) df$ESCOLARI <- relevel(df$ESCOLARI, ref = "Analfabeto")
 if ("Estágio I"  %in% levels(df$ECGRUP))   df$ECGRUP   <- relevel(df$ECGRUP,   ref = "Estágio I")
 
@@ -111,7 +106,6 @@ n_obitos <- format(sum(df$cens == 1), big.mark = ".", decimal.mark = ",")
 subtitulo <- paste0("Câncer de fígado (C22)  ·  FOSP 2014–2019  ·  n = ", n_total,
                     "  ·  ", n_obitos, " óbitos")
 
-# Formatação para os slides (vírgula decimal; "< 0,001"; NA -> "—")
 formatar_p <- function(p) {
   ifelse(is.na(p), "—",
          ifelse(p < 0.001, "< 0,001",
@@ -120,7 +114,6 @@ formatar_p <- function(p) {
 fmt_num <- function(x, d = 1) formatC(x, format = "f", digits = d,
                                       big.mark = ".", decimal.mark = ",")
 
-# Fórmula Surv(tempo, cens) ~ vars (vars vazio = modelo nulo)
 fml <- function(vars) {
   as.formula(paste("Surv(tempo, cens) ~",
                    if (length(vars) == 0) "1" else paste(vars, collapse = " + ")))
@@ -128,8 +121,6 @@ fml <- function(vars) {
 ajusta <- function(vars, dist = "gengamma", data = df) {
   flexsurvreg(fml(vars), data = data, dist = dist)
 }
-
-# TRV: m1 (completo) x m0 (restrito); gl = diferença do nº de parâmetros
 trv <- function(m1, m0) {
   est <- 2 * (m1$loglik - m0$loglik)
   gl  <- m1$npars - m0$npars
@@ -150,8 +141,6 @@ tabela_trv_gg <- function(ajustes) {
     cbind(Comparacao = paste(nm, "x GG"), Modelo = nm, trv(gg, ajustes[[nm]]))
   }))
 }
-
-# Texto pronto sobre a forma do risco (slides "Distribuição Escolhida"/Conclusão)
 forma_risco <- function(nome, fit) {
   r <- fit$res
   switch(nome,
@@ -170,8 +159,6 @@ forma_risco <- function(nome, fit) {
     "forma de risco não mapeada"
   )
 }
-
-# Salva ggplot como .RDS (chunks do qmd) e .PNG (embed ![](plots/...))
 salva_plot <- function(p, nome, w = 10, h = 6.5) {
   saveRDS(p, file.path(dir_plots, paste0(nome, ".RDS")))
   ggsave(file.path(dir_plots, paste0(nome, ".png")), p,
@@ -179,11 +166,9 @@ salva_plot <- function(p, nome, w = 10, h = 6.5) {
 }
 
 # 4. Etapa I — Modelos sem covariáveis -----------------------------------------
-# 4.1 Ajuste ----
 ajustes1 <- lapply(dists, function(d) ajusta(character(0), dist = d))
 ajustes1
 
-# 4.2 AIC, BIC e TRV ----
 tab_ic1  <- tabela_ic(ajustes1)
 tab_trv1 <- tabela_trv_gg(ajustes1)
 tab_trv1$Decisao <- ifelse(tab_trv1$P_valor > 0.05, "compatível com GG", "rejeitado")
@@ -191,7 +176,6 @@ tab_ic1[order(tab_ic1$AIC), ]
 tab_ic1[order(tab_ic1$BIC), ]
 tab_trv1
 
-# 4.3 Método gráfico via Kaplan-Meier ----
 ekm  <- survfit(Surv(tempo, cens) ~ 1, data = df)
 t_km <- ekm$time
 s_km <- ekm$surv
@@ -216,10 +200,6 @@ p_km_modelos <- ggplot(df_km, aes(x = S_KM, y = S_Modelo)) +
   tema_km
 salva_plot(p_km_modelos, "km_vs_modelos", w = 11, h = 6.5)
 
-# 4.4 Método da linearização (convenções exatas do Cap. 13) ----
-# Exponencial: -log S(t) x t | Weibull: log(-log S(t)) x log t |
-# Log-normal: Φ⁻¹(S(t)) x log t  (livro usa qnorm(S); reta com inclinação negativa)
-# Gama e Gama Generalizada não têm linearização.
 ok <- s_km > 0 & s_km < 1
 df_lin <- rbind(
   data.frame(Painel = "Exponencial: −log S(t) × t",
@@ -242,7 +222,6 @@ p_linearizacao <- ggplot(df_lin, aes(x = x, y = y)) +
   tema_km
 salva_plot(p_linearizacao, "linearizacao", w = 12, h = 4.5)
 
-# 4.5 Curvas dos modelos sobre a Kaplan-Meier ----
 t_grid <- seq(0.05, max(df$tempo), length.out = 200)
 df_curvas <- do.call(rbind, lapply(names(ajustes1), function(nm) {
   s <- summary(ajustes1[[nm]], t = t_grid, type = "survival", ci = FALSE)[[1]]
@@ -262,8 +241,6 @@ p_curvas_modelos <- ggplot() +
   tema_km
 salva_plot(p_curvas_modelos, "curvas_modelos", w = 10, h = 6.5)
 
-# 4.6 Distribuição sugerida pelos critérios ----
-# Menor AIC entre os não rejeitados pelo TRV (p > 0,05); integrar com os gráficos.
 compat1   <- c("Gama Generalizada", tab_trv1$Modelo[tab_trv1$P_valor > 0.05])
 sugestao1 <- tab_ic1$Modelo[tab_ic1$Modelo %in% compat1][
   which.min(tab_ic1$AIC[tab_ic1$Modelo %in% compat1])]
@@ -277,7 +254,6 @@ decisoes1 <- list(
   forma_risco     = forma_risco(sugestao1, ajustes1[[sugestao1]])
 )
 
-# 4.7 Base analítica e tabelas para os slides ----------------------------------
 vars_cat <- intersect(c("SEXO", "ESCOLARI", "ECGRUP", "CATEATEND",
                         "CIRURGIA", "RADIO", "QUIMIO"), names(df))
 base_analitica <- list(
