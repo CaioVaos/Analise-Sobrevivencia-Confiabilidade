@@ -156,3 +156,4 @@
 /* ---------- Auxiliares de layout ---------- */
 .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+

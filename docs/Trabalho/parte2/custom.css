@@ -1,147 +1,84 @@
-/* ===== Base ===== */
+/* =============================================================
+   ANÁLISE DE SOBREVIVÊNCIA E CONFIABILIDADE · CÂNCER DE FÍGADO (C22)
+   Folha de estilo única — base (custom.css) + Parte II (parte2.css)
+   -------------------------------------------------------------
+   Substitui os dois arquivos anteriores. No YAML do Quarto, use:
+       format:
+         revealjs:
+           css: estilo.css
+   ============================================================= */
+
+
+/* =============================================================
+   1. PALETA
+   ============================================================= */
+:root {
+  --bg:         #0b1712;   /* fundo geral (verde-petróleo escuro) */
+  --navy:       #10241d;   /* texto principal / cards escuros */
+  --verde:      #3f6b52;   /* verde institucional */
+  --verde-esc:  #2c5943;   /* verde escuro (destaques) */
+  --ouro:       #b8862a;   /* dourado */
+  --ouro-cl:    #d9b054;   /* dourado claro */
+  --cinza:      #6b7d73;   /* cinza-verde (rótulos) */
+  --cinza-esc:  #46564c;   /* cinza-verde escuro */
+  --sub:        #4f6257;   /* texto secundário */
+  --vermelho:   #a33a2d;   /* terracota (negativo / alerta) */
+  --card-g:     #e3efe6;   /* fundo do card verde */
+  --card-d:     #faf1de;   /* fundo do card dourado */
+  --branco:     #ffffff;
+}
+
+
+/* =============================================================
+   2. BASE DO REVEAL
+   ============================================================= */
 .reveal {
   font-family: "Inter", "Segoe UI", Arial, sans-serif;
   font-size: 30px;
-  background: #0b1712;
-  color: #10241d !important;
+  background: var(--bg);
+  color: var(--navy) !important;
 }
-.reveal .slides section,
+
 .reveal .slides section {
-  color: #10241d;
+  color: var(--navy);
 }
 
-
-/* ===== Títulos ===== */
-.reveal h1 {
-  font-size: 2.4em;
-  font-weight: 800;
-  color: #b8862a;
-}
-.reveal h2 {
-  font-size: 1.7em;
-  font-weight: 700;
-  color: #b8862a;
-}
-.reveal h3 {
-  font-size: 1.3em;
-  font-weight: 600;
-  color: #b8862a;
-}
-
-/* ===== Slide de título ===== */
-.reveal .title-slide {
-  background: url("media/transicao.png");
-  background-size: cover;
-  background-position: center;
-  color: #ffffff;
-}
-.reveal .slides section.glass {
-  background: rgba(8, 18, 14, 0.28);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-}
-.reveal .title-slide h1,
-.reveal .title-slide h2,
-.reveal .title-slide p {
-  color: #ffffff;
-}
-
-/* ===== Texto ===== */
 .reveal p,
 .reveal li {
   line-height: 1.45;
 }
 
-/* ===== Listas ===== */
 .reveal ul li::marker {
-  color: #b8862a;
+  color: var(--ouro);
 }
 
-/* ===== Caixas coloridas (use para destacar Evento/Censura/Tempo) ===== */
-.box-blue {
-  border-left: 8px solid #3f6b52;
-  background: #e9f1ea;
-  padding: 0.7em;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(16, 36, 29, 0.10);
-}
-.box-yellow {
-  border-left: 8px solid #b8862a;
-  background: #faf1de;
-  padding: 0.7em;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(16, 36, 29, 0.08);
-}
-.box-gray {
-  border-left: 8px solid #6b7d73;
-  background: #eef1ee;
-  padding: 0.7em;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(16, 36, 29, 0.07);
-}
-.box-terracotta {
-  border-left: 8px solid #b8862a;
-  background: rgba(184, 134, 42, 0.08);
-  padding: 0.7em;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(16, 36, 29, 0.10);
+
+/* =============================================================
+   3. TÍTULOS E SLIDES ESPECIAIS
+   ============================================================= */
+.reveal h1 { font-size: 2.4em; font-weight: 800; color: var(--ouro); }
+.reveal h2 { font-size: 1.7em; font-weight: 700; color: var(--ouro); }
+.reveal h3 { font-size: 1.3em; font-weight: 600; color: var(--ouro); }
+
+/* Slide de título */
+.reveal .title-slide {
+  background: url("media/transicao.png");
+  background-size: cover;
+  background-position: center;
+  color: var(--branco);
 }
 
-/* ===== Destaques (use para p-valores, medianas, achados) ===== */
-.highlight-blue {
-  color: #3f6b52;
-  font-weight: 700;
-}
-.highlight-yellow {
-  color: #b8862a;
-  font-weight: 700;
-}
-.highlight-teal {
-  color: #2c5943;
-  font-weight: 700;
+.reveal .title-slide h1,
+.reveal .title-slide h2,
+.reveal .title-slide p {
+  color: var(--branco);
 }
 
-/* ===== Tabelas (gtsummary / pairwise_survdiff) ===== */
-.reveal table {
-  font-size: 0.7em;
-  border-collapse: collapse;
-}
-.reveal table th {
-  background: #2c5943;
-  color: #ffffff;
-  padding: 0.4em 0.6em;
-}
-.reveal table td {
-  padding: 0.35em 0.6em;
-  border-bottom: 1px solid rgba(16, 36, 29, 0.15);
-}
-.reveal table tr:nth-child(even) td {
-  background: rgba(233, 241, 234, 0.6);
-}
-
-/* ===== Gráficos (ggsurvplot) ===== */
-.reveal .cell-output-display img {
-  border-radius: 10px;
-  box-shadow: 0 6px 18px rgba(16, 36, 29, 0.15);
-}
-
-/* ===== Código ===== */
-.reveal pre code {
-  font-size: 0.78em;
-  background: #10241d;
-  color: #eaf3ec;
-  border-radius: 10px;
-  padding: 1em;
-}
-
-/* ===== Notas de rodapé / fragmentos de p-valor ===== */
-.reveal .footer {
-  font-size: 0.5em;
-  color: #5f7566;
-}
-.reveal .fragment {
-  color: #2c5943;
-  font-weight: 600;
+/* Slide "glass" (translúcido) */
+.reveal .slides section.glass {
+  background: rgba(8, 18, 14, 0.28);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
 /* ===== Slide Final ===== */
@@ -161,92 +98,367 @@
   background-image: none !important;
 }
 
-/* =============================================================
-   parte2.css — classes auxiliares dos cards (somam-se ao custom.css)
-   ============================================================= */
+/* Rodapé e fragmentos */
+.reveal .footer   { font-size: 0.5em; color: #5f7566; }
+.reveal .fragment { color: var(--verde-esc); font-weight: 600; }
 
-/* Cards principais */
+
+/* =============================================================
+   4. CAIXAS DE DESTAQUE (Evento / Censura / Tempo)
+   ============================================================= */
+.box-blue,
+.box-yellow,
+.box-gray,
+.box-terracotta {
+  padding: 0.7em;
+  border-radius: 8px;
+}
+
+.box-blue {
+  border-left: 8px solid var(--verde);
+  background: #e9f1ea;
+  box-shadow: 0 4px 12px rgba(16, 36, 29, 0.10);
+}
+
+.box-yellow {
+  border-left: 8px solid var(--ouro);
+  background: var(--card-d);
+  box-shadow: 0 4px 12px rgba(16, 36, 29, 0.08);
+}
+
+.box-gray {
+  border-left: 8px solid var(--cinza);
+  background: #eef1ee;
+  box-shadow: 0 4px 12px rgba(16, 36, 29, 0.07);
+}
+
+.box-terracotta {
+  border-left: 8px solid var(--ouro);
+  background: rgba(184, 134, 42, 0.08);
+  box-shadow: 0 4px 10px rgba(16, 36, 29, 0.10);
+}
+
+/* Destaques inline (p-valores, medianas, achados) */
+.highlight-blue   { color: var(--verde);     font-weight: 700; }
+.highlight-yellow { color: var(--ouro);      font-weight: 700; }
+.highlight-teal   { color: var(--verde-esc); font-weight: 700; }
+
+
+/* =============================================================
+   5. TABELAS NATIVAS, CÓDIGO E GRÁFICOS (gtsummary / ggsurvplot)
+   ============================================================= */
+.reveal table {
+  font-size: 0.7em;
+  border-collapse: collapse;
+}
+
+.reveal table th {
+  background: var(--verde-esc);
+  color: var(--branco);
+  padding: 0.4em 0.6em;
+}
+
+.reveal table td {
+  padding: 0.35em 0.6em;
+  border-bottom: 1px solid rgba(16, 36, 29, 0.15);
+}
+
+.reveal table tr:nth-child(even) td {
+  background: rgba(233, 241, 234, 0.6);
+}
+
+.reveal pre code {
+  font-size: 0.78em;
+  background: var(--navy);
+  color: #eaf3ec;
+  border-radius: 10px;
+  padding: 1em;
+}
+
+.reveal .cell-output-display img {
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(16, 36, 29, 0.15);
+}
+
+
+/* =============================================================
+   6. CARDS PRINCIPAIS E INTERNOS
+   ============================================================= */
 .c-g, .c-d {
   border-radius: 14px;
-  padding: 1.2rem 1.35rem;
+  padding: 1.1rem 1.3rem;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
   height: 100%;
   text-align: left;
 }
-.c-g { background: #e3efe6; border: 1.5px solid #3f6b52; }
-.c-d { background: #faf1de; border: 1.5px solid #b8862a; }
-.c-k { background: #10241d; border-radius: 14px; padding: 1.1rem 1.4rem; text-align: left; }
+
+.c-g { background: var(--card-g); border: 1.5px solid var(--verde); }
+.c-d { background: var(--card-d); border: 1.5px solid var(--ouro); }
+
+.c-k {
+  background: var(--navy);
+  border-radius: 14px;
+  padding: 1.1rem 1.4rem;
+  text-align: left;
+}
 
 /* Cards internos (brancos) */
 .in-g, .in-d {
-  background: #ffffff;
+  background: var(--branco);
   border-radius: 10px;
-  padding: 10px 14px;
+  padding: 9px 14px;
   text-align: left;
 }
-.in-g { border: 1px solid rgba(63, 107, 82, 0.3); }
-.in-d { border: 1px solid rgba(184, 134, 42, 0.4); border-left: 5px solid #b8862a; }
 
-/* Textos */
-.ttl { font-size: 1.0em; font-weight: 700; color: #10241d; margin: 0; }
+.in-g { border: 1px solid rgba(63, 107, 82, 0.3);  border-left: 5px solid var(--verde); }
+.in-d { border: 1px solid rgba(184, 134, 42, 0.4); border-left: 5px solid var(--ouro); }
+
+
+/* =============================================================
+   7. TIPOGRAFIA AUXILIAR
+   ============================================================= */
+.ttl { font-size: 1.0em;  font-weight: 700; color: var(--navy); margin: 0; }
+.big { font-size: 2.2em;  font-weight: 800; line-height: 1.05; }
+.txt { font-size: 0.64em; color: var(--navy); line-height: 1.35; }
+.sub { font-size: 0.54em; color: var(--sub);  line-height: 1.4; }
+
 .lbl {
-  font-size: 0.54em; font-weight: 700; text-transform: uppercase;
-  letter-spacing: 0.08em; color: #6b7d73;
+  font-size: 0.54em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--cinza);
 }
-.txt  { font-size: 0.64em; color: #10241d; line-height: 1.35; }
-.sub  { font-size: 0.54em; color: #6b7d73; line-height: 1.35; }
-.big  { font-size: 2.2em; font-weight: 800; line-height: 1.05; }
 
-/* Selos de função / código */
+
+/* =============================================================
+   8. SELOS DE CÓDIGO, PÍLULAS E NUMERAÇÃO
+   ============================================================= */
 .fn {
   display: inline-block;
-  font-family: 'Courier New', monospace; font-size: 0.62em; font-weight: 700;
-  padding: 2px 10px; border-radius: 5px; white-space: nowrap;
-  background: #dcead9; color: #3f6b52;
+  font-family: 'Courier New', monospace;
+  font-size: 0.62em;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 5px;
+  white-space: nowrap;
+  background: #dcead9;
+  color: var(--verde);
 }
-.fn-d { background: #b8862a; color: #ffffff; }
+.fn-d { background: var(--ouro); color: var(--branco); }
 
-/* Pílulas */
 .pill {
-  display: inline-block; font-size: 0.58em; padding: 3px 13px; border-radius: 99px; font-weight: 600;
-  background: rgba(63, 107, 82, 0.12); color: #2c5943; border: 0.5px solid rgba(63, 107, 82, 0.35);
+  display: inline-block;
+  font-size: 0.58em;
+  padding: 3px 13px;
+  border-radius: 99px;
+  font-weight: 600;
+  background: rgba(63, 107, 82, 0.12);
+  color: var(--verde-esc);
+  border: 0.5px solid rgba(63, 107, 82, 0.35);
 }
-.pill-d { background: rgba(184, 134, 42, 0.12); color: #7a5a12; border-color: rgba(184, 134, 42, 0.4); }
+.pill-d {
+  background: rgba(184, 134, 42, 0.12);
+  color: #7a5a12;
+  border-color: rgba(184, 134, 42, 0.4);
+}
 
-/* Numeração em círculo */
 .num {
-  flex: 0 0 1.8em; width: 1.8em; height: 1.8em; border-radius: 50%;
-  background: #3f6b52; color: #ffffff; font-size: 0.78em; font-weight: 800;
-  display: flex; align-items: center; justify-content: center;
+  flex: 0 0 1.8em;
+  width: 1.8em;
+  height: 1.8em;
+  border-radius: 50%;
+  background: var(--verde);
+  color: var(--branco);
+  font-size: 0.78em;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.num-d { background: #b8862a; }
+.num-d { background: var(--ouro); }
 
-/* Linha de item numerado */
 .item { display: flex; align-items: center; gap: 14px; }
 
-/* Fluxo de passos */
-.fluxo { display: flex; align-items: stretch; gap: 8px; }
-.passo {
-  flex: 1; background: #ffffff; border: 1.5px solid #3f6b52; border-radius: 12px;
-  padding: 10px 12px; text-align: left;
-}
-.seta { align-self: center; color: #3f6b52; font-size: 0.8em; }
 
-/* Linhas de tabela (grade) */
-.lin {
-  display: grid; gap: 8px; padding: 4px 0;
-  border-top: 1px solid rgba(63, 107, 82, 0.15);
-  font-size: 0.56em; color: #10241d; text-align: left;
+/* =============================================================
+   9. FLUXO DA METODOLOGIA E FUNIL DE SELEÇÃO
+   ============================================================= */
+.fluxo { display: flex; align-items: stretch; gap: 8px; }
+
+.passo {
+  flex: 1;
+  background: var(--branco);
+  border: 1.5px solid var(--verde);
+  border-radius: 12px;
+  padding: 10px 12px;
+  text-align: left;
 }
-.lin-h { font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #6b7d73; border-top: none; }
+
+.seta { align-self: center; color: var(--ouro-cl); font-size: 0.8em; }
+
+/* Funil de seleção (resultados) */
+.funil { display: flex; align-items: stretch; gap: 8px; margin: 4px 0 12px 0; }
+
+.etp {
+  flex: 1;
+  background: var(--branco);
+  border: 1.5px solid var(--verde);
+  border-radius: 12px;
+  padding: 10px 12px;
+  text-align: left;
+}
+.etp-d { border-color: var(--ouro); }
+.etp-x { border-color: var(--vermelho); }
+
+.etp .n { font-size: 1.9em; font-weight: 800; line-height: 1; color: var(--verde); }
+.etp-d .n { color: var(--ouro); }
+.etp-x .n { color: var(--vermelho); }
+.etp .s { font-size: 0.5em; color: var(--cinza-esc); line-height: 1.3; margin-top: 4px; }
+
+
+/* =============================================================
+   10. TABELAS EM GRADE (lin)
+   ============================================================= */
+.lin {
+  display: grid;
+  gap: 10px;
+  align-items: center;
+  padding: 6px 10px;
+  border-top: 1px solid rgba(63, 107, 82, 0.15);
+  font-size: 0.56em;
+  color: var(--navy);
+  text-align: left;
+}
+
+.lin-h {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--cinza-esc);
+  border-top: none;
+  border-radius: 8px;
+}
+.c-g .lin-h { background: rgba(63, 107, 82, 0.14); }
+.c-d .lin-h { background: rgba(184, 134, 42, 0.18); }
+
 .lin b { font-weight: 700; }
-.ok  { color: #3f6b52; font-weight: 700; }
-.no  { color: #a33a2d; font-weight: 700; }
+
+.lin-best {
+  background: rgba(184, 134, 42, 0.22);
+  border-radius: 8px;
+  font-weight: 700;
+  border-top-color: transparent;
+}
+.lin-dim { opacity: 0.6; }
+
+
+/* =============================================================
+   11. MARCADORES E TAGS DE DECISÃO
+   ============================================================= */
+.ok, .pos { color: var(--verde-esc); font-weight: 700; }
+.no, .neg { color: var(--vermelho);  font-weight: 700; }
+
+.tg {
+  display: inline-block;
+  padding: 1px 10px;
+  border-radius: 99px;
+  font-weight: 700;
+  font-size: 0.92em;
+  white-space: nowrap;
+}
+.tg-ok   { background: #d3ead9; color: #1f5a3a; }
+.tg-no   { background: #f5d9d3; color: #9b2c20; }
+.tg-ref  { background: #e4e8e4; color: var(--cinza-esc); }
+.tg-gold { background: #f3e2b8; color: #6b4d0f; }
 
 /* Marcador de "preencher" */
 .todo {
-  border: 1.5px dashed #b8862a; background: #fffaf0; color: #7a5a12;
-  border-radius: 10px; padding: 10px 14px; font-size: 0.56em; text-align: left;
+  border: 1.5px dashed var(--ouro);
+  background: #fffaf0;
+  color: #7a5a12;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 0.56em;
+  text-align: left;
 }
+
+
+/* =============================================================
+   12. MENSAGENS-CHAVE, AVISOS E FÓRMULA
+   ============================================================= */
+.msg {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-align: left;
+  background: rgba(217, 176, 84, 0.10);
+  border: 1px solid rgba(217, 176, 84, 0.35);
+  border-left: 5px solid var(--ouro-cl);
+  border-radius: 10px;
+  padding: 9px 16px;
+  margin: 0 0 12px 0;
+  font-size: 0.6em;
+  line-height: 1.35;
+  color: #e8f0ea;
+}
+.msg b { color: var(--ouro-cl); }
+
+.msg-k {
+  flex: 0 0 auto;
+  font-size: 0.72em;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--navy);
+  background: var(--ouro-cl);
+  padding: 3px 10px;
+  border-radius: 6px;
+}
+
+.callout {
+  border-left: 5px solid var(--vermelho);
+  background: #fdeeea;
+  color: #6e2a20;
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-size: 0.52em;
+  line-height: 1.4;
+  text-align: left;
+}
+.callout b { color: #9b2c20; }
+
+.callout-ok { border-left-color: var(--verde); background: #e7f1ea; color: #1f4a33; }
+.callout-ok b { color: var(--verde-esc); }
+
+.formula {
+  font-family: 'Courier New', monospace;
+  font-size: 0.5em;
+  line-height: 1.6;
+  background: var(--navy);
+  color: var(--ouro-cl);
+  border-radius: 10px;
+  padding: 10px 16px;
+  text-align: left;
+  margin-top: 12px;
+}
+.formula span { color: #cfe0d5; }
+
+
+/* =============================================================
+   13. GRÁFICOS E AUXILIARES DE LAYOUT
+   ============================================================= */
+.plot { display: flex; justify-content: center; }
+
+.plot img {
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+  background: var(--branco);
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+.g2 { display: grid; grid-template-columns: 1fr 1fr;       gap: 16px; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr;   gap: 16px; }

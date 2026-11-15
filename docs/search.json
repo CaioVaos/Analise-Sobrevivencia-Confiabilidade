@@ -228,14 +228,14 @@
     "href": "Trabalho/parte2/index.html#etapa-ii-seleção-de-variáveis",
     "title": "Análise de SobrevivênciaCâncer de Fígado",
     "section": "2.2 Etapa II · Seleção de Variáveis",
-    "text": "2.2 Etapa II · Seleção de Variáveis\n\n\nOs 5 passos de seleção · TRV a 10%\n\n\n\n\n\nPasso 1\n\n\nUma a uma contra o modelo nulo\n\n\n\n▶\n\n\n\nPasso 2\n\n\nModelo múltiplo, retirando uma por vez\n\n\n\n▶\n\n\n\nPasso 3\n\n\nReentrada das descartadas\n\n\n\n▶\n\n\n\nPasso 4\n\n\nReavaliação das excluídas no passo 1\n\n\n\n▶\n\n\n\nPasso 5\n\n\nInterações (até duas)\n\n\n\n\n\n\n\n\n\n\nAntes do passo 1\n\n\n\nFiltro: p &lt; 0,25 no Log-Rank ou no Peto-Peto\n\n\n\n\nCandidatas: 6, com justificativa clínica\n\n\n\n\nAjuste inicial: Gama Generalizada, depois trocada pela distribuição escolhida\n\n\n\n\nMesma amostra em todos os modelos comparados\n\n\n\n\n\n\n\n\nRegra de decisão\n\n\n\nTRV com p &lt; 0,10 mantém a variável\n\n\n\n\nAIC / BIC como apoio; o BIC prioriza a parcimônia\n\n\n\n\nMagnitude do efeito (RTM) e relevância prática: com amostra grande, p pequeno aparece mesmo com efeito pequeno"
+    "text": "2.2 Etapa II · Seleção de Variáveis\n\n\nOs 5 passos de seleção · TRV a 10% + BIC\n\n\n\n\n\nPasso 1\n\n\nUma a uma contra o modelo nulo\n\n\n\n▶\n\n\n\nPasso 2\n\n\nModelo múltiplo, retirando uma por vez\n\n\n\n▶\n\n\n\nPasso 3\n\n\nReentrada das descartadas\n\n\n\n▶\n\n\n\nPasso 4\n\n\nReavaliação das excluídas no passo 1\n\n\n\n▶\n\n\n\nPasso 5\n\n\nInterações (até duas)\n\n\n\n\n\n\n\n\n\n\nAntes do passo 1\n\n\n\nFiltro: p &lt; 0,25 no Log-Rank ou no Peto-Peto\n\n\n\n\nCandidatas: 6, com justificativa clínica\n\n\n\n\nAjuste inicial: Gama Generalizada, depois trocada pela distribuição escolhida\n\n\n\n\nMesma amostra em todos os modelos comparados\n\n\n\n\n\n\n\n\nRegra de decisão\n\n\n\nEntra/fica se p (TRV) &lt; 0,10 E ΔBIC &gt; 0\n\n\n\n\nΔBIC = BIC(sem o termo) − BIC(com o termo); positivo favorece manter o termo\n\n\n\n\nCom n = 4.210, o BIC penaliza ≈ 8,3 por parâmetro e evita reter efeitos triviais que o p-valor sozinho aprovaria"
   },
   {
     "objectID": "Trabalho/parte2/index.html#etapa-ii-avaliação-e-interpretação",
     "href": "Trabalho/parte2/index.html#etapa-ii-avaliação-e-interpretação",
     "title": "Análise de SobrevivênciaCâncer de Fígado",
     "section": "2.3 Etapa II · Avaliação e Interpretação",
-    "text": "2.3 Etapa II · Avaliação e Interpretação\n\n\n\n\nDistribuição final\n\n\n\nMesmos critérios da Etapa I, agora com covariáveis\n\n\n\n$AIC $BIC TRV\n\n\n\n\n\n\n\nDiagnóstico\n\n\n\nCox-Snell · risco acumulado dos resíduos sobre a reta\n\n\n\n\nQuantílico aleatorizado · qq-plot com banda de confiança\n\n\n\n\n\n\n\n\nInterpretação\n\n\n\nRTM · razão de tempos medianos, com IC95%\n\n\n\n\nExponencial e Gama usam exp(-coef); as demais exp(coef)\n\n\n\nIDADE reportada por 10 anos"
+    "text": "2.3 Etapa II · Avaliação e Interpretação\n\n\n\n\nDistribuição final\n\n\n\nMesmos critérios da Etapa I, agora com covariáveis\n\n\n\n$AIC $BIC TRV\n\n\n\n\n\n\n\nDiagnóstico\n\n\n\nCox-Snell · risco acumulado dos resíduos sobre a reta\n\n\n\n\nQuantílico aleatorizado · qq-plot com banda de confiança\n\n\n\n\n\n\n\n\nInterpretação\n\n\n\nRTM · razão de tempos medianos, com IC95%\n\n\n\n\nExponencial e Gama usam exp(-coef); as demais exp(coef)\n\n\n\nInterações: efeitos lidos em conjunto"
   },
   {
     "objectID": "Trabalho/parte2/index.html#etapa-i-kaplan-meier-modelos",
@@ -256,14 +256,14 @@
     "href": "Trabalho/parte2/index.html#etapa-i-aic-e-bic",
     "title": "Análise de SobrevivênciaCâncer de Fígado",
     "section": "3.3 Etapa I · AIC e BIC",
-    "text": "3.3 Etapa I · AIC e BIC\n\nResultadoGama Generalizada tem o menor AIC e o menor BIC; a log-normal, a segunda melhor, fica 41 pontos de AIC acima (regra prática: ΔAIC &gt; 10 indica suporte desprezível).\n\n\n\n\n\nCritérios de informação\n\n\nModeloAICBICΔAIC\n\n\nGama Generalizada23.469,423.488,50\n\n\nLog-normal23.510,923.523,6+41,4\n\n\nWeibull23.942,723.955,3+473,2\n\n\nGama24.182,524.195,1+713,0\n\n\nExponencial25.344,725.351,0+1.875,2\n\n\nOrdenado por AIC; a ordem pelo BIC é a mesma."
+    "text": "3.3 Etapa I · AIC e BIC\n\nResultadoGama Generalizada tem o menor AIC e o menor BIC; a log-normal, a segunda melhor, fica 41 pontos de AIC acima.\n\n\n\n\n\nCritérios de informação\n\n\nModeloAICBICΔAIC\n\n\nGama Generalizada23.469,423.488,50\n\n\nLog-normal23.510,923.523,6+41,4\n\n\nWeibull23.942,723.955,3+473,2\n\n\nGama24.182,524.195,1+713,0\n\n\nExponencial25.344,725.351,0+1.875,2\n\n\nOrdenado por AIC; a ordem pelo BIC é a mesma."
   },
   {
     "objectID": "Trabalho/parte2/index.html#etapa-i-teste-da-razão-de-verossimilhanças",
     "href": "Trabalho/parte2/index.html#etapa-i-teste-da-razão-de-verossimilhanças",
     "title": "Análise de SobrevivênciaCâncer de Fígado",
     "section": "3.4 Etapa I · Teste da Razão de Verossimilhanças",
-    "text": "3.4 Etapa I · Teste da Razão de Verossimilhanças\n\nResultadoCom n = 4.210, o TRV detecta até desvios pequenos: todos os modelos simples são rejeitados. A log-normal é a mais próxima (TRV = 43,4), mas ainda inadequada.\n\n\n\nCada modelo contra a Gama Generalizada\n\n\nComparaçãoTRVglp-valorDecisão (5%)\n\n\nExponencial × GG1.879,242&lt; 0,001rejeitado\n\n\nWeibull × GG475,211&lt; 0,001rejeitado\n\n\nLog-normal × GG43,441&lt; 0,001rejeitado\n\n\nGama × GG715,011&lt; 0,001rejeitado\n\n\np &gt; 0,05 indicaria que o modelo simples é compatível com a Gama Generalizada; aqui isso não ocorre em nenhum caso → mantém-se a Gama Generalizada."
+    "text": "3.4 Etapa I · Teste da Razão de Verossimilhanças\n\nResultadoCom n = 4.210, o TRV detecta até desvios pequenos: todos os modelos simples são rejeitados. A log-normal é a mais próxima (TRV = 43,4).\n\n\n\nCada modelo contra a Gama Generalizada\n\n\nComparaçãoTRVglp-valorDecisão (5%)\n\n\nExponencial × GG1.879,242&lt; 0,001rejeitado\n\n\nWeibull × GG475,211&lt; 0,001rejeitado\n\n\nLog-normal × GG43,441&lt; 0,001rejeitado\n\n\nGama × GG715,011&lt; 0,001rejeitado\n\n\np &gt; 0,05 indicaria que o modelo simples é compatível com a Gama Generalizada; aqui isso não ocorre em nenhum caso → mantém-se a Gama Generalizada."
   },
   {
     "objectID": "Trabalho/parte2/index.html#etapa-i-distribuição-escolhida",
@@ -284,28 +284,28 @@
     "href": "Trabalho/parte2/index.html#etapa-ii-passos-1-e-2",
     "title": "Análise de SobrevivênciaCâncer de Fígado",
     "section": "3.8 Etapa II · Passos 1 e 2",
-    "text": "3.8 Etapa II · Passos 1 e 2\n\nResultadoNo passo 1 só o sexo (p = 0,113) não entra; no passo 2, com todas juntas, nenhuma variável sai.\n\n\n\n\n\nPasso 1 · uma variável por vez\n\n\nVariávelp (TRV)Decisão\n\n\nECGRUP&lt; 0,001entra\n\n\nCIRURGIA&lt; 0,001entra\n\n\nQUIMIO&lt; 0,001entra\n\n\nESCOLARI&lt; 0,001entra\n\n\nIDADE (+10 anos)&lt; 0,001entra\n\n\nSEXO0,113não entra\n\n\n\n\n\n\n\nPasso 2 · modelo múltiplo\n\n\nVariável retiradap (TRV)Decisão\n\n\nECGRUP&lt; 0,001fica\n\n\nCIRURGIA&lt; 0,001fica\n\n\nQUIMIO&lt; 0,001fica\n\n\nESCOLARI&lt; 0,001fica\n\n\nIDADE (+10 anos)0,042fica\n\n\nNenhuma variável sai no passo 2."
+    "text": "3.8 Etapa II · Passos 1 e 2\n\nResultadoNo passo 1 só o sexo não entra (p = 0,113; ΔBIC = −5,8). No passo 2, a idade é significativa (p = 0,042), mas o BIC prefere o modelo sem ela.\n\n\n\n\n\nPasso 1 · uma variável por vez\n\n\nVariávelp (TRV)BICΔBICDecisão\n\n\nECGRUP&lt; 0,00122.419,6+1.068,9entra\n\n\nCIRURGIA&lt; 0,00122.770,3+718,2entra\n\n\nQUIMIO&lt; 0,00123.296,1+192,4entra\n\n\nESCOLARI&lt; 0,00123.449,5+39,0entra\n\n\nIDADE (+10 anos)&lt; 0,00123.471,1+17,4entra\n\n\nSEXO0,11323.494,3−5,8não entra\n\n\nBIC do modelo nulo: 23.488,5. ΔBIC = BIC(nulo) − BIC(com o termo).\n\n\n\n\n\n\n\nPasso 2 · modelo múltiplo\n\n\nRetiradap (TRV)BICΔBICDecisão\n\n\nECGRUP&lt; 0,00122.582,0+897,4fica\n\n\nCIRURGIA&lt; 0,00122.097,7+413,0fica\n\n\nQUIMIO&lt; 0,00122.018,6+334,0fica\n\n\nESCOLARI&lt; 0,00121.688,1+3,5fica\n\n\nIDADE (+10 anos)0,04221.680,4−4,2sai (BIC)\n\n\nBIC do modelo completo: 21.684,6. Dourado: significativo no TRV, mas vetado pelo BIC."
   },
   {
     "objectID": "Trabalho/parte2/index.html#etapa-ii-passos-3-a-5",
     "href": "Trabalho/parte2/index.html#etapa-ii-passos-3-a-5",
     "title": "Análise de SobrevivênciaCâncer de Fígado",
     "section": "3.9 Etapa II · Passos 3 a 5",
-    "text": "3.9 Etapa II · Passos 3 a 5\n\nResultadoO efeito marginal do sexo desaparece após o ajuste (p = 0,914). As interações ECGRUP × CIRURGIA e ECGRUP × QUIMIO são significativas.\n\n\n\n\n\nPassos 3 e 4 · reentrada e reavaliação\n\n\n\nPasso 3 · reentrada das descartadas\n\n\nNada a reentrar: nenhuma variável saiu no passo 2.\n\n\n\n\nPasso 4 · reavaliação das excluídas no passo 1\n\n\nSEXO · TRV = 0,01 · p = 0,914 → não entra\n\n\n\n\n\n\n\n\nPasso 5 · interações (até duas)\n\n\n\nECGRUP × CIRURGIA · cirurgia em 49% no estágio I e 11% no IV\n\n\nTRV = 27,52 (gl 5) · p &lt; 0,001 → entra\n\n\n\n\nECGRUP × QUIMIO · quimioterapia em 27% nos estágios I/II e 47% no IV\n\n\nTRV = 93,18 (gl 5) · p &lt; 0,001 → entra"
+    "text": "3.9 Etapa II · Passos 3 a 5\n\nResultadoO BIC vetou dois termos significativos: a idade (p = 0,042) e a interação ECGRUP × CIRURGIA (p &lt; 0,001; ΔBIC = −14,3). Cada parâmetro extra custa ≈ 8,3 no BIC (ln 4.210).\n\n\n\n\n\nPassos 3 e 4 · reentrada e reavaliação\n\n\n\nPasso 3 · reentrada da IDADE\n\n\np (TRV) = 0,042; ΔBIC = −4,2 → não entra (BIC)\n\n\n\n\nPasso 4 · SEXO (excluída no passo 1)\n\n\np (TRV) = 0,837; ΔBIC = −8,3 → não entra. O efeito marginal do sexo desaparece após o ajuste.\n\n\n\n\n\n\n\n\nPasso 5 · interações (até duas)\n\n\n\nECGRUP × CIRURGIA · cirurgia em 49% no estágio I e 11% no IV\n\n\nTRV = 27,39 (gl 5) · p &lt; 0,001 · ΔBIC = −14,3 → não entra (BIC)\n\n\n\n\nECGRUP × QUIMIO · quimioterapia em 27% nos estágios I/II e 47% no IV\n\n\nTRV = 93,95 (gl 5) · p &lt; 0,001 · ΔBIC = +52,2 → entra\n\n\n\nBIC do modelo sem interações: 21.680,4. A interação com a cirurgia é significativa, mas não compensa a complexidade."
   },
   {
     "objectID": "Trabalho/parte2/index.html#etapa-ii-modelo-selecionado",
     "href": "Trabalho/parte2/index.html#etapa-ii-modelo-selecionado",
     "title": "Análise de SobrevivênciaCâncer de Fígado",
     "section": "3.10 Etapa II · Modelo Selecionado",
-    "text": "3.10 Etapa II · Modelo Selecionado\n\n\n\n\nPermaneceram\n\n\n\nECGRUP — principal fator prognóstico\n\n\nCIRURGIA — tratamento curativo\n\n\nQUIMIO — efeito depende do estágio\n\n\nESCOLARI — acesso a cuidado\n\n\nIDADE (+10 anos) — limítrofe (p = 0,064), mantida pelo protocolo a 10%\n\n\n\n\n\n\n\n\nSaíram\n\n\n\nSEXO — passo 1 (p = 0,113); não reentrou no passo 4 (p = 0,914)\n\n\nRADIO / CATEATEND — fora por justificativa clínica\n\n\n\n\n\n\n\n\nInterações\n\n\n\nECGRUP × CIRURGIA (p &lt; 0,001)\n\n\nECGRUP × QUIMIO (p &lt; 0,001)\n\n\n\n26 parâmetros · Gama Generalizada\n\n\n\n\nSurv(tempo, cens) ~ ECGRUP + CIRURGIA + QUIMIO + ESCOLARI + IDADE10 + ECGRUP × CIRURGIA + ECGRUP × QUIMIO"
+    "text": "3.10 Etapa II · Modelo Selecionado\n\n\n\n\nPermaneceram\n\n\n\nECGRUP — principal fator prognóstico\n\n\nCIRURGIA — tratamento curativo\n\n\nQUIMIO — efeito depende do estágio\n\n\nESCOLARI — acesso a cuidado\n\n\n\nTodos com p &lt; 0,001 e ΔBIC &gt; 0.\n\n\n\n\n\n\n\nSaíram\n\n\n\nSEXO — passo 1 (p = 0,113)\n\n\nIDADE (+10 anos) — passos 2/3 (p = 0,042; ΔBIC = −4,2)\n\n\nECGRUP × CIRURGIA — passo 5 (p &lt; 0,001; ΔBIC = −14,3)\n\n\nRADIO / CATEATEND — fora por justificativa clínica\n\n\n\n\n\n\n\n\nInteração mantida\n\n\n\nECGRUP × QUIMIO (p &lt; 0,001; ΔBIC = +52,2)\n\n\n\n20 parâmetros · Gama Generalizada. O BIC vetou dois termos significativos pelo TRV: idade e ECGRUP × CIRURGIA.\n\n\n\n\nSurv(tempo, cens) ~ ECGRUP + CIRURGIA + QUIMIO + ESCOLARI + ECGRUP × QUIMIO"
   },
   {
     "objectID": "Trabalho/parte2/index.html#etapa-ii-distribuição-com-covariáveis",
     "href": "Trabalho/parte2/index.html#etapa-ii-distribuição-com-covariáveis",
     "title": "Análise de SobrevivênciaCâncer de Fígado",
     "section": "3.12 Etapa II · Distribuição com Covariáveis",
-    "text": "3.12 Etapa II · Distribuição com Covariáveis\n\nResultadoCom as covariáveis, a Gama Generalizada segue com o menor AIC e BIC e a log-normal é rejeitada a 5% (p &lt; 0,001): mesma conclusão da Etapa I.\n\n\n\nModelo com as covariáveis selecionadas\n\n\nModeloAICΔAICBICp (TRV × GG)Decisão\n\n\nGama Generalizada21.488,8021.653,8—referência\n\n\nLog-normal21.500,6+11,721.659,2&lt; 0,001rejeitado\n\n\nWeibull21.801,5+312,721.960,2&lt; 0,001rejeitado\n\n\nGama21.960,2+471,422.118,8&lt; 0,001rejeitado\n\n\nExponencial22.214,9+726,122.367,2&lt; 0,001rejeitado\n\n\nA log-normal é a mais próxima (ΔAIC = 11,7; ΔBIC = 5,4; TRV = 13,7). Distribuição final: Gama Generalizada (Q = 0,17; IC95% 0,08–0,26). O sinal de Q difere da Etapa I (−0,42), o que pode refletir as covariáveis explicarem parte da heterogeneidade; a escolha da família não muda."
+    "text": "3.12 Etapa II · Distribuição com Covariáveis\n\nResultadoCom as covariáveis selecionadas, a Gama Generalizada segue com o menor AIC e BIC e a log-normal é rejeitada a 5% (p &lt; 0,001): mesma conclusão da Etapa I.\n\n\n\nModelo com as covariáveis selecionadas\n\n\nModeloAICΔAICBICp (TRV × GG)Decisão\n\n\nGama Generalizada21.501,3021.628,2—referência\n\n\nLog-normal21.512,6+11,321.633,2&lt; 0,001rejeitado\n\n\nWeibull21.818,0+316,721.938,5&lt; 0,001rejeitado\n\n\nGama21.979,4+478,122.099,9&lt; 0,001rejeitado\n\n\nExponencial22.237,0+735,722.351,2&lt; 0,001rejeitado\n\n\nA log-normal é a mais próxima (ΔAIC = 11,3; ΔBIC = 5,0; TRV = 13,3). Distribuição final: Gama Generalizada (Q = 0,17; IC95% 0,08–0,25). O sinal de Q difere da Etapa I (−0,42)."
   },
   {
     "objectID": "Trabalho/parte2/index.html#etapa-ii-diagnóstico",
@@ -319,21 +319,21 @@
     "href": "Trabalho/parte2/index.html#etapa-ii-razão-de-tempos-medianos",
     "title": "Análise de SobrevivênciaCâncer de Fígado",
     "section": "3.15 Etapa II · Razão de Tempos Medianos",
-    "text": "3.15 Etapa II · Razão de Tempos Medianos\n\n\n\n\n\n\n\n\n\n\nPrincipais efeitos\n\n\n\nEstadiamento (vs I, sem tratamento): II 0,50 · III 0,12 · IV 0,05 (0,04–0,07)\n\n\nCirurgia (estágio I): 4,52 (3,23–6,32)\n\n\nEscolaridade (vs analfabeto): médio 1,36 · superior 1,90 (1,39–2,60)\n\n\nIdade (+10 anos): 0,96 (0,92–1,00)\n\n\n\nReferência: Estágio I · sem cirurgia · sem quimio · Analfabeto. Com interações, os efeitos principais valem na categoria de referência da outra variável.\n\n\n\n\n\n\n\n\n“Sem informação” no estadiamento tem RTM 0,12, semelhante ao estágio III: não são dados ao acaso, o que justifica mantê-los como categoria."
+    "text": "3.15 Etapa II · Razão de Tempos Medianos\n\n\n\n\n\n\n\n\n\n\nPrincipais efeitos\n\n\n\nEstadiamento (vs I, sem tratamento): II 0,52 · III 0,12 · IV 0,05 (0,04–0,06)\n\n\nCirurgia (efeito único em todos os estágios): 4,15 (3,61–4,77)\n\n\nEscolaridade (vs analfabeto): médio 1,42 (1,07–1,89) · superior 1,97 (1,45–2,69)\n\n\nQuimioterapia: efeito depende do estágio (próximo slide)\n\n\n\nReferência: Estágio I · sem cirurgia · sem quimio · Analfabeto. O efeito principal da QUIMIO (RTM 1,11) vale no Estágio I; nos demais estágios combina-se com a interação.\n\n\n\n\n\n\n\n\n“Sem informação” no estadiamento tem RTM 0,11, semelhante ao estágio III (0,12): não são dados ao acaso, o que justifica mantê-los como categoria."
   },
   {
     "objectID": "Trabalho/parte2/index.html#etapa-ii-perfis-previstos",
     "href": "Trabalho/parte2/index.html#etapa-ii-perfis-previstos",
     "title": "Análise de SobrevivênciaCâncer de Fígado",
     "section": "3.17 Etapa II · Perfis Previstos",
-    "text": "3.17 Etapa II · Perfis Previstos\n\n\n\n\n\n\n\n\n\n\nMedianas previstas\n\n\n\nDesfavorável\n\n\nEstágio IV · sem cirurgia · sem quimio · Analfabeto · 70 anos → ≈ 2,0 meses (IC95% 1,5–2,6).\n\n\n\n\nFavorável\n\n\nEstágio I · cirurgia · quimio · Ensino superior · 56 anos → mediana não atingida no seguimento (o modelo extrapola ≈ 384 meses).\n\n\n\n\n\nLeitura qualitativa. Perfis extremos e ilustrativos; a mediana favorável é extrapolação além do acompanhamento (máx. 143 meses)."
+    "text": "3.17 Etapa II · Perfis Previstos\n\n\n\n\n\n\n\n\n\n\nMedianas previstas\n\n\n\nDesfavorável\n\n\nEstágio IV · sem cirurgia · sem quimio · Analfabeto → ≈ 1,9 meses (IC95% 1,4–2,5).\n\n\n\n\nFavorável\n\n\nEstágio I · cirurgia · quimio · Ensino superior → mediana não atingida no seguimento (o modelo extrapola ≈ 353 meses).\n\n\n\n\n\nLeitura qualitativa. Perfis extremos e ilustrativos (sem idade, que saiu do modelo); a mediana favorável é extrapolação além do acompanhamento (máx. 143 meses)."
   },
   {
     "objectID": "Trabalho/parte2/index.html#conclusão-1",
     "href": "Trabalho/parte2/index.html#conclusão-1",
     "title": "Análise de SobrevivênciaCâncer de Fígado",
     "section": "4.1 Conclusão",
-    "text": "4.1 Conclusão\n\n\nA distribuição Gama Generalizada descreveu melhor o tempo até o óbito, e estadiamento, cirurgia, quimioterapia (por estágio) e escolaridade permaneceram associados à sobrevida quando analisados em conjunto; a idade teve associação limítrofe.\n\n\n\n\n\n\nDistribuição\n\n\nGama Generalizada nas duas etapas (menor AIC/BIC; modelos simples rejeitados pelo TRV). Risco flexível, não constante; Q = 0,17 no modelo final.\n\n\n\n\n\n\n\nMaiores efeitos\n\n\n\nEstágio IV vs I (não tratados): RTM 0,05 (0,04–0,07) · −95%\n\n\nCirurgia no Estágio I: RTM 4,52 (3,23–6,32)\n\n\nEnsino superior vs Analfabeto: RTM 1,90 (1,39–2,60)\n\n\nQuimio no Estágio IV: RTM ≈ 3,90 (combinada)\n\n\n\n\n\n\n\n\nLimitações\n\n\n\n— Estudo observacional: associação não é causa\n\n\n— Confundimento por indicação: quem opera ou faz quimioterapia já é um paciente selecionado\n\n\n— RHC não é base populacional\n\n\n— Dados ausentes em ESCOLARI e ECGRUP\n\n\n— QUIMIO: curvas se cruzam; perfis extremos extrapolam o seguimento"
+    "text": "4.1 Conclusão\n\n\nA distribuição Gama Generalizada descreveu melhor o tempo até o óbito, e estadiamento, cirurgia, quimioterapia (por estágio) e escolaridade permaneceram associados à sobrevida. A seleção combinou TRV (10%) e BIC: sexo e idade não permaneceram.\n\n\n\n\n\n\nDistribuição\n\n\nGama Generalizada nas duas etapas (menor AIC/BIC; modelos simples rejeitados pelo TRV). Risco flexível, não constante; Q = 0,17 no modelo final.\n\n\n\n\n\n\n\nMaiores efeitos\n\n\n\nEstágio IV vs I (não tratados): RTM 0,05 (0,04–0,06) · −95%\n\n\nCirurgia: RTM 4,15 (3,61–4,77)\n\n\nEnsino superior vs Analfabeto: RTM 1,97 (1,45–2,69)\n\n\nQuimio no Estágio IV: RTM 3,96 (3,25–4,83) (combinada)\n\n\n\n\n\n\n\n\nLimitações\n\n\n\n— Estudo observacional: associação não é causa\n\n\n— Confundimento por indicação: quem opera ou faz quimioterapia já é um paciente selecionado\n\n\n— RHC não é base populacional\n\n\n— Dados ausentes em ESCOLARI e ECGRUP\n\n\n— QUIMIO: curvas se cruzam; perfis extremos extrapolam o seguimento"
   },
   {
     "objectID": "Trabalho/parte2/index.html#base-analítica-da-parte-ii",
@@ -347,28 +347,28 @@
     "href": "Trabalho/parte2/index.html#etapa-ii-reavaliação-na-distribuição-final",
     "title": "Análise de SobrevivênciaCâncer de Fígado",
     "section": "3.11 Etapa II · Reavaliação na Distribuição Final",
-    "text": "3.11 Etapa II · Reavaliação na Distribuição Final\n\nAtençãoO TRV a 10% mantém todos os termos, mas o BIC, mais parcimonioso, retiraria IDADE e ECGRUP × CIRURGIA. A decisão segue o protocolo (TRV) e a relevância clínica.\n\n\n\nRetirada de cada termo (hierarquia respeitada)\n\n\nTermoTRVglp-valorΔAICΔBICLeitura do BIC\n\n\nESCOLARI42,025&lt; 0,001+32,0+0,3indiferente\n\n\nIDADE (+10 anos)3,4310,064+1,4−4,9retiraria\n\n\nECGRUP × CIRURGIA21,095&lt; 0,001+11,1−20,6retiraria\n\n\nECGRUP × QUIMIO86,755&lt; 0,001+76,8+45,0mantém\n\n\nΔ &gt; 0: retirar o termo piora o ajuste. Os efeitos principais de ECGRUP, CIRURGIA e QUIMIO são protegidos pela hierarquia e não saem isoladamente."
+    "text": "3.11 Etapa II · Reavaliação na Distribuição Final\n\nResultadoTRV (10%) e BIC concordam em todos os termos: a regra combinada eliminou os desacordos entre os critérios.\n\n\n\nRetirada de cada termo (hierarquia respeitada)\n\n\nTermoTRVglp-valorΔAICΔBICLeitura do BIC\n\n\nCIRURGIA403,911&lt; 0,001+401,9+395,6mantém\n\n\nESCOLARI47,925&lt; 0,001+37,9+6,2mantém\n\n\nECGRUP × QUIMIO93,955&lt; 0,001+83,9+52,2mantém\n\n\nΔ &gt; 0: retirar o termo piora o ajuste. ECGRUP e QUIMIO são protegidos pela hierarquia (não saem isoladamente por estarem na interação). A margem de ESCOLARI no BIC é pequena (+6,2)."
   },
   {
     "objectID": "Trabalho/parte2/index.html#etapa-ii-interpretando-as-interações",
     "href": "Trabalho/parte2/index.html#etapa-ii-interpretando-as-interações",
     "title": "Análise de SobrevivênciaCâncer de Fígado",
     "section": "3.16 Etapa II · Interpretando as Interações",
-    "text": "3.16 Etapa II · Interpretando as Interações\n\nResultadoCirurgia associa-se a maior tempo mediano em todos os estágios, porém menos no IV; a quimioterapia não mostra efeito no estágio I e passa a ter associação crescente nos estágios avançados.\n\n\n\n\n\nCirurgia (vs não) por estágio\n\n\nEstágioRTM (IC95%)Leitura\n\n\nI4,52estimativa pontual\n\n\nII5,12estimativa pontual\n\n\nIII6,03estimativa pontual\n\n\nIV2,77estimativa pontual\n\n\n\n\n\n\n\nQuimioterapia (vs não) por estágio\n\n\nEstágioRTM (IC95%)Leitura\n\n\nI1,14estimativa pontual\n\n\nII1,27estimativa pontual\n\n\nIII2,56estimativa pontual\n\n\nIV3,90estimativa pontual\n\n\n\n\nEstimativas pontuais (produto dos efeitos); IC indisponível nesta renderização. Demais efeitos: Estágio IV vs I = 0,05 (0,04–0,07) entre não tratados; Ensino superior vs Analfabeto = 1,90 (1,39–2,60); Idade (+10 anos) = 0,96 (0,92–1,00)."
+    "text": "3.16 Etapa II · Interpretando as Interações\n\nResultadoA quimioterapia não mostra efeito no estágio I e passa a ter associação crescente nos estágios avançados; a cirurgia tem efeito único em todos os estágios (a interação foi vetada pelo BIC).\n\n\n\n\n\nQuimioterapia (vs não) por estágio\n\n\nEstágioRTM (IC95%)Leitura\n\n\nI1,11 (0,78–1,57)IC inclui 1\n\n\nII1,23 (0,93–1,62)IC inclui 1\n\n\nIII2,48 (1,94–3,16)maior tempo mediano\n\n\nIV3,96 (3,25–4,83)maior tempo mediano\n\n\nSem efeito claro no estágio I; associação crescente nos estágios avançados.\n\n\n\n\n\n\n\nDemais efeitos\n\n\n\nCirurgia (vs não)\n\n\nRTM 4,15 (IC95% 3,61–4,77), igual em todos os estágios.\n\n\n\n\nEstágio IV vs I\n\n\nRTM 0,05 (0,04–0,06) entre não tratados: redução de ≈ 95% no tempo mediano.\n\n\n\n\nEscolaridade (vs analfabeto)\n\n\nEnsino médio 1,42 (1,07–1,89) · Ensino superior 1,97 (1,45–2,69).\n\n\n\n\n\nRTM combinada = efeito principal × interação, com IC95% pela matriz de covariância do modelo."
   },
   {
     "objectID": "Trabalho/parte2/index.html#etapa-ii-sensibilidade-casos-completos",
     "href": "Trabalho/parte2/index.html#etapa-ii-sensibilidade-casos-completos",
     "title": "Análise de SobrevivênciaCâncer de Fígado",
     "section": "3.18 Etapa II · Sensibilidade (casos completos)",
-    "text": "3.18 Etapa II · Sensibilidade (casos completos)\n\nResultadoA direção é preservada nos 16 termos e as magnitudes são parecidas; só a escolaridade superior atenua (1,90 → 1,37). Conclusões estáveis ao tratamento dos ausentes.\n\n\n\nReajuste sem “Sem informação” / “Não se aplica”\n\n\nTermoRTM principalRTM casos completosMesma direção\n\n\nEstágio II0,500,52sim\n\n\nEstágio III0,120,15sim\n\n\nEstágio IV0,050,07sim\n\n\nCirurgia (Sim)4,524,36sim\n\n\nQuimioterapia (Sim)1,141,30sim\n\n\nEnsino médio1,361,12sim\n\n\nEnsino superior1,901,37sim\n\n\nIdade (+10 anos)0,960,94sim\n\n\n8 dos 16 termos exibidos; os demais (escolaridades intermediárias e interações) também mantêm a direção."
+    "text": "3.18 Etapa II · Sensibilidade (casos completos)\n\nResultadoA direção é preservada nos 12 termos; as magnitudes atenuam nos casos completos, sobretudo a escolaridade superior (1,97 → 1,42) e a interação com a quimioterapia no estágio IV (3,58 → 2,79).\n\n\n\nReajuste sem “Sem informação” / “Não se aplica”\n\n\nTermoRTM principalRTM casos completosMesma direção\n\n\nEstágio II0,520,54sim\n\n\nEstágio III0,120,15sim\n\n\nEstágio IV0,050,06sim\n\n\nCirurgia (Sim)4,154,32sim\n\n\nEnsino superior1,971,42sim\n\n\nQUIMIO × Estágio IV3,582,79sim\n\n\n6 dos 12 termos exibidos; os demais (escolaridades intermediárias e interações dos outros estágios) também mantêm a direção."
   },
   {
     "objectID": "Trabalho/parte2/index.html#fim",
     "href": "Trabalho/parte2/index.html#fim",
     "title": "Análise de SobrevivênciaCâncer de Fígado",
     "section": "Fim",
-    "text": "Fim\n\n\nObrigado!\n\n\nCaio Salviano · caiosalviano@id.uff.br\n\n\nUniversidade Federal Fluminense · Análise de Sobrevivência e Confiabilidade"
+    "text": "Fim"
   },
   {
     "objectID": "Trabalho/parte2/index.html",
@@ -382,7 +382,7 @@
     "href": "Trabalho/parte2/index.html#etapa-ii-seleção-em-resumo",
     "title": "Análise de SobrevivênciaCâncer de Fígado",
     "section": "3.7 Etapa II · Seleção em Resumo",
-    "text": "3.7 Etapa II · Seleção em Resumo\n\nResultadoDas 6 candidatas, 5 permanecem: o sexo sai no passo 1 e não reentra; as duas interações testadas entram.\n\n\n\n\nCandidatas\n\n\n6\n\n\nECGRUP · CIRURGIA · QUIMIO · ESCOLARI · SEXO · IDADE\n\n\n\n▶\n\n\n\nPasso 1\n\n\n5\n\n\nSEXO fica de fora (p = 0,113)\n\n\n\n▶\n\n\n\nPasso 2\n\n\n5\n\n\nnenhuma variável sai\n\n\n\n▶\n\n\n\nPassos 3 e 4\n\n\n5\n\n\nnada a reentrar; SEXO não reentra (p = 0,914)\n\n\n\n▶\n\n\n\nPasso 5\n\n\n+ 2\n\n\nECGRUP × CIRURGIA e ECGRUP × QUIMIO entram\n\n\n\n▶\n\n\n\nModelo final\n\n\n5 + 2\n\n\nvariáveis + interações · 26 parâmetros\n\n\n\n\nSurv(tempo, cens) ~ ECGRUP + CIRURGIA + QUIMIO + ESCOLARI + IDADE10 + ECGRUP × CIRURGIA + ECGRUP × QUIMIOdistribuição: Gama Generalizada · n = 4.210 · 2.760 óbitos"
+    "text": "3.7 Etapa II · Seleção em Resumo\n\nResultadoDas 6 candidatas, 4 permanecem: o sexo sai no passo 1 e a idade sai no passo 2 pelo BIC, apesar de p = 0,042; só a interação com a quimioterapia entra.\n\n\n\n\nCandidatas\n\n\n6\n\n\nECGRUP · CIRURGIA · QUIMIO · ESCOLARI · SEXO · IDADE\n\n\n\n▶\n\n\n\nPasso 1\n\n\n5\n\n\nSEXO fica de fora (p = 0,113; ΔBIC = −5,8)\n\n\n\n▶\n\n\n\nPasso 2\n\n\n4\n\n\nIDADE sai pelo BIC (p = 0,042; ΔBIC = −4,2)\n\n\n\n▶\n\n\n\nPassos 3 e 4\n\n\n4\n\n\nIDADE e SEXO não reentram\n\n\n\n▶\n\n\n\nPasso 5\n\n\n+1\n\n\nECGRUP × QUIMIO entra; ECGRUP × CIRURGIA vetada pelo BIC (ΔBIC = −14,3)\n\n\n\n▶\n\n\n\nModelo final\n\n\n4 + 1\n\n\nvariáveis + interação · 20 parâmetros\n\n\n\n\nSurv(tempo, cens) ~ ECGRUP + CIRURGIA + QUIMIO + ESCOLARI + ECGRUP × QUIMIOdistribuição: Gama Generalizada · n = 4.210 · 2.760 óbitos"
   },
   {
     "objectID": "Trabalho/parte2/index.html#etapa-ii-diagnóstico-cox-snell",
@@ -396,6 +396,20 @@
     "href": "Trabalho/parte2/index.html#etapa-ii-diagnóstico-resíduos-quantílicos",
     "title": "Análise de SobrevivênciaCâncer de Fígado",
     "section": "3.14 Etapa II · Diagnóstico · Resíduos Quantílicos",
-    "text": "3.14 Etapa II · Diagnóstico · Resíduos Quantílicos\n\n\n\n\n\n\n\n\n\n\nLeitura\n\n\n\nPontos dentro da banda de confiança, salvo eventuais desvios nas caudas.\n\n\n\n\n\n\n\n\n\nCautela com QUIMIO. As curvas se cruzam na Parte I, o que ameaça a hipótese de tempo acelerado. O efeito não é lido isoladamente: ele depende do estágio (interação ECGRUP × QUIMIO)."
+    "text": "3.14 Etapa II · Diagnóstico · Resíduos Quantílicos\n\n\n\n\n\n\n\n\n\n\nLeitura\n\n\n\najuste adequado no corpo da distribuição, com os pontos sobre a reta e dentro da banda. Há desvio sistemático na cauda inferior, indicando que o modelo subestima óbitos muito precoces; a cauda superior apresenta desvio leve. Com n grande, pequenos desvios de cauda são esperados e não alteram as conclusões sobre as covariáveis."
+  },
+  {
+    "objectID": "Trabalho/parte2/index.html#objetivo",
+    "href": "Trabalho/parte2/index.html#objetivo",
+    "title": "Análise de SobrevivênciaCâncer de Fígado",
+    "section": "1.2 Objetivo",
+    "text": "1.2 Objetivo\n\n\n\n\n\nI\n\n\nSem covariáveis\n\n\n\nQual distribuição descreve o tempo até o óbito por câncer de fígado?\n\n\nExponencialWeibullLog-normalGamaGama Generalizada\n\n\nEscolha por gráficos, AIC/BIC e Teste da Razão de Verossimilhanças\n\n\n\n\n\n\n\n\nII\n\n\nCom covariáveis\n\n\n\nQuais fatores permanecem no modelo e quanto mudam o tempo de sobrevida?\n\n\nSeleção de variáveisDiagnósticoRazão de tempos medianos\n\n\nInterpretação em termos de tempo mediano de sobrevida"
+  },
+  {
+    "objectID": "Trabalho/parte2/index.html#etapa-ii-passos-3-4-e-5",
+    "href": "Trabalho/parte2/index.html#etapa-ii-passos-3-4-e-5",
+    "title": "Análise de SobrevivênciaCâncer de Fígado",
+    "section": "3.9 Etapa II · Passos 3, 4 e 5",
+    "text": "3.9 Etapa II · Passos 3, 4 e 5\n\nResultadoO BIC vetou dois termos significativos: a idade (p = 0,042) e a interação ECGRUP × CIRURGIA (p &lt; 0,001; ΔBIC = −14,3). Cada parâmetro extra custa ≈ 8,3 no BIC (ln 4.210).\n\n\n\n\nPassos 3 e 4 · reentrada e reavaliação\n\n\n  \n    3\n    Reentrada da IDADE (+10 anos)\n    não entra (BIC)\n  \n  \n    p (TRV) = 0,042 ✓\n    ΔBIC = −4,2 ✗\n  \n  Significativa no TRV, mas o BIC prefere o modelo sem ela (ΔBIC &lt; 0).\n\n\n\n  \n    4\n    SEXO · excluída no passo 1\n    não entra\n  \n  \n    p (TRV) = 0,837 ✗\n    ΔBIC = −8,3 ✗\n  \n  O efeito marginal do sexo desaparece após o ajuste: nenhum dos critérios apoia a entrada.\n\n\nRegra combinada: entra apenas se p &lt; 0,10 E ΔBIC &gt; 0. A idade passa só no TRV; o sexo, em nenhum.\n\n\n\n\n\nPasso 5 · interações (até duas)\n\n\n  \n    ×\n    ECGRUP × CIRURGIA\n    não entra (BIC)\n  \n  cirurgia em 49% no estágio I e 11% no IV\n  \n    TRV = 27,39 · gl 5\n    p &lt; 0,001 ✓\n    ΔBIC = −14,3 ✗\n  \n  Significativa no TRV, mas 5 parâmetros extras não compensam no BIC (ΔBIC &lt; 0).\n\n\n\n  \n    ×\n    ECGRUP × QUIMIO\n    entra\n  \n  quimioterapia em 27% nos estágios I/II e 47% no IV\n  \n    TRV = 93,95 · gl 5\n    p &lt; 0,001 ✓\n    ΔBIC = +52,2 ✓\n  \n  Significativa e com ganho de BIC: o efeito da quimioterapia depende do estágio.\n\n\nBIC do modelo sem interações: 21.680,4. Apenas a interação com a quimioterapia entra no modelo final."
   }
 ]
