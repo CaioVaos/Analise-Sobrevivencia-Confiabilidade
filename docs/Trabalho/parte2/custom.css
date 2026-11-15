@@ -1,15 +1,4 @@
 /* =============================================================
-   ANÁLISE DE SOBREVIVÊNCIA E CONFIABILIDADE · CÂNCER DE FÍGADO (C22)
-   Folha de estilo única — base (custom.css) + Parte II (parte2.css)
-   -------------------------------------------------------------
-   Substitui os dois arquivos anteriores. No YAML do Quarto, use:
-       format:
-         revealjs:
-           css: estilo.css
-   ============================================================= */
-
-
-/* =============================================================
    1. PALETA
    ============================================================= */
 :root {
@@ -81,7 +70,11 @@
   -webkit-backdrop-filter: blur(14px);
 }
 
-/* ===== Slide Final ===== */
+/* Rodapé e fragmentos */
+.reveal .footer   { font-size: 0.5em; color: #5f7566; }
+.reveal .fragment { color: var(--verde-esc); font-weight: 600; }
+
+/* Slide Final */
 .reveal .final-slide {
   background: url("media/final.png");
 
@@ -97,10 +90,6 @@
   font-size: 2.5em !important;
   background-image: none !important;
 }
-
-/* Rodapé e fragmentos */
-.reveal .footer   { font-size: 0.5em; color: #5f7566; }
-.reveal .fragment { color: var(--verde-esc); font-weight: 600; }
 
 
 /* =============================================================
@@ -190,7 +179,6 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  height: 100%;
   text-align: left;
 }
 
@@ -462,3 +450,98 @@
 
 .g2 { display: grid; grid-template-columns: 1fr 1fr;       gap: 16px; }
 .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr;   gap: 16px; }
+
+
+/* =============================================================
+   14. SLIDE FINAL (sem tarja atrás do título)
+   ============================================================= */
+/* O fundo (final.png) é desenhado pelo .slide-background; a própria
+   <section> não pode repetir a imagem, senão aparece uma tarja atrás do título. */
+.reveal .slides section.final-slide {
+  background: none !important;
+  background-image: none !important;
+  background-color: transparent !important;
+}
+.reveal .slides section.final-slide h1,
+.reveal .slides section.final-slide h2 {
+  color: var(--branco);
+  background: none !important;
+  font-size: 2.5em;
+}
+
+
+/* =============================================================
+   15. OCUPAÇÃO VERTICAL DOS SLIDES
+   ============================================================= */
+/* As colunas ficam SEMPRE lado a lado: o contêiner é forçado em linha
+   e cada .column mantém o width="49%" / "2%" definido no .qmd.
+   (Sem isto, o display:flex do .column o tornava bloco e empilhava.) */
+.reveal .slides section .columns {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: stretch !important;
+  justify-content: flex-start;
+  gap: 0 !important;
+  width: 100%;
+}
+
+.reveal .slides section .columns > .column {
+  flex: 0 0 auto !important;   /* respeita o width do .qmd (49% / 2% / 32%…) */
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* cartões esticam até o fim da coluna */
+.reveal .slides section .columns > .column > .c-g,
+.reveal .slides section .columns > .column > .c-d,
+.reveal .slides section .columns > .column > .c-k,
+.reveal .slides section .columns > .column > .plot {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+/* altura mínima do bloco de colunas (área útil ≈ 93 a 650 px) */
+.reveal .slides section .columns.fill   { min-height: 540px; }  /* logo após o título */
+.reveal .slides section .columns.fill-m { min-height: 450px; }  /* após a faixa .msg */
+.reveal .slides section .columns.fill-s { min-height: 340px; }  /* após outros blocos */
+
+/* itens internos dividem a altura que sobra no cartão */
+.c-g > .in-g, .c-g > .in-d,
+.c-d > .in-g, .c-d > .in-d { flex: 1 1 auto; }
+
+.c-g > .in-g:not(.item), .c-g > .in-d:not(.item),
+.c-d > .in-g:not(.item), .c-d > .in-d:not(.item) {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.c-g > .g2 { flex: 1 1 auto; grid-auto-rows: 1fr; }
+.g2 > .in-g { display: flex; flex-direction: column; justify-content: center; }
+
+/* linhas de tabela esticam (o cabeçalho não) */
+.c-g > .lin:not(.lin-h),
+.c-d > .lin:not(.lin-h) { flex: 1 1 auto; }
+
+/* distribui o espaço livre entre os blocos de um cartão só de texto */
+.spread { justify-content: space-evenly; }
+
+/* cartões com pouco conteúdo: fontes maiores */
+.zoom .txt  { font-size: .72em; }
+.zoom .sub  { font-size: .6em; }
+.zoom .lbl  { font-size: .6em; }
+.zoom .pill { font-size: .68em; }
+.zoom .fn   { font-size: .7em; }
+.zoom .ttl  { font-size: 1.12em; }
+.zoom .big  { font-size: 2.7em; }
+.zoom .lin  { font-size: .64em; }
+
+/* funil de seleção e fórmula: mais altos */
+.funil { margin: 10px 0 18px 0; }
+.etp   { padding: 16px 14px; }
+.etp .n { font-size: 2.4em; }
+.etp .s { font-size: .6em; }
+.formula { font-size: .58em; padding: 14px 20px; }
