@@ -147,7 +147,7 @@ callout_si <- if (is.na(si) || is.na(iii)) "" else if (abs(log(si / iii)) < 0.25
 
 # Metodologia
 
-## Etapa I · Escolha da Distribuição
+## Etapa I · Escolha da Distribuição {.etapa1}
 
 :::: {.columns .fill}
 ::: {.column width="49%"}
@@ -175,7 +175,7 @@ callout_si <- if (is.na(si) || is.na(iii)) "" else if (abs(log(si / iii)) < 0.25
 :::
 ::::
 
-## Etapa II · Seleção de Variáveis
+## Etapa II · Seleção de Variáveis {.etapa2}
 
 <div class="c-k" style="margin-bottom:14px;">
 <div class="lbl" style="color:#d9b054;">Os 5 passos de seleção · TRV a 10% + BIC</div>
@@ -215,7 +215,7 @@ callout_si <- if (is.na(si) || is.na(iii)) "" else if (abs(log(si / iii)) < 0.25
 :::
 ::::
 
-## Etapa II · Avaliação e Interpretação
+## Etapa II · Avaliação e Interpretação {.etapa2}
 
 :::: {.columns .fill-s style="min-height:380px;"}
 ::: {.column width="32%"}
@@ -248,7 +248,7 @@ callout_si <- if (is.na(si) || is.na(iii)) "" else if (abs(log(si / iii)) < 0.25
 
 # Resultados
 
-## Etapa I · Kaplan-Meier × Modelos
+## Etapa I · Kaplan-Meier × Modelos {.etapa1}
 
 <div class="msg"><span class="msg-k">Leitura</span><span>Quanto mais próximos da diagonal, melhor o ajuste: a <b>Gama Generalizada</b> é a que mais se aproxima; a <b>exponencial</b> é a que mais se afasta.</span></div>
 
@@ -256,7 +256,7 @@ callout_si <- if (is.na(si) || is.na(iii)) "" else if (abs(log(si / iii)) < 0.25
 ![](plots/km_vs_modelos.png){height=455}
 :::
 
-## Etapa I · Linearização
+## Etapa I · Linearização {.etapa1}
 
 <div class="msg"><span class="msg-k">Leitura</span><span>A <b>exponencial</b> sai claramente da reta; Weibull e log-normal ficam mais próximas, mas com desvios nas caudas. Gama e Gama Generalizada não têm linearização.</span></div>
 
@@ -264,7 +264,7 @@ callout_si <- if (is.na(si) || is.na(iii)) "" else if (abs(log(si / iii)) < 0.25
 ![](plots/linearizacao.png){width=100%}
 :::
 
-## Etapa I · AIC e BIC
+## Etapa I · AIC e BIC {.etapa1}
 
 <div class="msg"><span class="msg-k">Resultado</span><span><b>Gama Generalizada</b> tem o menor AIC e o menor BIC; a log-normal, a segunda melhor, fica <b>41 pontos de AIC</b> acima.</span></div>
 
@@ -290,7 +290,7 @@ callout_si <- if (is.na(si) || is.na(iii)) "" else if (abs(log(si / iii)) < 0.25
 :::
 ::::
 
-## Etapa I · Teste da Razão de Verossimilhanças
+## Etapa I · Teste da Razão de Verossimilhanças {.etapa1}
 
 <div class="msg"><span class="msg-k">Resultado</span><span>Com n = 4.210, o TRV detecta até desvios pequenos: <b>todos os modelos simples são rejeitados</b>. A log-normal é a mais próxima (TRV = 43,4).</span></div>
 
@@ -304,7 +304,7 @@ callout_si <- if (is.na(si) || is.na(iii)) "" else if (abs(log(si / iii)) < 0.25
 <div class="sub">p &gt; 0,05 indicaria que o modelo simples é compatível com a Gama Generalizada; aqui isso não ocorre em nenhum caso → mantém-se a Gama Generalizada.</div>
 </div>
 
-## Etapa I · Distribuição Escolhida
+## Etapa I · Distribuição Escolhida {.etapa1}
 
 :::: {.columns .fill}
 ::: {.column width="49%"}
@@ -328,7 +328,7 @@ callout_si <- if (is.na(si) || is.na(iii)) "" else if (abs(log(si / iii)) < 0.25
 :::
 ::::
 
-## Etapa II · Covariáveis Candidatas 
+## Etapa II · Covariáveis Candidatas {.etapa2}
 
 <div class="msg"><span class="msg-k">Critério</span><span>As <b>7 covariáveis qualitativas passam</b> no filtro de 0,25: com n grande o filtro quase não elimina, e a escolha das <b>6 candidatas é clínica</b>.</span></div>
 
@@ -345,7 +345,7 @@ callout_si <- if (is.na(si) || is.na(iii)) "" else if (abs(log(si / iii)) < 0.25
 <div class="sub">"Sem informação" e "Não se aplica" mantidos como categorias próprias (ver Base Analítica).</div>
 </div>
 
-## Etapa II · Seleção em Resumo
+## Etapa II · Seleção em Resumo {.etapa2}
 
 <div class="msg"><span class="msg-k">Resultado</span><span>Das <b>6 candidatas, 4 permanecem</b>: o <b>sexo</b> sai no passo 1 e a <b>idade</b> sai no passo 2 pelo <b>BIC</b>, apesar de p = 0,042; só a interação com a <b>quimioterapia</b> entra.</span></div>
 
@@ -365,7 +365,7 @@ callout_si <- if (is.na(si) || is.na(iii)) "" else if (abs(log(si / iii)) < 0.25
 
 <div class="formula">Surv(tempo, cens) ~ <span>ECGRUP + CIRURGIA + QUIMIO + ESCOLARI + ECGRUP × QUIMIO</span><br>distribuição: <span>Gama Generalizada</span></div>
 
-## Etapa II · Passos 1 e 2
+## Etapa II · Passos 1 e 2 {.etapa2}
 
 <div class="msg"><span class="msg-k">Resultado</span><span>No passo 1 só o <b>sexo</b> não entra (p = 0,113; ΔBIC = −5,8).<br>No passo 2, a <b>idade</b> é significativa (p = 0,042), mas o <b>BIC prefere o modelo sem ela</b>.</span></div>
 
@@ -399,7 +399,7 @@ callout_si <- if (is.na(si) || is.na(iii)) "" else if (abs(log(si / iii)) < 0.25
 :::
 ::::
 
-## Etapa II · Passos 3, 4 e 5
+## Etapa II · Passos 3, 4 e 5 {.etapa2}
 
 <div class="msg"><span class="msg-k">Resultado</span><span>O <b>BIC vetou dois termos significativos</b>: a <b>idade</b> (p = 0,042) e a interação <b>ECGRUP × CIRURGIA</b> (p &lt; 0,001; ΔBIC = −14,3).<br>Cada parâmetro extra custa ≈ 8,3 no BIC (ln 4.210).</span></div>
 
@@ -482,7 +482,7 @@ callout_si <- if (is.na(si) || is.na(iii)) "" else if (abs(log(si / iii)) < 0.25
 :::
 ::::
 
-## Etapa II · Modelo Selecionado
+## Etapa II · Modelo Selecionado {.etapa2}
 
 :::: {.columns .fill-s style="min-height:450px;"}
 ::: {.column width="32%"}
@@ -525,7 +525,7 @@ callout_si <- if (is.na(si) || is.na(iii)) "" else if (abs(log(si / iii)) < 0.25
 
 <div class="formula">Surv(tempo, cens) ~ <span>ECGRUP + CIRURGIA + QUIMIO + ESCOLARI + ECGRUP × QUIMIO</span></div>
 
-## Etapa II · Reavaliação na Distribuição Final
+## Etapa II · Reavaliação na Distribuição Final {.etapa2}
 
 <div class="msg"><span class="msg-k">Resultado</span><span><b>TRV (10%) e BIC concordam em todos os termos</b>: a regra combinada eliminou os desacordos entre os critérios.</span></div>
 
@@ -538,7 +538,7 @@ callout_si <- if (is.na(si) || is.na(iii)) "" else if (abs(log(si / iii)) < 0.25
 <div class="sub">Δ &gt; 0: retirar o termo piora o ajuste.<br>ECGRUP e QUIMIO são protegidos pela hierarquia (não saem isoladamente por estarem na interação).<br>A margem de ESCOLARI no BIC é pequena (+6,2).</div>
 </div>
 
-## Etapa II · Distribuição com Covariáveis
+## Etapa II · Distribuição com Covariáveis {.etapa2}
 
 <div class="msg"><span class="msg-k">Resultado</span><span>Com as covariáveis selecionadas, a <b>Gama Generalizada</b> segue com o menor AIC e BIC e a <b>log-normal</b> é rejeitada a 5% (p &lt; 0,001): <b>mesma conclusão da Etapa I</b>.</span></div>
 
@@ -553,7 +553,7 @@ callout_si <- if (is.na(si) || is.na(iii)) "" else if (abs(log(si / iii)) < 0.25
 <div class="sub">A log-normal é a mais próxima (ΔAIC = 11,3; ΔBIC = 5,0; TRV = 13,3).<br><b>Distribuição final: Gama Generalizada</b> (Q = 0,17; IC95% 0,08–0,25).<br>O sinal de Q difere da Etapa I (−0,42).</div>
 </div>
 
-## Etapa II · Diagnóstico · Cox-Snell
+## Etapa II · Diagnóstico · Cox-Snell {.etapa2}
 
 <div class="msg"><span class="msg-k">Leitura</span><span>A KM dos resíduos acompanha a referência Exp(1) (reta de 45° no risco acumulado), indicando <b>adequação global</b>;<br>desvios na cauda direita refletem poucos pacientes em risco.</span></div>
 
@@ -561,7 +561,7 @@ callout_si <- if (is.na(si) || is.na(iii)) "" else if (abs(log(si / iii)) < 0.25
 ![](plots/coxsnell.png){width=88% fig-align="center"}
 :::
 
-## Etapa II · Diagnóstico · Resíduos Quantílicos
+## Etapa II · Diagnóstico · Resíduos Quantílicos {.etapa2}
 
 :::: {.columns}
 ::: {.column width="48%"}
@@ -579,7 +579,7 @@ callout_si <- if (is.na(si) || is.na(iii)) "" else if (abs(log(si / iii)) < 0.25
 :::
 ::::
 
-## Etapa II · Razão de Tempos Medianos
+## Etapa II · Razão de Tempos Medianos {.etapa2}
 
 :::: {.columns}
 ::: {.column width="60%"}
@@ -612,7 +612,7 @@ cat(callout_si)
 :::
 ::::
 
-## Etapa II · Interpretando as Interações
+## Etapa II · Interpretando as Interações {.etapa2}
 
 <div class="msg"><span class="msg-k">Resultado</span><span>A <b>quimioterapia</b> não mostra efeito no estágio I e passa a ter associação crescente nos estágios avançados; a <b>cirurgia</b> tem efeito único em todos os estágios (a interação foi vetada pelo BIC).</span></div>
 
@@ -642,7 +642,7 @@ cat(tab_comb(comb$qui))
 
 <div class="sub" style="margin-top:10px; color:#cfe0d5;">`r nota_comb`</div>
 
-## Etapa II · Perfis Previstos
+## Etapa II · Perfis Previstos {.etapa2}
 
 :::: {.columns}
 ::: {.column width="58%"}

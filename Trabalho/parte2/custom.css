@@ -545,3 +545,113 @@
 .etp .n { font-size: 2.4em; }
 .etp .s { font-size: .6em; }
 .formula { font-size: .58em; padding: 14px 20px; }
+
+/* =============================================================
+   17. DISTINÇÃO VISUAL ENTRE ETAPAS
+   Linha decorativa sob o título h2: verde (Etapa I) e dourado (Etapa II).
+   Aplicar no título do slide: ## Título {.etapa1} ou {.etapa2}
+   ============================================================= */
+.reveal .slides section.present.etapa1 h2,
+.reveal .slides section.present.etapa2 h2 {
+  position: relative;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+}
+
+.reveal .slides section.present.etapa1 h2::after,
+.reveal .slides section.present.etapa2 h2::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  border-radius: 2px;
+}
+
+.reveal .slides section.present.etapa1 h2::after {
+  background: linear-gradient(90deg, #3f6b52 0%, #2c5943 100%);
+}
+
+.reveal .slides section.present.etapa2 h2::after {
+  background: linear-gradient(90deg, #d9b054 0%, #b8862a 100%);
+}
+
+/* Slides de seção, conclusão e final não recebem a linha */
+.reveal .slides section.present.level1 h2::after,
+.reveal .slides section.present.final-slide h2::after {
+  display: none !important;
+}
+
+/* =============================================================
+   17. DISTINÇÃO VISUAL ENTRE ETAPAS (REALÇADA)
+   Linha grossa + brilho + badge ao lado do título.
+   Aplicar no título do slide: ## Título {.etapa1} ou {.etapa2}
+   ============================================================= */
+.reveal .slides section.present.etapa1 h2,
+.reveal .slides section.present.etapa2 h2 {
+  position: relative;
+  padding-bottom: 16px;
+  margin-bottom: 22px;
+  display: inline-block;
+}
+
+/* Linha grossa com brilho */
+.reveal .slides section.present.etapa1 h2::after,
+.reveal .slides section.present.etapa2 h2::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 140px;
+  height: 4px;
+  border-radius: 2px;
+}
+
+.reveal .slides section.present.etapa1 h2::after {
+  background: linear-gradient(90deg, #3f6b52 0%, #2c5943 100%);
+  box-shadow: 0 2px 8px rgba(63, 107, 82, 0.55);
+}
+
+.reveal .slides section.present.etapa2 h2::after {
+  background: linear-gradient(90deg, #d9b054 0%, #b8862a 100%);
+  box-shadow: 0 2px 8px rgba(217, 176, 84, 0.55);
+}
+
+/* Badge ao lado do título */
+.reveal .slides section.present.etapa1 h2::before,
+.reveal .slides section.present.etapa2 h2::before {
+  content: "";
+  position: absolute;
+  right: -130px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.38em;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  padding: 4px 12px;
+  border-radius: 99px;
+  white-space: nowrap;
+}
+
+.reveal .slides section.present.etapa1 h2::before {
+  content: "ETAPA I";
+  color: #3f6b52;
+  background: rgba(63, 107, 82, 0.18);
+  border: 1px solid rgba(63, 107, 82, 0.4);
+}
+
+.reveal .slides section.present.etapa2 h2::before {
+  content: "ETAPA II";
+  color: #b8862a;
+  background: rgba(184, 134, 42, 0.18);
+  border: 1px solid rgba(184, 134, 42, 0.4);
+}
+
+/* Slides de seção, conclusão e final não recebem */
+.reveal .slides section.present.level1 h2::before,
+.reveal .slides section.present.level1 h2::after,
+.reveal .slides section.present.final-slide h2::before,
+.reveal .slides section.present.final-slide h2::after {
+  display: none !important;
+}
